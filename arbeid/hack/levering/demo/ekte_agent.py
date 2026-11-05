@@ -102,11 +102,14 @@ def uten_rot(tekst, tmp=None):
     return tekst.replace(tmp, "<tmp>") if tmp else tekst
 
 
-def kjor_sporbar(saker, timeout=300):
-    """Kjører agenten på sakene. Returnerer alltid en dict for loggen: kall, returkode, varighet, utskrift, rader
-    (de 19 feltene i agent.csv) og feil (None når alt gikk bra). Stier er uten repo-sti."""
+def kjor_sporbar(saker, aar=2026, timeout=300):
+    """Kjører agenten på sakene for teståret aar. Returnerer alltid en dict for loggen: kall, returkode, varighet,
+    utskrift, rader (de 19 feltene i agent.csv) og feil (None når alt gikk bra). Stier er uten repo-sti.
+    2026: den leverte agenten (samme som sh KJOR.sh). 2024/2025: agent_aar.py (samme agent, rullende modell)."""
     if not REAL.exists():
         raise RuntimeError("mangler NBIMs stemmer (state/opplastet/). " + KJOR_FORST)
+    if aar not in (2024, 2025, 2026):
+        raise ValueError(f"testår {aar} støttes ikke (2024, 2025 eller 2026)")
     py = agent_python()
     with tempfile.TemporaryDirectory(prefix="c1_lim_") as d:
         inn, ut = os.path.join(d, "saker.csv"), os.path.join(d, "ut")
@@ -115,7 +118,10 @@ def kjor_sporbar(saker, timeout=300):
             w = csv.DictWriter(f, fieldnames=felt)
             w.writeheader()
             w.writerows(saker)
-        kall = [py, str(AGENT), "--csv", inn, "--ut", ut]
+        if aar == 2026:
+            kall = [py, str(AGENT), "--csv", inn, "--ut", ut]
+        else:
+            kall = [py, str(Path(__file__).resolve().parent / "agent_aar.py"), "--aar", str(aar), "--csv", inn, "--ut", ut]
         t0 = time.monotonic()
         o = subprocess.run(kall, cwd=ROT, capture_output=True, text=True, timeout=timeout)
         fil = os.path.join(ut, "agent.csv")

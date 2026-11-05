@@ -27,6 +27,10 @@ Har du allerede et Python-miljø med Streamlit, går det også an å kjøre `str
   - Tre tilfeldige saker fra 2026.
 - **Hel fil:** last opp en CSV-fil, for eksempel `ny_data/real_votes.csv` eller `arbeid/hack/c1/data_off/real_test_input.csv`. Saker fra før 2026 tas ut, fordi modellen er trent på dem.
   Hele test 2026 (1 578 saker) tar omtrent 10 s og gir samme tall som `sh KJOR.sh`: F1 0,520 på Linux, 0,512 på Mac.
+  Velg testår for fila: 2026 (standard) eller 2025 eller 2024. For 2026 brukes den leverte agenten. For 2024 og 2025
+  kjører `agent_aar.py` samme agent med den rullende modellen (`abl_rull.py --testaar`): trent på årene før,
+  terskel valgt på året før det. Tallene blir de samme som i treårstabellen (`testaar.sh`):
+  F1 0,509 / 0,531 / 0,520 for 2024–2026 på Linux. Bare saker fra valgt år brukes.
 - **Treffsikkerhet med en gang:** øverst står F1, presisjon og recall på MOT mot styret, samme mål som den offisielle
   måleren. Under står antall treff, bom, falske MOT og saker sendt til menneske. Hver sak er merket ✅ treff,
   ❌ bom, ⚠️ falsk MOT eller ✓ riktig, med farge, ikon og tekst. Du kan filtrere på hver av dem.

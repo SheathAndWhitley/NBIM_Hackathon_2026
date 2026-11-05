@@ -43,6 +43,7 @@ import ekte_agent  # noqa: E402
 HER = Path(__file__).parent
 LOGGMAPPE = HER / "logg"
 TESTAAR = "2026"  # teståret: modellen er trent på årene før, så bare saker herfra (eller nye saker) måles ærlig
+AAR_VALG = [2026, 2025, 2024]  # testår som kan velges for en opplastet fil (2026 = den leverte agenten)
 MAKS_DETALJER = 40
 STOR_LISTE = 30  # flere saker enn dette: lukk detaljene (et møte vises med de interessante sakene åpne)
 # Statusfarger fra dataviz-skillens faste statuspalett (good #0ca30c, critical #d03b3b, serious #ec835a, warning #fab219),
@@ -136,15 +137,19 @@ def poeng(rader, fas):
                 acc=(tp + n["TN"]) / med, acc_styret=(fp + n["TN"]) / med, acc_sys=(stp + sy.count("TN")) / med)
 
 
-def forbered(saker):
-    """Tar ut kjente saker fra før teståret: de er i treningsdataene, så et treff der sier ingenting."""
-    beholdt, ute = [], 0
+def forbered(saker, aar):
+    """Beholder kjente saker fra teståret aar (og nye saker som ikke finnes i NBIMs stemmer). Kjente saker fra før aar
+    er i treningsdataene, så et treff der sier ingenting; saker fra etter aar hører til et annet testår."""
+    beholdt, for_, etter = [], 0, 0
     for s in saker:
-        if finn_fasit(s) is not None and (s.get("meeting_date") or "")[:4] < TESTAAR:
-            ute += 1
+        y = (s.get("meeting_date") or "")[:4]
+        if finn_fasit(s) is not None and y < str(aar):
+            for_ += 1
+        elif finn_fasit(s) is not None and y > str(aar):
+            etter += 1
         else:
             beholdt.append(s)
-    return beholdt, ute
+    return beholdt, for_, etter
 
 
 def les_fil(fil):
@@ -155,22 +160,22 @@ def les_fil(fil):
         return b.decode("latin-1")
 
 
-def kjor_ekte(tekst, kilde, kjoring):
-    """Kjører agenten og skriver én loggfil for klikket (også ved feil). Returnerer resultatet som dict."""
+def kjor_ekte(tekst, kilde, kjoring, aar=int(TESTAAR)):
+    """Kjører agenten for teståret aar og skriver én loggfil for klikket (også ved feil). Returnerer resultatet som dict."""
     start = dt.datetime.now()
-    post = {"tid": start.isoformat(timespec="seconds"), "kjoring": kjoring, "kilde": kilde,
+    post = {"tid": start.isoformat(timespec="seconds"), "kjoring": kjoring, "kilde": kilde, "testaar": aar,
             "tekst_sha256": hashlib.sha256(tekst.encode("utf-8")).hexdigest(), "tekst_tegn": len(tekst),
-            "modell": ekte_agent.MODELLNAVN, "saker": [], "tatt_ut_for_testaar": 0, "agentkall": None, "svar": [],
-            "feil": None}
-    saker, ute = [], 0
+            "modell": ekte_agent.MODELLNAVN if aar == 2026 else f"rullende repo4 for testår {aar} (agent_aar.py)",
+            "saker": [], "tatt_ut_for_testaar": 0, "tatt_ut_etter_testaar": 0, "agentkall": None, "svar": [], "feil": None}
+    saker, ute, etter = [], 0, 0
     try:
-        saker, ute = forbered(ekte_agent.les_saker(tekst))
+        saker, ute, etter = forbered(ekte_agent.les_saker(tekst), aar)
         post["saker"] = [f"{r.get('meeting_id', '')}|{r.get('item_no', '')}" for r in saker]
-        post["tatt_ut_for_testaar"] = ute
+        post["tatt_ut_for_testaar"], post["tatt_ut_etter_testaar"] = ute, etter
         if not saker:
-            raise ValueError(f"alle {ute} sakene er fra før {TESTAAR} og ligger i treningsdataene; bruk saker fra {TESTAAR} "
-                             "eller nye saker")
-        res = ekte_agent.kjor_sporbar(saker)
+            raise ValueError(f"ingen saker fra teståret {aar}: {ute} er fra før (i treningsdataene) og {etter} fra etter; "
+                             f"velg et annet testår eller bruk saker fra {aar}")
+        res = ekte_agent.kjor_sporbar(saker, aar)
         post["svar"] = res.pop("rader")
         post["feil"] = res.pop("feil")
         post["agentkall"] = res
@@ -183,7 +188,7 @@ def kjor_ekte(tekst, kilde, kjoring):
         raise RuntimeError(f"{post['feil']}\n(logget i {fil.relative_to(HER)})")
     fas = {f"{s['meeting_id']}|{s['item_no']}": finn_fasit(s) for s in saker}
     return dict(rader=post["svar"], kilde=kilde, loggfil=fil.name, fasit={k: v for k, v in fas.items() if v}, ute=ute,
-                sek=round((dt.datetime.now() - start).total_seconds()))
+                etter=etter, aar=aar, sek=round((dt.datetime.now() - start).total_seconds()))
 
 
 def tall(x, d=3):
@@ -203,7 +208,7 @@ def vis_poeng(res, pg):
     med = n["TP"] + n["FP"] + n["FN"] + n["TN"]
     rut = sum(r["til_menneske"] == "1" for r in rader)
     with st.container(border=True):
-        st.subheader(f"Resultat: {antall(len(rader), 'sak', 'saker')} fra {res['kilde']}")
+        st.subheader(f"Resultat: {antall(len(rader), 'sak', 'saker')} fra {res['kilde']} · testår {res['aar']}")
         if med:
             k = st.columns(4)
             k[0].metric("F1 på MOT", tall(pg["f1"]), help="F1 på MOT mot styret, samme mål som den offisielle måleren")
@@ -233,9 +238,16 @@ def vis_poeng(res, pg):
                        "agenten ser dem aldri.")
         else:
             st.info("Ingen av sakene finnes i NBIMs stemmer, så det finnes ingen fasit å måle mot.")
-        ekstra = f"{antall(res['ute'], 'sak', 'saker')} fra før {TESTAAR} er tatt ut: de er i treningsdataene, så et treff der sier ingenting. " \
-            if res["ute"] else ""
-        st.caption(f"{ekstra}Kjøringen tok {res['sek']} s og er logget i logg/{res['loggfil']}.")
+        aar = res["aar"]
+        oppsett = ("den leverte agenten, samme som sh KJOR.sh" if aar == 2026
+                   else "samme agent med den rullende modellen, samme oppsett som treårstallene i testaar.sh")
+        tekst = [f"Testår {aar}: modellen er trent på 2019–{aar - 1}, og C, terskel og kalibrering er valgt på {aar - 1} ({oppsett})."]
+        if res["ute"]:
+            tekst.append(f"{antall(res['ute'], 'sak', 'saker')} fra før {aar} er tatt ut: de er i treningsdataene, så et treff "
+                         "der sier ingenting.")
+        if res.get("etter"):
+            tekst.append(f"{antall(res['etter'], 'sak', 'saker')} fra etter {aar} er tatt ut: de hører til et annet testår.")
+        st.caption(" ".join(tekst) + f" Kjøringen tok {res['sek']} s og er logget i logg/{res['loggfil']}.")
 
 
 def datonokkel(r):
@@ -325,19 +337,28 @@ with venstre:
 with hoyre:
     fil = st.file_uploader("… eller last opp en hel CSV-fil", type=["csv", "tsv", "txt"],
                            help="For eksempel ny_data/real_votes.csv eller arbeid/hack/c1/data_off/real_test_input.csv. "
-                                f"Saker fra før {TESTAAR} tas ut, fordi modellen er trent på dem.")
+                                "Bare saker fra teståret du velger under, brukes.")
+    aar = int(TESTAAR)
     if fil:
-        st.info(f"Bruker fila **{fil.name}** i stedet for teksten til venstre. Hele test {TESTAAR} (1 578 saker) "
-                "tar omtrent like lang tid som ett møte.")
+        try:
+            valgt = st.segmented_control("Testår for fila", AAR_VALG, default=int(TESTAAR), format_func=str,
+                                         help="Modellen trenes på årene før teståret, og terskelen velges på året før det. "
+                                              "2026 er den leverte agenten (samme som sh KJOR.sh). 2024 og 2025 har samme "
+                                              "oppsett som treårstallene i testaar.sh.")
+        except AttributeError:  # eldre Streamlit
+            valgt = st.radio("Testår for fila", AAR_VALG, horizontal=True)
+        aar = valgt or int(TESTAAR)
+        st.info(f"Bruker fila **{fil.name}** i stedet for teksten til venstre, med saker fra {aar}. Et helt testår tar "
+                "omtrent like lang tid som ett møte.")
     st.caption("Fasitfeltene (NBIMs stemme og begrunnelse) fjernes før agenten ser sakene. De brukes bare til å regne "
                "ut treffsikkerheten etterpå.")
-kilde = f"fil:{fil.name}:{fil.size}" if fil else f"tekst:{hashlib.sha256(tekst.encode('utf-8')).hexdigest()}"
+kilde = f"fil:{fil.name}:{fil.size}:{aar}" if fil else f"tekst:{hashlib.sha256(tekst.encode('utf-8')).hexdigest()}"
 if st.button("Anbefal", type="primary"):
     st.session_state.pop("ekte", None)
     try:
         with st.spinner("Agenten kjører (modellen trenes på nytt hver gang, 10–30 sekunder) ..."):
             res = kjor_ekte(les_fil(fil) if fil else tekst, fil.name if fil else valg.split(" (")[0],
-                            f"lim-{uuid.uuid4().hex[:6]}")
+                            f"lim-{uuid.uuid4().hex[:6]}", aar)
         st.session_state["ekte"] = (kilde, res)
         pg = poeng(res["rader"], res["fasit"])
         st.toast(f"Ferdig: {antall(len(res['rader']), 'sak', 'saker')}" + (f", F1 på MOT {tall(pg['f1'])}" if pg["n"]["-"] < len(res["rader"]) else ""),
