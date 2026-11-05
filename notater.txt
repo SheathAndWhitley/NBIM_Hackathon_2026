@@ -1,9 +1,0 @@
-
-Ting vi burde nevne:
-
-- Lekkasje
-    - Modellene vår er lekkasje beskyttet bruker ikke informasjon fra et møte den er i i det øyeblikket til å beregne svar til samme møte.
-    - Samt så husker den ikke fra tidligere runs og går gjennom periodisk slik at fremtiden ikke forklarer fortiden
-    - " History is updated only after a whole meeting is processed, so items at the same meeting can't see each other's answers.
-NBIM's rationale text and GVG section are never used as inputs. They only exist when NBIM voted against, so they would give away the answer.
-Jury version: "The model sees the proposal text without names, its type and country, and NBIM's own earlier votes at that company, never anything from after the meeting."

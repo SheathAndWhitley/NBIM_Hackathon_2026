@@ -1,0 +1,26 @@
+kjor_agent.py (real_votes, smed2 #2044-modell) 2026-11-05 17:03:48, 6 s
+inn: 1578 saker; avvik fra styret 73, av dem MOT styret 70 (med NBIM-sitat 70); til menneske 164 (10.4%), av dem 0 som ikke kunne vurderes og 1 med injeksjon
+låst på val 2025: C 3, rå grense 0.92321 (kalibrert 0.232), val-F1 0.5251; til menneske når kalibrert P(MOT) i [0.15, 0.85)
+nye saker lagt til uten etikett: 0; saker fra før 2026 (i treningen, ikke ærlig målt): 0
+--- smed2 train.py (#2044) ---
+FEATURES (kolonner lest av modellen): ['company_id', 'country', 'item_no', 'market', 'meeting_date', 'mgmt_rec', 'mgmt_rec_raw', 'proponent', 'proposal_text', 'proposal_type', 'year']
+FORBUDT og ikke brukt: ['funds_disagree', 'nbim_vote', 'nbim_vote_raw', 'position_paper', 'rationale_section', 'rationale_text'] | snitt med brukt: set()
+REPO-TREKK: prev_same_item,prev_same_person,prev_meeting_any_dev,hist_type_dev_rate (13757, 7) snitt [0.0265 0.547  0.0122 0.2689 0.3049 0.5402 0.0622]
+VAL 2025: C=3 grense=0.9232 {'F1': 0.5251, 'P': 0.6184, 'R': 0.4563, 'n_pred_MOT': 76, 'n_MOT': 103, 'n': 1909, 'PRAUC': 0.5001}
+TEST 2026 (rå grense fra val 0.9232): {'F1': 0.5294, 'P': 0.5143, 'R': 0.5455, 'n_pred_MOT': 70, 'n_MOT': 66, 'n': 1539, 'PRAUC': 0.5369}
+IKKE HOVEDTALL (bare sjekk, grensa satt med test-fordelingen; hovedtallet er måler v3 under): TEST 2026 (samme andel flagget som val 0.0398, merk: bruker test-fordeling uten etiketter): {'F1': 0.5625, 'P': 0.5806, 'R': 0.5455, 'n_pred_MOT': 62, 'n_MOT': 66, 'n': 1539, 'PRAUC': 0.5369}
+SCORE 0.5294
+--- måler maaler_offisiell_v2.py test (maskin alene, ruting ignorert) ---
+[svar] data real, vindu test: 1539 vurderte rader, 66 avvik fra styret, 0 svarrader utenfor vinduet ignorert
+  avvik: TP 36 FP 34 FN 30  P 0.5143  R 0.5455  F1 0.5294  PR-AUC 0.5368
+  streng MOT: TP 0 FP 0 FN 0  P 0.0000  R 0.0000  F1 0.0000
+  ruting (konfidens < 0.6): 0 til menneske (0.0%)
+SCORE 0.529412
+RETNING maks
+--- måler maaler_offisiell_v2.py test (med ruting (konfidens < 0,6 = menneske)) ---
+[svar] data real, vindu test: 1539 vurderte rader, 66 avvik fra styret, 0 svarrader utenfor vinduet ignorert
+  avvik: TP 36 FP 34 FN 30  P 0.5143  R 0.5455  F1 0.5294  PR-AUC 0.5368
+  streng MOT: TP 0 FP 0 FN 0  P 0.0000  R 0.0000  F1 0.0000
+  ruting (konfidens < 0.6): 161 til menneske (10.5%)
+SCORE 0.529412
+RETNING maks

@@ -1,0 +1,11 @@
+[project]
+name = "smed2-c1-mot"
+version = "0.1.0"
+requires-python = ">=3.13"
+dependencies = [
+    "lightgbm>=4.7.0",
+    "matplotlib>=3.11.2",
+    "pandas>=3.1.1",
+    "scikit-learn>=1.9.1",
+    "scipy>=1.18.1",
+]

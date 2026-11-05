@@ -1,0 +1,7 @@
+kolonner: ['injection_flag', 'meeting_id', 'company_id', 'company', 'ticker', 'country', 'market', 'meeting_date', 'item_no', 'proposal_number', 'proposal_text', 'proponent', 'mgmt_rec_raw', 'nbim_vote_raw', 'mgmt_rec', 'nbim_vote', 'against_board', 'rationale_text', 'position_paper', 'year', 'proposal_type', 'rationale_section']
+real_votes: 13757 saker, 194 selskaper, 1161 møter, 37 land
+år: 2019 - 2026 {2019: 1504, 2020: 1539, 2021: 1564, 2022: 1828, 2023: 1832, 2024: 1942, 2025: 1970, 2026: 1578}
+sakstyper (proposal_type): 24
+market: {'DM': 8791, 'EM': 4966}
+topp land: {'Japan': 2403, 'United States': 2376, 'China': 988, 'United Kingdom': 965, 'Sweden': 778, 'India': 643, 'Germany': 573, 'Switzerland': 561}
+test-input: 1578 saker, 136 selskaper, 31 land, år [np.int64(2026)], market {'DM': 893, 'EM': 685}

@@ -1,0 +1,12 @@
+data: state/opplastet/20261105_114241_real_votes.csv, 13757 rader
+MOT mot styret per år (nbim_vote == MOT og against_board == 1):
+  2019: 92
+  2020: 70
+  2021: 82
+  2022: 95
+  2023: 77
+  2024: 88
+  2025: 99
+  2026: 58
+test 2026, alle rader: 1578 saker, 141 møter, 136 selskaper
+test 2026, rader med fasit: 1539 saker, 140 møter, 135 selskaper

@@ -1,0 +1,3 @@
+Management: 56 MOT mot styret, agenten fant 29
+Shareholder: 2 MOT mot styret, agenten fant 1
+sum: 58 MOT mot styret, agenten fant 30

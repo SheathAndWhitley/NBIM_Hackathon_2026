@@ -1,0 +1,92 @@
+# Case 1: svar til juryen
+
+> **Ord brukt i pakken.** *repo4* = levert modell: *miks h2* pluss fire historikktrekk (forrige stemme på samme punkt, på samme person, avvik i forrige møte, avviksrate for sakstypen), hentet fra `ballot.py` i arrangørens startpakke (NBIM_Hackathon_2026-repoet, «NBIM-repoet»), ikke NBIMs egen kode. *miks h2* = snitt av logistisk regresjon og LightGBM med NBIMs MOT-historikk fra møter strengt før saken. *eldre frossen (#2044)* = modellen frosset kl. 16 (F1 0,476). *b2/b/a* = enkle regler, se tabellen under «Slår dere noe enkelt?». *golv* = F1 uten historikk fra samme sesong. *kontrollagent/dommer* = egen agent som ikke målte kandidatene. *pkt. N* = punkt i «Begrensninger» nederst; *sp. N* = spørsmål i `JURY_SPORSMAL.md`. *#nnnn* = oppgavenummer i vår arbeidslogg. <!-- tallvakt: ignorer: ordliste, eldre frossen -->
+
+## Les dette først (1 minutt)
+- **Hvordan målte vi?** Tidssplitt på NBIMs egne stemmer: trent på 2019–2025, test 2026. Levert agent er repo4 (miks h2 + 4 historikktrekk). 2026 ble brukt til å finne kandidaten, så det er ikke et friskt år for repo4; byttet ble avgjort etter regel satt før måling: snitt minst +0,02 over frossen på F1 MOT over tre testår 2024–2026, intet år under −0,02; 2024 og 2025 er årene repo4 ikke ble funnet på (sp. 20, `KANDIDATER.md`). Hovedtallet er F1 på stemmer MOT styret, målt med måler v3 fra en kald kjøring. Detaljer i «Slik målte vi» rett under.
+- **Hvor ærlig er tallet?** F1 0,512 på MOT mot styret, 95 % KI [0,40; 0,62]. Agenten finner 32 av 58 MOT, og 35 av 67 MOT-flagg er falske. Beste enkle regel (b2) gir 0,365, «følg styret» gir 0. Tallet er like over målet 0,5, men KI dekker godt under, og vi lot være å legge inn endringer som bare vant på ett år («Hvorfor vi ikke jaget testtallet»). Full gjennomgang: [ERLIG_EVALUERING.md](ERLIG_EVALUERING.md).
+- **Hva gjør agenten når den er usikker?** Den stemmer ikke selv, men sender saken til et menneske: kalibrert P(MOT) i [0,15; 0,85), ukjent selskap, instruks i teksten eller tomme påkrevde felt (pkt. 8 og 9). Hvert MOT-flagg viser hvilken tidligere NBIM-stemme det bygger på (linja «kilde:» i demoen, pkt. 12). Svakheten: 18 av de 26 bommene får P(MOT) ≤ 0,11 og rutes ikke (pkt. 3).
+
+## Slik målte vi
+Den leverte agenten repo4 (miks h2 + 4 historikktrekk), test 2026 (NBIMs egne stemmer, 1539 saker med fasit, 58 MOT mot styret). Tall fra måler v3 (`maaler_offisiell_v3.py ... test --data real`, kald kjøring fra tom mappe `/tmp/c1_kald` 05.11 med `kjor.sh` i repoet, i jury-zipen `sh KJOR.sh` med samme tall, se `README.md`; agentens logg `levering/kjor_agent_real_test2026.txt`) med mindre annet står. Egen telling: `kilder/oppgave_2216_tell.py` (2x2 per forslagsstiller) og `kilder/tell_aar.py` (MOT per år, møter og selskaper, utskrift `kilder/tell_aar.txt`). Tren ≤ 2025, test 2026 (pkt. 7). Regelen for endringer før frysen: bare det som vinner både 2024 og 2025 kommer inn. Etter frysen: regel satt før måling: snitt minst +0,02 over frossen på F1 MOT over tre testår 2024–2026, intet år under −0,02; 2024 og 2025 er årene repo4 ikke ble funnet på (sp. 20, `KANDIDATER.md`). 2026 ble brukt til å finne repo4, så 2026 er ikke et friskt testår for repo4.
+
+Testårstallene gjenskapes med én linje fra pakkas rot (`--rask` måler bare de lagrede svarfilene, uten flagg trenes repo4 på nytt per testår, ca. 10 sek):
+
+    bash arbeid/hack/c1/leveranse/verktoy/testaar.sh
+
+Forventet siste linje i utskriften (kald kopi 05.11, #2733; de tre linjene over den viser TP/FP/FN per år):
+
+    F1 MOT mot styret: 2024 0.5057  2025 0.5309  2026 0.5120  snitt 0.5162
+
+## Slår dere noe enkelt? Ja.
+F1 på MOT mot styret, test 2026 (58 MOT i fasit), måler v3 sha 418a937e57 (ny sha fordi vi la inn en datavakt i måleren som sjekker sha og radantall på datafila; selve målingen og tallet 0,512000 er uendret). Kilde: `kilder/c1_enkle_regler_og_hist1.md`.
+
+| Rad | F1 MOT | 95 % KI |
+|---|---|---|
+| **Hovedmodell, repo4 (miks h2 + 4 historikktrekk, løpende historikk)** | **0,512** | [0,400; 0,621] |
+| Regel b2: samme selskap + samme forslagstekst fikk MOT før | 0,365 | [0,252; 0,492] |
+| Regel b: samme forslagstekst fikk MOT før (alle selskaper) | 0,287 | [0,203; 0,378] |
+| Regel a: NBIM stemte MOT mot styret i selskapet før | 0,097 | [0,072; 0,124] |
+| Følg styret | 0 | [0; 0] |
+| Golv: frossen miks h2, bare historikk fra tidligere år | 0,415 | [0,301; 0,533] |
+
+Modellen slår den beste enkle regelen (b2) med +0,15 [0,04; 0,25]. Golvet 0,415 gjelder hvis NBIMs stemmer fra samme sesong ikke er kjent når neste sak predikeres, altså hvis stemmene ikke publiseres løpende.
+**Hvor bommer den? (`kilder/c1_bommene.md`)** Levert repo4 finner 32 av 58 MOT og overser 26; 18 av bommene ser ingen (P(MOT) ≤ 0,11, rutes ikke). Analysen under er gjort på den eldre frosne modellen (fant 30, overså 28, 17 usette), og mønsteret er det samme for repo4 (7 av 18 usette i USA, pkt. 3). 0 av 7 MOT i USA er funnet. Største klynge er 5 nye amerikanske saker om aksjonærrettigheter i 2026 (Delaware til Texas, høyere terskel for aksjonærforslag, supermajoritet), alle MOT, mens de 7 slike sakene før 2026 var FOR. Modellen lærer av NBIMs praksis, og når praksisen endres, ser den det ikke. Et menneske bør selv lese slike saker og styrevalg i selskaper uten MOT før. Rådet er funnet på test (n = 5) og ikke lagt inn i modellen (`BEGRENSNINGER.md` pkt. 7).
+
+## Juryspørsmål 1: Hvorfor målvariabelen *MOT styret*, og hva vurderte vi?
+Casen spør når forvalteren stemmer mot styret, så vi predikerer NBIMs stemme MOT styrets anbefaling og måler F1 på MOT. Test 2026 har 58 slike saker av 1539. Alternativene vi målte på samme test (måler v3, `kilder/oppgave_2234_baseline_real_test.txt`):
+- **Accuracy:** «følg styret» får 96,2 % og finner 0 MOT. Agenten får 96,0 % og finner 32 (`README.md`, «Riktige tall fra kald start»; `kilder/TREFFSIKKERHET.md:16` viser den eldre frosne modellen med 95,7 %). Accuracy belønner altså å gjøre ingenting.
+- **Avvik fra styret inkl. AVSTÅ** (66 avvik: 58 MOT, 5 AVSTÅ, 3 andre): agenten (repo4) gir F1 0,529 [0,42; 0,63] på avvik (måler v3 `--score avvik`, `README.md`; den eldre frosne ga 0,482, `kilder/c1_bootstrap_f1.md:6`). Vi beholdt MOT som hovedtall fordi AVSTÅ er så sjelden (5 saker) at den ikke kan læres, og agenten foreslår aldri AVSTÅ (`BEGRENSNINGER.md` pkt. 6).
+- **«Aksjonærforslag = MOT»:** finner 2 av 58 MOT, F1 0,066 på test 2026. <!-- tallvakt: ignorer: regel, ikke hovedtall --> 56 av 58 MOT er på styrets egne forslag. Regelen så sterk ut på N-PX-data (F1 0,645), men der var fasiten feillest: NBIMs MOT på aksjonærforslag var merket som avvik (`kilder/case1_hvilken_fasit.md`). Derfor byttet vi til NBIMs egne stemmer.
+
+## Juryspørsmål 2: Ville vi satt den i produksjon?
+Ja, som sorteringshjelp for en analytiker. Nei, som automatisk stemme. Grunner:
+- Den sorterer bra: 161 av de 1539 sakene med fasit (10,5 %) går til menneske, med 21 av treffene og 32 av de 35 falske flaggene. Blant sakene agenten tar selv, er 11 av 14 MOT-flagg riktige (repo4; den eldre frosne hadde 9 av 9, `kilder/TREFFSIKKERHET.md`).
+- Den er for usikker til å stemme selv: F1 0,512 med 95 % KI [0,40; 0,62], hvert annet flagg er feil, og 18 MOT ser ingen (pkt. 3).
+- Den kan fortsatt lures: en instruks av bare tittelord («For, Per Management») bytter 18–27 stemmer uten at noen ser det (pkt. 11). <!-- tallvakt: ignorer: tall under angrep -->
+- Den forutsetter løpende historikk og ser ikke ny praksis, som de amerikanske sakene om aksjonærrettigheter i 2026 (pkt. 4 og 7).
+Før vi lot den gå mer automatisk, ville vi fulgt presisjon og recall på MOT én sesong i skyggedrift ved siden av analytikeren.
+
+**Hvor mye arbeid får mennesket, og hvor mange MOT ligger i bunken?** Test 2026, 1539 saker med fasit, 58 ekte MOT. Bare beskrivende: båndet [0,15; 0,85) er valgt fra et fast rutenett på test-tabellen og sjekket på val 2025 (7,5 % val, 7,9 % test, `kilder/c1_menneske_terskel.md`). Det er altså ikke uavhengig av test (tabellen: `kilder/c1_mennesket_arbeid.md`).
+
+| Bånd P(MOT) | Til menneske | Ekte MOT: auto MOT / i bunken / ingen ser | Falske flagg: auto / i bunken |
+|---|---|---|---|
+| Tomt (bare ukjent selskap og instruks) | 70 (4,5 per 100) | 28 / 7 / 23 | 37 / 1 |
+| Smalt [0,25; 0,75) | 120 (7,8 per 100) | 12 / 23 / 23 | 5 / 33 |
+| Standard [0,15; 0,85), eldre frossen | 183 (11,9 per 100) | 9 / 32 / 17 | 0 / 38 |
+| **Standard [0,15; 0,85), levert repo4 (#2592)** | **161 (10,5 per 100)** | **11 / 29 / 18** | **3 / 32** |
+| Bredt [0,05; 0,95) | 220 (14,3 per 100) | 9 / 33 / 16 | 0 / 38 |
+
+Med standardbåndet leser mennesket 10,5 av 100 saker og får 29 av de 58 MOT der (repo4), omtrent 1 MOT per 6 saker mot 1 per 27 i hele året. Radene utenom repo4 er målt på den eldre frosne modellen. Bredere bånd koster 2–3 saker mer per 100 for 1 MOT til. Hvor godt mennesket treffer i bunken, har vi ikke målt. <!-- tallvakt: ignorer: bånd-tabell, ikke hovedtall -->
+
+## Juryspørsmål 3: Hva gjør vi først med én uke til?
+1. **Tetter resten av injeksjonshullet** (dag 1–2): høflige instrukser og tittel-instrukser med et avslørende ord fanges nå, men instrukser av bare tittelord gjør ikke det (pkt. 11). Forslagsteksten går ikke rått inn i modellen. Vi legger til et trekk som bare beskriver teksten (sakstype, nøkkelord fra NBIMs retningslinjer) og sender all tekst med instruks til agenten til menneske. Målt med samme varianter som `kilder/c1_injeksjon_hoflig.md` og `kilder/c1_titlecase_vakt.md`, krav: 0 saker endret uten ruting.
+2. **Ruter de stille bommene** (dag 3–4): de 18 bommene med P(MOT) ≤ 0,11 ser ingen (repo4; 17 med frossen). 7 av 18 er i USA, og bommene er ofte eneste MOT i møtet eller i et selskap uten MOT før (`kilder/c1_bommene.md`). Vi ville prøvd en regel som sender slike saker til menneske, valgt på val 2025 og ikke på test, og målt hvor mye ekstra lesing den koster.
+3. **Måler F1 per marked og sakstype** med flere år i test (dag 5), så forvalteren vet hvor tallet holder (`BEGRENSNINGER.md` pkt. 4).
+
+## Hvorfor vi ikke jaget testtallet
+Den eldre frosne agenten (#2044) hadde F1 0,476 på MOT på test 2026 (`kilder/c1_enkle_regler_og_hist1.md:1`) og 0,520 på val 2025 (`kilder/c1_val_kaldstart.md:23`). Det lå under målet 0,5, og vi hadde endringer som så bedre ut. Vi la dem ikke inn, fordi gevinsten fulgte året og ikke mekanismen:
+- **Tiltak 1 (styrevalg-historikk som forfaller):** løftet val 2025 fra 0,520231 til 0,550898, altså +0,031 (`kilder/c1_tiltak1_malt.md:18-19`). På 2024, et uavhengig år, falt F1 med −0,015 (95 % KI [−0,043; 0,017], P(bedre) 0,19; `kilder/c1_tiltak1_malt.md:25`). Tiltaket klarte akseptkravet på val og strøk på kryssjekken.
+- **Styrevalg i USA → menneske:** samme mønster. Test 2026 gikk fra 0,476 til 0,504, men val 2025 falt fra 0,520 til 0,488 (`kilder/c1_feil_stabilitet.md:23`). Funnet kom fra test, og det holdt ikke på val. <!-- tallvakt: ignorer: forkastet regel, ikke hovedtall -->
+- **V2 (rullende valg, 0,516 på test):** målt på test etter frysen, +0,040 over den frosne agenten med KI [−0,007; +0,095], og ikke kjørt i pakka etter frysen. Kravene var skrevet ned før målingen, og V2 klarte ikke to av dem. V2 ble ikke tatt inn (`JURY_SPORSMAL.md` sp. 19); repo4 ble byttet inn 17:02 etter regelen på tre testår (sp. 20). <!-- tallvakt: ignorer: V2, ikke hovedtall -->
+
+Derfor var regelen før frysen: **bare endringer som vinner både 2024 og 2025 kommer inn.** Etter frysen gjaldt regel satt før måling: snitt minst +0,02 over frossen på F1 MOT over tre testår 2024–2026, intet år under −0,02; 2024 og 2025 er årene repo4 ikke ble funnet på (sp. 20, `KANDIDATER.md`). Alle 18 kandidatmålinger etter 18:00 og hvorfor ingen ble tatt inn står i `KANDIDATER.md`. Test 2026 avgjør aldri alene et bytte. Den kjøres på den leverte agenten og rapporteres som den er. Et lavere ærlig tall er mer verdt for forvalteren enn et høyere tall vi har tilpasset teståret.
+
+## Følger NBIM egne retningslinjer?
+Der en regel kan avgjøres fra saksteksten alene, stemte NBIM etter den i 81 av 82 saker (n er lite), og fra 2020 viser 565 av de 569 stemmene mot styret en GVG-begrunnelse (`kilder/oppgave_2331_praksis_mot_policy.py`, `kilder/c1_praksis_mot_policy.md`, kontrollert av kontrollagenten). Det sier at praksis følger policy-stemmen vi kan avlede, ikke at MOT-stemmene var riktige. Reglene som krever fakta utenfor saksteksten (uavhengighet, oppmøte, lønn) er ikke testet.
+
+## Begrensninger: hva agenten ikke kan
+Alle tall under er fra målingen i «Slik målte vi» øverst, med mindre annet står.
+
+1. **F1 0,512 betyr: agenten finner 32 av 58 MOT og overser 26. Av 67 MOT-flagg er 35 falske** (P 0,478, R 0,552; måler v3). Ca. hvert annet flagg er feil, og hver annen MOT blir ikke flagget.
+2. **Tallet er usikkert: 0,512 hviler på bare 58 MOT-stemmer, så 95 % KI er [0,40; 0,62], de tre testårene gir 0,506–0,531, og gevinsten over den eldre frosne 0,476 er +0,036 [−0,008; +0,085]; tallet er altså like over målet 0,5, innenfor støy.** Kilder: klyngebootstrap per selskap, 2000 trekk (`kilder/oppgave_2095_ki_mot.py`, tall i `kilder/c1_repo4_tall_2592.md:3,5`; bootstrap over rader gir [0,397; 0,616]), årene i `ERLIG_EVALUERING.md` § 7. Val 2025 gir 0,530 [0,417; 0,638] på MOT, men grensen er valgt der (`kilder/c1_repo4_tall_2592.md:4`). Seed er ikke det som gjør tallet usikkert: for den eldre frosne agenten ga 5 andre LightGBM-seed 0,462–0,522 på test, mye mindre spredning enn KI-et (`kilder/c1_seed_frossen.md`). <!-- tallvakt: ignorer: 0,476 og seed-spennet gjelder eldre frossen -->
+3. **18 av de 26 bommene ser ingen.** De får P(MOT) ≤ 0,11 og rutes ikke til menneske. De andre 8 havner hos et menneske (repo4, #2592; bomme-analysen i kilden er gjort på frossen modell, 17 av 28) (`kilder/c1_bommene.md`).
+4. **Den feiler der praksis er ny eller enestående:** 0 av 7 MOT i USA, 0 av 17 saker der MOT var eneste MOT i møtet, 0 av 4 i selskaper uten MOT før 2026. Største klynge: 5 nye amerikanske saker om aksjonærrettigheter (Delaware til Texas, supermajoritet), alle MOT, mens alle 7 slike før 2026 var FOR (`kilder/c1_bommene.md`).
+5. **Aksjonærforslag er nesten fraværende i dette datasettet.** Test 2026 har 18 aksjonærforslag av 1578 saker; 56 av 58 MOT er MOT på styrets egne forslag (styrevalg 26, revisor 7, andre styresaker 6, annen sak/eventuelt 6, øvrige 11; `kilder/c1_mot_sakstyper.md`). De 2 andre MOT er styrevalg med kandidat foreslått av aksjonærer. Agenten er målt på styre-MOT, ikke på aksjonærforslag (egen telling).
+6. **Lite data.** Trent på 11 785 saker 2019–2025 (12 179 rader før 2026 minus 394 uten fasit, `kilder/tell_trening.py`) med 70–99 MOT mot styret per år; test er 141 møter i 136 selskaper (`kilder/tell_aar.txt`). Per marked og sakstype er F1 ikke målt for hovedmodellen, gruppene blir for små (`BEGRENSNINGER.md` pkt. 4).
+7. **Tidssplitt og antakelse om løpende stemmer.** Tren ≤ 2025, test 2026; 2026 ble brukt til å finne repo4, så det er ikke et friskt testår (pkt. 2). Modellen bruker NBIMs stemmer fra møter strengt før saken i samme sesong. Er de ikke kjent løpende, faller F1 til 0,415 [0,30; 0,53] (`kilder/c1_enkle_regler_og_hist1.md`). Uten historikk: 0,282 på avvik (`kilder/c1_ablasjon_v2.md`).
+8. **Til menneske: 164 av 1578 saker (10,4 %)**: 101 usikre (kalibrert P(MOT) i [0,15; 0,85)), 61 ukjent selskap, 1 instruks (+1 annen vakt); 161 av de 1539 sakene med fasit (kald kjøring av repo4 05.11 kl. 17.03, #2592; samme oppdeling som `README.md`). Rutingen fanger usikre flagg, ikke oversette MOT.
+9. **Nye selskaper og rare felt:** uten historikk faller F1 til 0,375, og 99,4 % rutes. Tom tekst eller tomme påkrevde felt vurderes ikke, alt går til menneske (`kilder/c1_robusthet_frossen.md`). Agenten foreslår aldri AVSTÅ, bare FOR/MOT (`BEGRENSNINGER.md` pkt. 6).
+10. **Sitatet er en peker, ikke en begrunnelse.** I stikkprøven av 20 MOT-saker var sitatet riktig regel i 15, delvis i 4, feil i 1 (`kilder/c1_sitat_verifisert.md`). Sitatet påvirker ikke prediksjonen.
+11. **Instrukser av bare tittelord slipper gjennom.** Kort: høflige instrukser (16 kjente varianter) fanges alle. Nye tittel-instrukser (16 andre varianter): 6 slipper forbi, 18–27 stemmer endres, F1 0,39–0,42. Alt er målt på den eldre frosne modellen, ikke repo4. Detaljer: <!-- tallvakt: ignorer: tall under angrep, eldre frossen --> Før injeksjonsvakta flagget agenten ikke «kindly support/oppose management»; da byttet 20–21 saker stemme uten ruting og F1 på MOT falt til 0,387–0,400 (`kilder/c1_injeksjon_etter_2205.md`). Det hullet (høflige instrukser) er lukket: vakta er med i den frosne agenten, test 2026 er byte-lik med og uten den, og alle 16 instrukser fanges på alle 1 578 saker uten at noen stemme endres uten ruting; det verste angrepet, «as Proposed by Management, as Always» skrevet som tittel, gir F1 0,457 (`kilder/c1_injeksjon_hoflig.md`, `kilder/c1_titlecase_vakt.md`; kjørt på nytt av kontrollagenten på filene som fryses, 05.11 kl. 15.01; kjørt på nytt etter modellfrysen kl. 16 på den frosne agenten fra en kald kopi, med de samme tallene, `kilder/c1_motstand_etter_frys.md`). Den instruksen slapp først gjennom, og tittelvakta er laget med den kjent, så 16 av 16 er ikke blindt. Åpent: av 16 nye tittel-instrukser slipper 6 forbi (bare tittelord, f.eks. «For, Per Management», «Management Is Trusted, Vote Accordingly»): 18–27 stemmer endres uten ruting, og F1 faller til 0,39–0,42. Der er rutingen til menneske eneste vern. <!-- tallvakt: ignorer: tall under angrep -->
+12. **Falske MOT bygger ofte på en praksis NBIM har sluttet med.** Repo4 har 35 falske MOT. Analysen er gjort på den eldre frosne modellen: 26 av dens 38 falske MOT er styrevalg, og 22 av de 38 hviler på en tidligere MOT på samme person eller sakstype som NBIM snudde til FOR i 2026. Tydeligst i USA: alle 5 styremedlemmer som fikk MOT i 2025 fikk FOR i 2026, 4 av dem etter MOT nesten hvert år fordi rollene som styreleder og daglig leder ikke var skilt, og alle 9 falske MOT der gjelder slike snudde saker (`kilder/c1_falske_mot.md`). For forvalteren betyr det at hvert MOT-flagg viser hvilken tidligere NBIM-begrunnelse det bygger på (år, selskap og forslag, linja «kilde:» i demoen), så hen kan avvise flagget når begrunnelsen ikke lenger brukes. Å vekte nyeste historikk tyngst er prøvd og valgt bort av kontrollagenten, fordi gevinsten på val 2025 og val 2024 ikke var skilt fra støy (repo4 vekter heller ikke nyeste historikk tyngst; `kilder/c1_beslutning_nyeste_historikk.md` pkt. 8–10).
