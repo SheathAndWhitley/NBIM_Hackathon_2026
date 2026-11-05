@@ -1,0 +1,820 @@
+{
+  "data_audit": {
+    "real_votes": {
+      "rows": 13757,
+      "meetings": 1161,
+      "companies": 194,
+      "date_range": [
+        "2019-01-23",
+        "2026-09-30"
+      ],
+      "always_for_share": 0.9385383297325486,
+      "with_board_provided_label": 0.9441609126388472,
+      "mgmt_proposals_with_board_rec_MOT": 3,
+      "of_which_nbim_voted_MOT": 3,
+      "with_board_by_year": {
+        "2019": 0.9329647546648238,
+        "2020": 0.9442204301075269,
+        "2021": 0.9363934426229508,
+        "2022": 0.9339729119638827,
+        "2023": 0.9528676888131743,
+        "2024": 0.9479553903345725,
+        "2025": 0.9460450497642745,
+        "2026": 0.9571150097465887
+      }
+    },
+    "npx_votes": {
+      "rows": 52906,
+      "meetings": 4568,
+      "companies": 2550,
+      "date_range": [
+        "2023-07-02",
+        "2026-06-30"
+      ],
+      "always_for_share": 0.9207688607391966,
+      "with_board_provided_label": 0.9604946333102069,
+      "mgmt_proposals_with_board_rec_MOT": 2538,
+      "of_which_nbim_voted_MOT": 1770,
+      "with_board_corrected": 0.9195863064218712,
+      "injection_flag_rows": 141
+    },
+    "sec_crosscheck": {
+      "real_vs_sec_matched": 87,
+      "real_vs_sec_agreement": 0.9770114942528736,
+      "npx_vs_sec_matched": 579,
+      "npx_vs_sec_agreement": 0.8998272884283247,
+      "sec_against_votes_in_npx_match": 58,
+      "of_which_npx_says_MOT": 11
+    }
+  },
+  "ballot": {
+    "split": {
+      "train 2019-23": {
+        "n": 7993,
+        "deviations": 477,
+        "rate": 0.0596772175653697
+      },
+      "valid 2024": {
+        "n": 1883,
+        "deviations": 98,
+        "rate": 0.05204460966542751
+      },
+      "test 2025-26": {
+        "n": 3448,
+        "deviations": 169,
+        "rate": 0.049013921113689095
+      }
+    },
+    "model_selection_valid_pr_auc": [
+      {
+        "model": "logreg(C=0.3,cw=None)",
+        "valid_pr_auc": 0.44322870800629377
+      },
+      {
+        "model": "logreg(C=0.3,cw=balanced)",
+        "valid_pr_auc": 0.42402127460818273
+      },
+      {
+        "model": "logreg(C=1.0,cw=None)",
+        "valid_pr_auc": 0.4610033800861496
+      },
+      {
+        "model": "logreg(C=1.0,cw=balanced)",
+        "valid_pr_auc": 0.4411306725516648
+      },
+      {
+        "model": "logreg(C=3.0,cw=None)",
+        "valid_pr_auc": 0.5008723573617517
+      },
+      {
+        "model": "logreg(C=3.0,cw=balanced)",
+        "valid_pr_auc": 0.45471337932144623
+      },
+      {
+        "model": "gbm(structured only)",
+        "valid_pr_auc": 0.43640596226630574
+      }
+    ],
+    "selected": "logreg(C=3.0,cw=None)",
+    "thresholds": {
+      "t_flag_hybrid": 0.4444444444444444,
+      "t_review_hybrid": 0.03125,
+      "t_flag_model_only": 0.4444444444444444
+    },
+    "test": {
+      "always_board": {
+        "accuracy": 0.9509860788863109,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "pr_auc": 0.049013921113689095,
+        "recall@10%": 0.10005800464037123,
+        "recall@20%": 0.20011600928074247,
+        "recall@30%": 0.29988399071925753,
+        "fp_per_tp": Infinity,
+        "flagged": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 169
+      },
+      "persistence": {
+        "accuracy": 0.9596867749419954,
+        "precision": 0.6442307692307693,
+        "recall": 0.39644970414201186,
+        "f1": 0.49084249084249093,
+        "pr_auc": 0.28498746445004636,
+        "recall@10%": 0.4399471985504374,
+        "recall@20%": 0.5022153959400923,
+        "recall@30%": 0.5643031058010816,
+        "fp_per_tp": 0.5522388059701493,
+        "flagged": 104,
+        "tp": 67,
+        "fp": 37,
+        "fn": 102
+      },
+      "type_majority": {
+        "accuracy": 0.9541763341067285,
+        "precision": 0.7391304347826086,
+        "recall": 0.10059171597633136,
+        "f1": 0.17708333333333334,
+        "pr_auc": 0.1562326884573615,
+        "recall@10%": 0.1390532544378698,
+        "recall@20%": 0.2899624501798211,
+        "recall@30%": 0.4089687132880237,
+        "fp_per_tp": 0.35294117647058826,
+        "flagged": 23,
+        "tp": 17,
+        "fp": 6,
+        "fn": 152
+      },
+      "model_only": {
+        "accuracy": 0.9564965197215777,
+        "precision": 0.5979381443298969,
+        "recall": 0.3431952662721893,
+        "f1": 0.4360902255639097,
+        "pr_auc": 0.39767224217128816,
+        "recall@10%": 0.5970359915314044,
+        "recall@20%": 0.7203840935184219,
+        "recall@30%": 0.7866691288046053,
+        "fp_per_tp": 0.6724137931034483,
+        "flagged": 97,
+        "tp": 58,
+        "fp": 39,
+        "fn": 111
+      },
+      "hybrid": {
+        "accuracy": 0.9579466357308585,
+        "precision": 0.5909090909090909,
+        "recall": 0.46153846153846156,
+        "f1": 0.5182724252491695,
+        "pr_auc": 0.4407406362271201,
+        "recall@10%": 0.596655990445687,
+        "recall@20%": 0.7202212503215848,
+        "recall@30%": 0.7865963467970157,
+        "fp_per_tp": 0.6923076923076923,
+        "flagged": 132,
+        "tp": 78,
+        "fp": 54,
+        "fn": 91
+      }
+    },
+    "test_hybrid_brier": {
+      "model": 0.03528250510395837,
+      "constant": 0.046725262541966586
+    },
+    "test_hybrid_ci95": {
+      "precision": [
+        0.507806581439394,
+        0.6783483691880637
+      ],
+      "recall": [
+        0.3710666463785757,
+        0.5614058542077117
+      ],
+      "f1": [
+        0.4399797297297297,
+        0.5909173855341738
+      ],
+      "pr_auc": [
+        0.35734143740560015,
+        0.5365897756446414
+      ],
+      "recall@20%": [
+        0.6400813633435739,
+        0.8056974673429946
+      ]
+    },
+    "test_hybrid_minus_persistence": {
+      "pr_auc": {
+        "mean_diff": 0.15627238041430558,
+        "ci_low": 0.1153640159200055,
+        "ci_high": 0.19700639835463407,
+        "p_le_0": 0.0
+      },
+      "recall@20%": {
+        "mean_diff": 0.21726941321487414,
+        "ci_low": 0.15125460844395403,
+        "ci_high": 0.27984864115629227,
+        "p_le_0": 0.0
+      },
+      "f1": {
+        "mean_diff": 0.026670068399668182,
+        "ci_low": -0.0063370704443179715,
+        "ci_high": 0.06091648540489791,
+        "p_le_0": 0.0565
+      }
+    },
+    "review_queue": {
+      "share_reviewed": 0.3805104408352668,
+      "caught": 142,
+      "deviations": 169,
+      "missed_in_autoclear": 27,
+      "auto_cleared": 2136
+    },
+    "by_type": [
+      {
+        "proposal_type": "DIRECTOR_ELECTION",
+        "n": 1642.0,
+        "deviations": 96.0,
+        "flagged": 73.0,
+        "tp": 44.0,
+        "caught_in_review": 83.0,
+        "share_reviewed": 0.49634591961023145
+      },
+      {
+        "proposal_type": "SAY_ON_PAY",
+        "n": 145.0,
+        "deviations": 15.0,
+        "flagged": 16.0,
+        "tp": 8.0,
+        "caught_in_review": 14.0,
+        "share_reviewed": 0.6
+      },
+      {
+        "proposal_type": "AUDITOR",
+        "n": 303.0,
+        "deviations": 13.0,
+        "flagged": 6.0,
+        "tp": 6.0,
+        "caught_in_review": 12.0,
+        "share_reviewed": 0.1254125412541254
+      },
+      {
+        "proposal_type": "OTHER_MGMT",
+        "n": 185.0,
+        "deviations": 12.0,
+        "flagged": 3.0,
+        "tp": 1.0,
+        "caught_in_review": 7.0,
+        "share_reviewed": 0.3783783783783784
+      },
+      {
+        "proposal_type": "OTHER_BUSINESS",
+        "n": 12.0,
+        "deviations": 12.0,
+        "flagged": 12.0,
+        "tp": 12.0,
+        "caught_in_review": 12.0,
+        "share_reviewed": 1.0
+      },
+      {
+        "proposal_type": "ARTICLES",
+        "n": 85.0,
+        "deviations": 5.0,
+        "flagged": 6.0,
+        "tp": 1.0,
+        "caught_in_review": 5.0,
+        "share_reviewed": 0.8117647058823529
+      },
+      {
+        "proposal_type": "SHP_GOVERNANCE",
+        "n": 5.0,
+        "deviations": 4.0,
+        "flagged": 4.0,
+        "tp": 4.0,
+        "caught_in_review": 4.0,
+        "share_reviewed": 1.0
+      },
+      {
+        "proposal_type": "EQUITY_PLAN",
+        "n": 56.0,
+        "deviations": 3.0,
+        "flagged": 0.0,
+        "tp": 0.0,
+        "caught_in_review": 2.0,
+        "share_reviewed": 0.2857142857142857
+      },
+      {
+        "proposal_type": "SHARE_ISSUANCE",
+        "n": 84.0,
+        "deviations": 2.0,
+        "flagged": 0.0,
+        "tp": 0.0,
+        "caught_in_review": 0.0,
+        "share_reviewed": 0.14285714285714285
+      },
+      {
+        "proposal_type": "RPT",
+        "n": 60.0,
+        "deviations": 2.0,
+        "flagged": 2.0,
+        "tp": 1.0,
+        "caught_in_review": 2.0,
+        "share_reviewed": 0.45
+      },
+      {
+        "proposal_type": "FIN_STATEMENTS",
+        "n": 226.0,
+        "deviations": 2.0,
+        "flagged": 0.0,
+        "tp": 0.0,
+        "caught_in_review": 0.0,
+        "share_reviewed": 0.05752212389380531
+      },
+      {
+        "proposal_type": "SHP_INDEP_CHAIR",
+        "n": 1.0,
+        "deviations": 1.0,
+        "flagged": 1.0,
+        "tp": 1.0,
+        "caught_in_review": 1.0,
+        "share_reviewed": 1.0
+      },
+      {
+        "proposal_type": "DIRECTOR_PAY",
+        "n": 114.0,
+        "deviations": 1.0,
+        "flagged": 0.0,
+        "tp": 0.0,
+        "caught_in_review": 0.0,
+        "share_reviewed": 0.0
+      },
+      {
+        "proposal_type": "MERGER",
+        "n": 10.0,
+        "deviations": 1.0,
+        "flagged": 1.0,
+        "tp": 0.0,
+        "caught_in_review": 0.0,
+        "share_reviewed": 0.3
+      },
+      {
+        "proposal_type": "CLASSIFY_BOARD",
+        "n": 1.0,
+        "deviations": 0.0,
+        "flagged": 1.0,
+        "tp": 0.0,
+        "caught_in_review": 0.0,
+        "share_reviewed": 1.0
+      },
+      {
+        "proposal_type": "DIVIDEND",
+        "n": 176.0,
+        "deviations": 0.0,
+        "flagged": 0.0,
+        "tp": 0.0,
+        "caught_in_review": 0.0,
+        "share_reviewed": 0.10227272727272728
+      },
+      {
+        "proposal_type": "DISCHARGE",
+        "n": 202.0,
+        "deviations": 0.0,
+        "flagged": 2.0,
+        "tp": 0.0,
+        "caught_in_review": 0.0,
+        "share_reviewed": 0.5198019801980198
+      },
+      {
+        "proposal_type": "ROUTINE",
+        "n": 72.0,
+        "deviations": 0.0,
+        "flagged": 0.0,
+        "tp": 0.0,
+        "caught_in_review": 0.0,
+        "share_reviewed": 0.09722222222222222
+      },
+      {
+        "proposal_type": "SHARE_REPURCHASE",
+        "n": 54.0,
+        "deviations": 0.0,
+        "flagged": 0.0,
+        "tp": 0.0,
+        "caught_in_review": 0.0,
+        "share_reviewed": 0.0
+      },
+      {
+        "proposal_type": "SHP_OTHER",
+        "n": 10.0,
+        "deviations": 0.0,
+        "flagged": 1.0,
+        "tp": 0.0,
+        "caught_in_review": 0.0,
+        "share_reviewed": 0.8
+      },
+      {
+        "proposal_type": "SHP_SUSTAINABILITY",
+        "n": 5.0,
+        "deviations": 0.0,
+        "flagged": 4.0,
+        "tp": 0.0,
+        "caught_in_review": 0.0,
+        "share_reviewed": 1.0
+      }
+    ],
+    "by_year": {
+      "2025": {
+        "precision": 0.6133333333333333,
+        "recall": 0.44660194174757284,
+        "f1": 0.5168539325842697,
+        "pr_auc": 0.4519662526042169
+      },
+      "2026": {
+        "precision": 0.5614035087719298,
+        "recall": 0.48484848484848486,
+        "f1": 0.5203252032520325,
+        "pr_auc": 0.4306517972749094
+      }
+    },
+    "reliability": [
+      {
+        "bin": "[0.0, 0.02)",
+        "n": 2002.0,
+        "predicted": 0.004974248067142721,
+        "observed": 0.01048951048951049
+      },
+      {
+        "bin": "[0.02, 0.05)",
+        "n": 871.0,
+        "predicted": 0.029740706095069742,
+        "observed": 0.03444316877152698
+      },
+      {
+        "bin": "[0.05, 0.1)",
+        "n": 245.0,
+        "predicted": 0.07298404509458568,
+        "observed": 0.07346938775510205
+      },
+      {
+        "bin": "[0.1, 0.2)",
+        "n": 229.0,
+        "predicted": 0.15770190243416826,
+        "observed": 0.17903930131004367
+      },
+      {
+        "bin": "[0.2, 0.35)",
+        "n": 3.0,
+        "predicted": 0.2510874789445407,
+        "observed": 0.3333333333333333
+      },
+      {
+        "bin": "[0.35, 0.5)",
+        "n": 19.0,
+        "predicted": 0.4452605979251214,
+        "observed": 0.2631578947368421
+      },
+      {
+        "bin": "[0.5, 0.75)",
+        "n": 57.0,
+        "predicted": 0.602238697451885,
+        "observed": 0.5789473684210527
+      },
+      {
+        "bin": "[0.75, 1.0)",
+        "n": 22.0,
+        "predicted": 0.991395664958363,
+        "observed": 0.9090909090909091
+      }
+    ],
+    "top_features": [
+      {
+        "feature": "cat__proposal_type_OTHER_BUSINESS",
+        "weight": 3.014109931888909,
+        "direction": "towards MOT"
+      },
+      {
+        "feature": "txt__board member",
+        "weight": 2.6584674681466764,
+        "direction": "towards MOT"
+      },
+      {
+        "feature": "cat__proposal_type_infrequent_sklearn",
+        "weight": 2.6035785207320608,
+        "direction": "towards MOT"
+      },
+      {
+        "feature": "txt__member",
+        "weight": 2.448147664657353,
+        "direction": "towards MOT"
+      },
+      {
+        "feature": "txt__and member",
+        "weight": 2.1946869866434944,
+        "direction": "towards MOT"
+      },
+      {
+        "feature": "txt__system",
+        "weight": 2.1559658646397883,
+        "direction": "towards MOT"
+      },
+      {
+        "feature": "txt__amend",
+        "weight": 2.0904978581899,
+        "direction": "towards MOT"
+      },
+      {
+        "feature": "txt__business",
+        "weight": 2.035460320757559,
+        "direction": "towards MOT"
+      },
+      {
+        "feature": "txt__elect directors",
+        "weight": 1.8683806057563939,
+        "direction": "towards MOT"
+      },
+      {
+        "feature": "txt__the",
+        "weight": 1.7212418436765402,
+        "direction": "towards MOT"
+      },
+      {
+        "feature": "txt__min",
+        "weight": 1.714882702794877,
+        "direction": "towards MOT"
+      },
+      {
+        "feature": "txt__external",
+        "weight": 1.7113257494343754,
+        "direction": "towards MOT"
+      },
+      {
+        "feature": "txt__fiscal year",
+        "weight": -4.428490322072906,
+        "direction": "towards FOR"
+      },
+      {
+        "feature": "txt__year",
+        "weight": -3.939098039262076,
+        "direction": "towards FOR"
+      },
+      {
+        "feature": "cat__country_Malaysia",
+        "weight": -2.054423881851417,
+        "direction": "towards FOR"
+      },
+      {
+        "feature": "txt__board for",
+        "weight": -2.0382920218702836,
+        "direction": "towards FOR"
+      },
+      {
+        "feature": "txt__person re",
+        "weight": -1.8448347465343646,
+        "direction": "towards FOR"
+      },
+      {
+        "feature": "txt__meeting",
+        "weight": -1.805541736098838,
+        "direction": "towards FOR"
+      },
+      {
+        "feature": "cat__proposal_type_DIRECTOR_PAY",
+        "weight": -1.7698796574289075,
+        "direction": "towards FOR"
+      },
+      {
+        "feature": "cat__country_United Kingdom",
+        "weight": -1.682403751163899,
+        "direction": "towards FOR"
+      },
+      {
+        "feature": "cat__country_Hong Kong",
+        "weight": -1.5997211858817615,
+        "direction": "towards FOR"
+      },
+      {
+        "feature": "txt__person",
+        "weight": -1.5780940750903067,
+        "direction": "towards FOR"
+      },
+      {
+        "feature": "cat__country_Sri Lanka",
+        "weight": -1.401748498925859,
+        "direction": "towards FOR"
+      },
+      {
+        "feature": "cat__country_Bermuda",
+        "weight": -1.4003581788367612,
+        "direction": "towards FOR"
+      }
+    ]
+  },
+  "say_on_pay": {
+    "data": {
+      "seasons": {
+        "2023-24": {
+          "size": 1609,
+          "sum": 141,
+          "mean": 0.0876
+        },
+        "2024-25": {
+          "size": 1491,
+          "sum": 135,
+          "mean": 0.0905
+        },
+        "2025-26": {
+          "size": 1217,
+          "sum": 120,
+          "mean": 0.0986
+        }
+      },
+      "proxy_status": {
+        "ok": 3813,
+        "no_def14a_in_window": 34,
+        "no_xbrl": 29,
+        "no_pvp_table": 9
+      },
+      "feature_coverage_test": {
+        "prev_against": 0.921,
+        "has_history": 1.0,
+        "log_peo_sct": 0.931,
+        "pay_above_rule": 1.0,
+        "peo_cap_ratio": 0.929,
+        "peo_pay_growth": 0.91,
+        "peo_missing": 1.0,
+        "ceo_change": 0.931,
+        "pay_pctile": 0.931,
+        "ceo_neo_ratio": 0.929,
+        "log_revenue": 0.856,
+        "tsr_1y": 0.909,
+        "rel_tsr_1y": 0.89,
+        "rel_tsr_cum": 0.909,
+        "loss_maker": 0.936,
+        "dilution": 0.917
+      }
+    },
+    "selected": {
+      "kind": "logreg",
+      "t_flag": 0.38461538461538464,
+      "t_review": 0.022222222222222223,
+      "oof_pr_auc": {
+        "logreg": 0.5960040278764064,
+        "gbm": 0.6071184085861875
+      },
+      "chosen": "logreg",
+      "n_train": 1491,
+      "pos_train": 135,
+      "review_share_train": 0.574111334674715,
+      "oof_calibrated": null
+    },
+    "test": {
+      "always_board": {
+        "accuracy": 0.9013968775677896,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "pr_auc": 0.09860312243221035,
+        "recall@10%": 0.10024650780608053,
+        "recall@20%": 0.19967132292522596,
+        "recall@30%": 0.2999178307313065,
+        "fp_per_tp": Infinity,
+        "flagged": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 120
+      },
+      "persistence": {
+        "accuracy": 0.8940016433853739,
+        "precision": 0.45454545454545453,
+        "recall": 0.375,
+        "f1": 0.410958904109589,
+        "pr_auc": 0.23208149697467692,
+        "recall@10%": 0.3878577817531306,
+        "recall@20%": 0.45550089445438285,
+        "recall@30%": 0.5237030411449016,
+        "fp_per_tp": 1.2,
+        "flagged": 99,
+        "tp": 45,
+        "fp": 54,
+        "fn": 75
+      },
+      "nbim_pay_rule": {
+        "accuracy": 0.9104354971240756,
+        "precision": 0.5364238410596026,
+        "recall": 0.675,
+        "f1": 0.5977859778597785,
+        "pr_auc": 0.5562459243946972,
+        "recall@10%": 0.6166666666666667,
+        "recall@20%": 0.7583333333333333,
+        "recall@30%": 0.7916666666666666,
+        "fp_per_tp": 0.8641975308641975,
+        "flagged": 151,
+        "tp": 81,
+        "fp": 70,
+        "fn": 39
+      },
+      "model": {
+        "accuracy": 0.914543960558751,
+        "precision": 0.5540540540540541,
+        "recall": 0.6833333333333333,
+        "f1": 0.6119402985074627,
+        "pr_auc": 0.5971521796099203,
+        "recall@10%": 0.6173913043478261,
+        "recall@20%": 0.807015503875969,
+        "recall@30%": 0.8637596899224805,
+        "fp_per_tp": 0.8048780487804879,
+        "flagged": 148,
+        "tp": 82,
+        "fp": 66,
+        "fn": 38
+      }
+    },
+    "test_model_brier": 0.052188344012640574,
+    "test_model_ci95": {
+      "precision": [
+        0.46938775510204084,
+        0.6280570204350692
+      ],
+      "recall": [
+        0.5981308411214953,
+        0.7652311006658832
+      ],
+      "f1": [
+        0.5363885057471264,
+        0.6763746975458002
+      ],
+      "pr_auc": [
+        0.5067336777995677,
+        0.6865769221070619
+      ],
+      "recall@20%": [
+        0.7424926642211137,
+        0.8733374358550924
+      ]
+    },
+    "test_model_minus_nbim_rule": {
+      "pr_auc": {
+        "mean_diff": 0.03641301531051001,
+        "ci_low": -0.034673085258404096,
+        "ci_high": 0.10787767256519777,
+        "p_le_0": 0.1505
+      },
+      "recall@20%": {
+        "mean_diff": 0.053851832255985124,
+        "ci_low": -0.0011304279369195752,
+        "ci_high": 0.11072788297733491,
+        "p_le_0": 0.029
+      },
+      "f1": {
+        "mean_diff": 0.014036302443990309,
+        "ci_low": -0.017609624772774172,
+        "ci_high": 0.046114465605792,
+        "p_le_0": 0.2105
+      }
+    },
+    "policy_vs_practice": {
+      "against_rate_above_threshold": 0.5364238410596026,
+      "n_above_threshold": 151,
+      "against_rate_below_threshold": 0.028513238289205704,
+      "share_of_against_votes_above_threshold": 0.7431192660550459,
+      "against_rate_ceo_change": 0.14358974358974358,
+      "against_rate_no_ceo_change": 0.08635394456289978
+    },
+    "coefficients": {
+      "pay_above_rule": 0.845,
+      "prev_against": 0.644,
+      "peo_pay_growth (missing)": 0.432,
+      "peo_pay_growth": 0.428,
+      "ceo_change": 0.418,
+      "pay_pctile": 0.39,
+      "log_revenue (missing)": 0.366,
+      "log_revenue": -0.348,
+      "rel_tsr_cum (missing)": -0.274,
+      "rel_tsr_1y (missing)": -0.225,
+      "tsr_1y": -0.217,
+      "log_peo_sct": 0.198,
+      "tsr_1y (missing)": -0.192,
+      "dilution": -0.131,
+      "peo_missing": 0.105,
+      "log_peo_sct (missing)": 0.105,
+      "ceo_change (missing)": 0.105,
+      "pay_pctile (missing)": 0.105,
+      "has_history": -0.104,
+      "prev_against (missing)": 0.104,
+      "ceo_neo_ratio": -0.099,
+      "loss_maker": 0.083,
+      "rel_tsr_1y": 0.071,
+      "peo_cap_ratio (missing)": 0.061,
+      "rel_tsr_cum": 0.053,
+      "loss_maker (missing)": 0.02,
+      "dilution (missing)": -0.019,
+      "ceo_neo_ratio (missing)": 0.014,
+      "peo_cap_ratio": -0.002
+    },
+    "review_queue": {
+      "share_reviewed": 0.6039441248972884,
+      "caught": 113,
+      "against": 120
+    }
+  }
+}

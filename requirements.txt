@@ -1,0 +1,16 @@
+# Core data + modelling
+pandas>=2.1
+numpy>=1.26
+scikit-learn>=1.4
+lxml>=5.0
+requests>=2.31
+rapidfuzz>=3.6
+pypdf>=4.0
+rank-bm25>=0.2.2
+matplotlib>=3.8
+# Agent (Claude API)
+anthropic>=0.75
+pydantic>=2.6
+# Demo
+streamlit>=1.35
+plotly>=5.20

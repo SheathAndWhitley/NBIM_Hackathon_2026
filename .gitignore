@@ -218,3 +218,9 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# --- Stemmegivningsagenten ---
+# Raw SEC caches are ~1.3 GB; rebuild with `python run.py --rebuild-data`.
+# The processed tables in data/processed/ are committed for offline reproduction.
+data/raw/sec/
+results/llm_raw/
