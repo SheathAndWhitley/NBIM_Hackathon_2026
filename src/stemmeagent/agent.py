@@ -24,6 +24,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import re
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
@@ -33,7 +34,7 @@ import pandas as pd
 from pydantic import BaseModel, Field, ValidationError
 
 from . import guidelines as gl
-from .config import LOGS, RESULTS
+from .config import LOGS, RESULTS, ROOT
 
 MODEL = "claude-opus-5-5"
 EFFORT_BULK = "low"
@@ -219,6 +220,22 @@ def _parse_message(msg) -> dict:
     return rec
 
 
+def load_env() -> None:
+    """Read ANTHROPIC_API_KEY from the git-ignored file .env in the project root, if present.
+
+    The SDK also finds ANTHROPIC_API_KEY in the environment or an `ant auth login` profile.
+    The key is never written to the repo, the cache or the audit log.
+    """
+    f = ROOT / ".env"
+    if not f.exists():
+        return
+    for line in f.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if line and not line.startswith("#") and "=" in line:
+            k, v = line.split("=", 1)
+            os.environ.setdefault(k.strip(), v.strip().strip('"').strip("'"))
+
+
 def call_live(params: dict, cache: dict | None = None) -> dict:
     """Synchronous call for the demo, with the server-side refusal fallback."""
     import anthropic
@@ -226,6 +243,7 @@ def call_live(params: dict, cache: dict | None = None) -> dict:
     cache = load_cache() if cache is None else cache
     if key in cache:
         return cache[key]
+    load_env()
     client = anthropic.Anthropic()
     msg = client.beta.messages.create(**params, betas=["server-side-fallback-2026-07-01"], fallbacks="default")
     rec = {"key": key, "created": datetime.now(timezone.utc).isoformat(timespec="seconds"), **_parse_message(msg)}
@@ -248,6 +266,7 @@ def run_batch(requests: list[tuple[str, dict]], poll_s: int = 60) -> dict:
     todo = [(cid, p) for cid, p in requests if cache_key(p) not in cache]
     if not todo:
         return cache
+    load_env()
     client = anthropic.Anthropic()
     key_of = {cid: cache_key(p) for cid, p in todo}
     batch = client.messages.batches.create(

@@ -19,7 +19,9 @@ ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT / "src"))
 warnings.filterwarnings("ignore")
 
-from stemmeagent import audit, pipeline  # noqa: E402
+import pandas as pd  # noqa: E402
+
+from stemmeagent import audit, pipeline, report  # noqa: E402
 from stemmeagent.config import RESULTS  # noqa: E402
 
 
@@ -56,8 +58,9 @@ def main() -> None:
     print("[1] Data audit")
     a = audit.run()
     results["data_audit"] = a
-    print(f"  real_votes.csv: with the board {a['real_votes']['with_board_provided_label']:.1%} "
-          f"(2025: {a['real_votes']['with_board_by_year'][2025]:.1%})  <- the baseline")
+    print(f"  real_votes.csv: NBIM votes against the board on {a['real_votes']['against_board_rate']:.1%}, "
+          f"with the board {a['real_votes']['with_board']:.1%} (AVSTÅ excluded; "
+          f"{a['real_votes']['abstain_votes']} abstentions)  <- the baseline")
     print(f"  npx_votes.csv : with the board {a['npx_votes']['with_board_provided_label']:.1%} as labelled, "
           f"{a['npx_votes']['with_board_corrected']:.1%} corrected "
           f"({a['npx_votes']['mgmt_proposals_with_board_rec_MOT']} management proposals marked 'board says MOT')")
@@ -71,13 +74,27 @@ def main() -> None:
     results["ballot"] = rb
     t = rb["split"]["test 2025-26"]
     print(f"  test: {t['n']} proposals, {t['deviations']} deviations from the board ({t['rate']:.1%}); model: {rb['selected']}")
-    for name in ("always_board", "persistence", "type_majority", "model_only", "hybrid"):
+    for name in ("always_board", "persistence", "type_majority", "model"):
         print(_row(name, rb["test"][name]))
     rq = rb["review_queue"]
     print(f"  review queue: analysts read {rq['share_reviewed']:.0%} of proposals and catch "
           f"{rq['caught']}/{rq['deviations']}; auto-cleared misses: {rq['missed_in_autoclear']}")
-    d = rb["test_hybrid_minus_persistence"]["pr_auc"]
-    print(f"  hybrid - persistence, PR-AUC: {d['mean_diff']:+.3f} (95% CI {d['ci_low']:+.3f} to {d['ci_high']:+.3f})")
+    d = rb["test_model_minus_persistence"]["pr_auc"]
+    print(f"  model - persistence, PR-AUC: {d['mean_diff']:+.3f} (95% CI {d['ci_low']:+.3f} to {d['ci_high']:+.3f}, "
+          f"bootstrap per company)")
+    hb = rb["hit_breakdown"]
+    print(f"  hits: {hb['model_hits']} of {hb['model_flags']} flags ({hb['hits_with_precedent']} with precedent, "
+          f"{hb['hits_without_precedent']} without); no-precedent deviations caught in review: "
+          f"{hb['of_which_caught_in_review']}/{hb['deviations_without_precedent']}")
+    rv = pd.DataFrame(rb["rolling_validation"])
+    piv = rv.pivot(index="year", columns="system", values="recall@20%")
+    print("  rolling validation (train on earlier years), recall@20% model / precedent-first / persistence: "
+          + "; ".join(f"{y}: {r['model']:.0%} / {r['precedent_first_variant']:.0%} / {r['persistence']:.0%}" for y, r in piv.iterrows()))
+    cb = rb["citation_baselines"]["previous_section_else_type"]["exact_section"]
+    print(f"  citation baseline to beat (previous section, else type majority): {cb:.1%}")
+    for k, v in rb["triage_injection"].items():
+        print(f"  triage injection [{k}]: max change in p {v['max_abs_change_p']:.3f}, "
+              f"deviations pushed out of the review queue: {v['deviations_moved_from_review_to_auto']}")
 
     print("\n[3] US say-on-pay deep dive - NBIM's SEC N-PX + pay data from each meeting's own proxy")
     rs, te_sop = pipeline.run_sop()
@@ -104,9 +121,11 @@ def main() -> None:
         results["agent"] = json.loads(agent_file.read_text())
         print("\n[4] Agent (LLM) evaluation: loaded from results/agent_eval.json")
     else:
-        print("\n[4] Agent (LLM) evaluation: not run yet (python -m stemmeagent.agent_eval, needs ANTHROPIC_API_KEY)")
+        print("\n[4] Agent (LLM) evaluation: not run yet (python run_agent.py --run, needs ANTHROPIC_API_KEY)")
 
     (RESULTS / "metrics.json").write_text(json.dumps(results, indent=2, default=lambda o: o if not hasattr(o, "item") else o.item()))
+    report.write(results)
+    print(f"  key numbers (Norwegian) -> {RESULTS / 'nokkeltall.md'}")
     if not args.no_figures:
         try:
             from stemmeagent import figures

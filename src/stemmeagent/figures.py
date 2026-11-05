@@ -152,7 +152,7 @@ def make_all(results: dict, te_ballot: pd.DataFrame, te_sop: pd.DataFrame) -> No
     rb = results["ballot"]
     rq = rb["review_queue"]
     systems = {
-        "Modell (presedens + tekst)": te_ballot["score"].values,
+        "Modell (logistisk regresjon)": te_ballot["score"].values,
         "Samme som sist": (te_ballot["prev_same"] == 1).astype(float).values,
     }
     systems["Forslagstype-flertall"] = te_ballot["score_type_majority"].values  # training-period rates only

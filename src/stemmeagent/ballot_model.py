@@ -9,6 +9,11 @@ Protocol (walk-forward, no random splits):
 Baselines: always with the board (the case baseline), persistence (repeat NBIM's
 previous decision on the same item/person at the same company) and proposal-type
 majority (deviate where NBIM deviated on most proposals of this type in training).
+
+One learned model, no hand-made decision rules. NBIM's precedent (same item/person
+before) is an input feature whose weight the model learns. A "precedent first" override
+was tested on four validation years (2021-24, see pipeline.rolling_validation): it gave
+the same analyst queue every year and a tied PR-AUC, so the simpler model was kept.
 """
 from __future__ import annotations
 
@@ -69,19 +74,12 @@ def make_gbm():
 
 @dataclass
 class BallotModel:
-    """Precedent-first hybrid.
-
-    Rule 1 (precedent): NBIM deviated on the same item/person at the same company at an
-    earlier meeting -> flag. (NBIM then cites the same guideline section in 97% of cases.)
-    Rule 2 (model): otherwise the calibrated probability ranks the proposal.
-    score = 1 + p for precedent cases (always ranked first), else p.
-    """
+    """Calibrated logistic regression; the risk score is the calibrated probability p."""
     name: str
     pipeline: Pipeline
     calibrator: IsotonicRegression
-    t_flag: float       # on the hybrid score, chosen for F1 on the validation year
-    t_review: float     # on the hybrid score, catches REVIEW_RECALL on the validation year
-    t_flag_model: float
+    t_flag: float       # p >= t_flag -> "NBIM will likely vote against the board" (best F1 on 2024)
+    t_review: float     # p >= t_review -> an analyst reads it (catches REVIEW_RECALL of 2024's deviations)
     selection: list[dict]
 
     def predict_proba(self, X: pd.DataFrame) -> np.ndarray:
@@ -91,8 +89,13 @@ class BallotModel:
         return self.pipeline.predict_proba(X)[:, 1]
 
     def score(self, X: pd.DataFrame, p: np.ndarray | None = None) -> np.ndarray:
-        p = self.predict_proba(X) if p is None else p
-        return np.where((X["prev_same"] == 1).values, 1.0 + p, p)
+        """Risk score used for ranking and routing: the calibrated probability itself."""
+        return self.predict_proba(X) if p is None else p
+
+
+def precedent_first(X: pd.DataFrame, p: np.ndarray) -> np.ndarray:
+    """The rejected variant, kept only to document the comparison: precedent cases first."""
+    return np.where((X["prev_same"] == 1).values, 1.0 + p, p)
 
 
 def fit_select(train: pd.DataFrame, valid: pd.DataFrame) -> BallotModel:
@@ -111,9 +114,7 @@ def fit_select(train: pd.DataFrame, valid: pd.DataFrame) -> BallotModel:
     name, pipe, _, p_valid = best
     cal = IsotonicRegression(out_of_bounds="clip", y_min=0.0, y_max=1.0).fit(p_valid, yva)
     pc = cal.predict(p_valid)
-    hv = np.where((valid["prev_same"] == 1).values, 1.0 + pc, pc)
-    return BallotModel(name, pipe, cal, f1_threshold(yva, hv), recall_threshold(yva, hv, REVIEW_RECALL),
-                       f1_threshold(yva, pc), results)
+    return BallotModel(name, pipe, cal, f1_threshold(yva, pc), recall_threshold(yva, pc, REVIEW_RECALL), results)
 
 
 # --- baselines ----------------------------------------------------------------

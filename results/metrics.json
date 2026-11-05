@@ -12,15 +12,19 @@
       "with_board_provided_label": 0.9441609126388472,
       "mgmt_proposals_with_board_rec_MOT": 3,
       "of_which_nbim_voted_MOT": 3,
+      "abstain_votes": 68,
+      "labelled_excl_abstain": 13285,
+      "against_board_rate": 0.05306736921339857,
+      "with_board": 0.9469326307866014,
       "with_board_by_year": {
-        "2019": 0.9329647546648238,
-        "2020": 0.9442204301075269,
-        "2021": 0.9363934426229508,
-        "2022": 0.9339729119638827,
-        "2023": 0.9528676888131743,
-        "2024": 0.9479553903345725,
+        "2019": 0.9336099585062241,
+        "2020": 0.9493243243243243,
+        "2021": 0.9413315754779169,
+        "2022": 0.941410693970421,
+        "2023": 0.953951108584423,
+        "2024": 0.9484590860786397,
         "2025": 0.9460450497642745,
-        "2026": 0.9571150097465887
+        "2026": 0.9602346805736637
       }
     },
     "npx_votes": {
@@ -36,6 +40,7 @@
       "mgmt_proposals_with_board_rec_MOT": 2538,
       "of_which_nbim_voted_MOT": 1770,
       "with_board_corrected": 0.9380686581201824,
+      "abstain_votes": 983,
       "injection_flag_rows": 141
     },
     "sec_crosscheck": {
@@ -76,19 +81,19 @@
       },
       {
         "model": "logreg(C=1.0,cw=None)",
-        "valid_pr_auc": 0.4666325148904065
+        "valid_pr_auc": 0.4666325148904063
       },
       {
         "model": "logreg(C=1.0,cw=balanced)",
-        "valid_pr_auc": 0.45076917169700564
+        "valid_pr_auc": 0.45076917169700575
       },
       {
         "model": "logreg(C=3.0,cw=None)",
-        "valid_pr_auc": 0.5034463466845261
+        "valid_pr_auc": 0.5034441946255322
       },
       {
         "model": "logreg(C=3.0,cw=balanced)",
-        "valid_pr_auc": 0.4625982239152814
+        "valid_pr_auc": 0.4631074958798774
       },
       {
         "model": "gbm(structured only)",
@@ -96,10 +101,134 @@
       }
     ],
     "selected": "logreg(C=3.0,cw=None)",
+    "rolling_validation": [
+      {
+        "year": 2021,
+        "system": "model",
+        "n": 1517,
+        "deviations": 89,
+        "pr_auc": 0.7175026919222152,
+        "recall@20%": 0.797752808988764,
+        "recall@40%": 0.9213483146067416
+      },
+      {
+        "year": 2021,
+        "system": "precedent_first_variant",
+        "n": 1517,
+        "deviations": 89,
+        "pr_auc": 0.6616738467733568,
+        "recall@20%": 0.797752808988764,
+        "recall@40%": 0.9213483146067416
+      },
+      {
+        "year": 2021,
+        "system": "persistence",
+        "n": 1517,
+        "deviations": 89,
+        "pr_auc": 0.208390895691526,
+        "recall@20%": 0.3600325330602163,
+        "recall@40%": 0.5202879778293219
+      },
+      {
+        "year": 2022,
+        "system": "model",
+        "n": 1758,
+        "deviations": 103,
+        "pr_auc": 0.3562945770642282,
+        "recall@20%": 0.6990291262135923,
+        "recall@40%": 0.9029126213592233
+      },
+      {
+        "year": 2022,
+        "system": "precedent_first_variant",
+        "n": 1758,
+        "deviations": 103,
+        "pr_auc": 0.4086398800206885,
+        "recall@20%": 0.6990291262135923,
+        "recall@40%": 0.9029126213592233
+      },
+      {
+        "year": 2022,
+        "system": "persistence",
+        "n": 1758,
+        "deviations": 103,
+        "pr_auc": 0.3028146992525653,
+        "recall@20%": 0.5012786699544027,
+        "recall@40%": 0.6257816477965112
+      },
+      {
+        "year": 2023,
+        "system": "model",
+        "n": 1759,
+        "deviations": 81,
+        "pr_auc": 0.26883524617923404,
+        "recall@20%": 0.6419753086419753,
+        "recall@40%": 0.8395061728395061
+      },
+      {
+        "year": 2023,
+        "system": "precedent_first_variant",
+        "n": 1759,
+        "deviations": 81,
+        "pr_auc": 0.3110358493432558,
+        "recall@20%": 0.6419753086419753,
+        "recall@40%": 0.8395061728395061
+      },
+      {
+        "year": 2023,
+        "system": "persistence",
+        "n": 1759,
+        "deviations": 81,
+        "pr_auc": 0.19993799024614645,
+        "recall@20%": 0.4590895243069156,
+        "recall@40%": 0.5944132538335437
+      },
+      {
+        "year": 2024,
+        "system": "model",
+        "n": 1882,
+        "deviations": 97,
+        "pr_auc": 0.5034441946255322,
+        "recall@20%": 0.8247422680412371,
+        "recall@40%": 0.9381443298969072
+      },
+      {
+        "year": 2024,
+        "system": "precedent_first_variant",
+        "n": 1882,
+        "deviations": 97,
+        "pr_auc": 0.4981826183042548,
+        "recall@20%": 0.8247422680412371,
+        "recall@40%": 0.9381443298969072
+      },
+      {
+        "year": 2024,
+        "system": "persistence",
+        "n": 1882,
+        "deviations": 97,
+        "pr_auc": 0.22884430153790558,
+        "recall@20%": 0.4628645187588104,
+        "recall@40%": 0.5973267209021892
+      }
+    ],
+    "rejected_variant_precedent_first_test": {
+      "accuracy": 0.9619517862329364,
+      "precision": 0.6363636363636364,
+      "recall": 0.4695121951219512,
+      "f1": 0.5403508771929824,
+      "pr_auc": 0.44449283339401086,
+      "recall@10%": 0.6073983739837399,
+      "recall@20%": 0.7210171250648677,
+      "recall@30%": 0.7960836979595373,
+      "fp_per_tp": 0.5714285714285714,
+      "flagged": 121,
+      "tp": 77,
+      "fp": 44,
+      "fn": 87
+    },
     "thresholds": {
-      "t_flag_hybrid": 0.6410256410256411,
-      "t_review_hybrid": 0.026954177897574125,
-      "t_flag_model_only": 0.3
+      "t_flag": 0.3,
+      "t_review": 0.026954177897574125
     },
     "test": {
       "always_board": {
@@ -147,12 +276,12 @@
         "fp": 6,
         "fn": 147
       },
-      "model_only": {
+      "model": {
         "accuracy": 0.9584664536741214,
         "precision": 0.6153846153846154,
         "recall": 0.34146341463414637,
         "f1": 0.4392156862745098,
-        "pr_auc": 0.39234487327529677,
+        "pr_auc": 0.39207160513573497,
         "recall@10%": 0.6080487804878049,
         "recall@20%": 0.721120913336793,
         "recall@30%": 0.7962290261200484,
@@ -161,67 +290,52 @@
         "tp": 56,
         "fp": 35,
         "fn": 108
-      },
-      "hybrid": {
-        "accuracy": 0.9619517862329364,
-        "precision": 0.6363636363636364,
-        "recall": 0.4695121951219512,
-        "f1": 0.5403508771929824,
-        "pr_auc": 0.44460948581430476,
-        "recall@10%": 0.6073983739837399,
-        "recall@20%": 0.7210171250648677,
-        "recall@30%": 0.7960836979595373,
-        "fp_per_tp": 0.5714285714285714,
-        "flagged": 121,
-        "tp": 77,
-        "fp": 44,
-        "fn": 87
       }
     },
-    "test_hybrid_brier": {
-      "model": 0.03416784843933398,
+    "test_model_brier": {
+      "model": 0.0341684165343856,
       "constant": 0.04543034478771812
     },
-    "test_hybrid_ci95": {
+    "test_model_ci95": {
       "precision": [
-        0.5454545454545454,
-        0.7241379310344828
+        0.5121809415768577,
+        0.7155985788810938
       ],
       "recall": [
-        0.37930471038990304,
-        0.5685023788040358
+        0.24832099051145567,
+        0.4379223227752639
       ],
       "f1": [
-        0.45936134013872526,
-        0.6213032113517551
+        0.3400695134061569,
+        0.5249519146703966
       ],
       "pr_auc": [
-        0.36513128379913445,
-        0.5400263436795332
+        0.3002011249765682,
+        0.488841314372181
       ],
       "recall@20%": [
-        0.6342035789515342,
-        0.8115315164979421
+        0.627182094294958,
+        0.8138740711411565
       ]
     },
-    "test_hybrid_minus_persistence": {
+    "test_model_minus_persistence": {
       "pr_auc": {
-        "mean_diff": 0.1483815645913919,
-        "ci_low": 0.11122567945509998,
-        "ci_high": 0.18656221553047353,
-        "p_le_0": 0.0
+        "mean_diff": 0.09752285593082337,
+        "ci_low": 0.03806622737745715,
+        "ci_high": 0.1578749869670206,
+        "p_le_0": 0.0005
       },
       "recall@20%": {
-        "mean_diff": 0.20832688597508647,
-        "ci_low": 0.14204156627946724,
-        "ci_high": 0.2735560383436078,
+        "mean_diff": 0.20851677021217904,
+        "ci_low": 0.1425820199241687,
+        "ci_high": 0.2756993004402719,
         "p_le_0": 0.0
       },
       "f1": {
-        "mean_diff": 0.036096558231811154,
-        "ci_low": 0.005241947829543778,
-        "ci_high": 0.06821625495222695,
-        "p_le_0": 0.0085
+        "mean_diff": -0.06630430085009505,
+        "ci_low": -0.13366032590705587,
+        "ci_high": -0.0036957944078451744,
+        "p_le_0": 0.982
       }
     },
     "review_queue": {
@@ -236,8 +350,8 @@
         "proposal_type": "DIRECTOR_ELECTION",
         "n": 1637.0,
         "deviations": 91.0,
-        "flagged": 70.0,
-        "tp": 44.0,
+        "flagged": 48.0,
+        "tp": 27.0,
         "caught_in_review": 84.0,
         "share_reviewed": 0.531459987782529
       },
@@ -245,8 +359,8 @@
         "proposal_type": "SAY_ON_PAY",
         "n": 145.0,
         "deviations": 15.0,
-        "flagged": 16.0,
-        "tp": 8.0,
+        "flagged": 9.0,
+        "tp": 6.0,
         "caught_in_review": 14.0,
         "share_reviewed": 0.6551724137931034
       },
@@ -254,10 +368,19 @@
         "proposal_type": "AUDITOR",
         "n": 303.0,
         "deviations": 13.0,
-        "flagged": 6.0,
-        "tp": 6.0,
+        "flagged": 5.0,
+        "tp": 5.0,
         "caught_in_review": 12.0,
         "share_reviewed": 0.1716171617161716
+      },
+      {
+        "proposal_type": "OTHER_MGMT",
+        "n": 185.0,
+        "deviations": 12.0,
+        "flagged": 2.0,
+        "tp": 0.0,
+        "caught_in_review": 7.0,
+        "share_reviewed": 0.43243243243243246
       },
       {
         "proposal_type": "OTHER_BUSINESS",
@@ -269,19 +392,10 @@
         "share_reviewed": 1.0
       },
       {
-        "proposal_type": "OTHER_MGMT",
-        "n": 185.0,
-        "deviations": 12.0,
-        "flagged": 2.0,
-        "tp": 1.0,
-        "caught_in_review": 7.0,
-        "share_reviewed": 0.43243243243243246
-      },
-      {
         "proposal_type": "ARTICLES",
         "n": 85.0,
         "deviations": 5.0,
-        "flagged": 2.0,
+        "flagged": 3.0,
         "tp": 0.0,
         "caught_in_review": 5.0,
         "share_reviewed": 0.8705882352941177
@@ -305,24 +419,6 @@
         "share_reviewed": 0.2857142857142857
       },
       {
-        "proposal_type": "FIN_STATEMENTS",
-        "n": 226.0,
-        "deviations": 2.0,
-        "flagged": 0.0,
-        "tp": 0.0,
-        "caught_in_review": 0.0,
-        "share_reviewed": 0.004424778761061947
-      },
-      {
-        "proposal_type": "RPT",
-        "n": 60.0,
-        "deviations": 2.0,
-        "flagged": 2.0,
-        "tp": 1.0,
-        "caught_in_review": 2.0,
-        "share_reviewed": 0.5
-      },
-      {
         "proposal_type": "SHARE_ISSUANCE",
         "n": 84.0,
         "deviations": 2.0,
@@ -332,13 +428,31 @@
         "share_reviewed": 0.08333333333333333
       },
       {
-        "proposal_type": "MERGER",
-        "n": 10.0,
-        "deviations": 1.0,
+        "proposal_type": "RPT",
+        "n": 60.0,
+        "deviations": 2.0,
+        "flagged": 1.0,
+        "tp": 1.0,
+        "caught_in_review": 2.0,
+        "share_reviewed": 0.5
+      },
+      {
+        "proposal_type": "FIN_STATEMENTS",
+        "n": 226.0,
+        "deviations": 2.0,
         "flagged": 0.0,
         "tp": 0.0,
         "caught_in_review": 0.0,
-        "share_reviewed": 0.0
+        "share_reviewed": 0.004424778761061947
+      },
+      {
+        "proposal_type": "SHP_INDEP_CHAIR",
+        "n": 1.0,
+        "deviations": 1.0,
+        "flagged": 1.0,
+        "tp": 1.0,
+        "caught_in_review": 1.0,
+        "share_reviewed": 1.0
       },
       {
         "proposal_type": "DIRECTOR_PAY",
@@ -350,12 +464,21 @@
         "share_reviewed": 0.017543859649122806
       },
       {
-        "proposal_type": "SHP_INDEP_CHAIR",
-        "n": 1.0,
+        "proposal_type": "MERGER",
+        "n": 10.0,
         "deviations": 1.0,
-        "flagged": 1.0,
-        "tp": 1.0,
-        "caught_in_review": 1.0,
+        "flagged": 0.0,
+        "tp": 0.0,
+        "caught_in_review": 0.0,
+        "share_reviewed": 0.0
+      },
+      {
+        "proposal_type": "CLASSIFY_BOARD",
+        "n": 1.0,
+        "deviations": 0.0,
+        "flagged": 0.0,
+        "tp": 0.0,
+        "caught_in_review": 0.0,
         "share_reviewed": 1.0
       },
       {
@@ -371,7 +494,7 @@
         "proposal_type": "DISCHARGE",
         "n": 202.0,
         "deviations": 0.0,
-        "flagged": 0.0,
+        "flagged": 2.0,
         "tp": 0.0,
         "caught_in_review": 0.0,
         "share_reviewed": 0.5693069306930693
@@ -386,15 +509,6 @@
         "share_reviewed": 0.0
       },
       {
-        "proposal_type": "CLASSIFY_BOARD",
-        "n": 1.0,
-        "deviations": 0.0,
-        "flagged": 1.0,
-        "tp": 0.0,
-        "caught_in_review": 0.0,
-        "share_reviewed": 1.0
-      },
-      {
         "proposal_type": "SHARE_REPURCHASE",
         "n": 54.0,
         "deviations": 0.0,
@@ -407,7 +521,7 @@
         "proposal_type": "SHP_OTHER",
         "n": 10.0,
         "deviations": 0.0,
-        "flagged": 1.0,
+        "flagged": 0.0,
         "tp": 0.0,
         "caught_in_review": 0.0,
         "share_reviewed": 1.0
@@ -424,47 +538,47 @@
     ],
     "by_year": {
       "2025": {
-        "precision": 0.6617647058823529,
-        "recall": 0.4368932038834951,
-        "f1": 0.5263157894736842,
-        "pr_auc": 0.45951604898848036
+        "precision": 0.6595744680851063,
+        "recall": 0.30097087378640774,
+        "f1": 0.4133333333333333,
+        "pr_auc": 0.40569537323255356
       },
       "2026": {
-        "precision": 0.6037735849056604,
-        "recall": 0.5245901639344263,
-        "f1": 0.5614035087719299,
-        "pr_auc": 0.43868922911101904
+        "precision": 0.5681818181818182,
+        "recall": 0.4098360655737705,
+        "f1": 0.4761904761904762,
+        "pr_auc": 0.3962366637115208
       }
     },
     "reliability": [
       {
         "bin": "[0.0, 0.02)",
         "n": 2063.0,
-        "predicted": 0.005148908593653893,
+        "predicted": 0.005148353580857729,
         "observed": 0.009694619486185167
       },
       {
         "bin": "[0.02, 0.05)",
         "n": 589.0,
-        "predicted": 0.027379817432828496,
+        "predicted": 0.027381233191598072,
         "observed": 0.04074702886247878
       },
       {
         "bin": "[0.05, 0.1)",
         "n": 360.0,
-        "predicted": 0.05829214139485367,
+        "predicted": 0.05829547049980629,
         "observed": 0.030555555555555555
       },
       {
         "bin": "[0.1, 0.2)",
         "n": 337.0,
-        "predicted": 0.13366294042287857,
+        "predicted": 0.13366454477167547,
         "observed": 0.1572700296735905
       },
       {
         "bin": "[0.2, 0.35)",
         "n": 18.0,
-        "predicted": 0.29359989252255947,
+        "predicted": 0.29351754812632813,
         "observed": 0.3333333333333333
       },
       {
@@ -480,125 +594,203 @@
         "observed": 0.9090909090909091
       }
     ],
+    "bootstrap_cluster": "company_id",
+    "hit_breakdown": {
+      "precedent_cases": 102,
+      "precedent_cases_that_deviated": 67,
+      "model_flags": 91,
+      "model_hits": 56,
+      "hits_with_precedent": 46,
+      "hits_without_precedent": 10,
+      "precedent_cases_flagged": 66,
+      "deviations_without_precedent": 97,
+      "of_which_flagged_by_model": 10,
+      "of_which_caught_in_review": 77,
+      "deviations_nbim_followed_board_last_time": 33,
+      "deviations_never_seen_before": 64,
+      "missed_in_autoclear_by_type": {
+        "DIRECTOR_ELECTION": 7,
+        "OTHER_MGMT": 5,
+        "FIN_STATEMENTS": 2,
+        "SHARE_ISSUANCE": 2,
+        "SAY_ON_PAY": 1,
+        "MERGER": 1,
+        "EQUITY_PLAN": 1,
+        "AUDITOR": 1
+      },
+      "deviations_by_country_top": {
+        "United States": 36,
+        "Japan": 18,
+        "India": 18,
+        "Switzerland": 11,
+        "Indonesia": 11,
+        "South Korea": 7
+      }
+    },
+    "citation_baselines": {
+      "n_test_deviations_with_section": 164,
+      "type_majority": {
+        "exact_section": 0.38414634146341464,
+        "same_chapter": 0.40853658536585363,
+        "coverage": 0.975609756097561
+      },
+      "previous_section": {
+        "exact_section": 0.40853658536585363,
+        "same_chapter": 0.40853658536585363,
+        "coverage": 0.42073170731707316
+      },
+      "previous_section_else_type": {
+        "exact_section": 0.6097560975609756,
+        "same_chapter": 0.6219512195121951,
+        "coverage": 0.975609756097561
+      },
+      "previous_section_accuracy_when_present": 0.9710144927536232
+    },
+    "triage_injection": {
+      "no_plain": {
+        "mean_abs_change_p": 0.014366400778760837,
+        "max_abs_change_p": 0.48574613792005106,
+        "route_changed": 205,
+        "deviations_moved_from_review_to_auto": 0,
+        "share_reviewed_after": 0.45948300900377576,
+        "deviations_caught_after": 150
+      },
+      "en_system": {
+        "mean_abs_change_p": 0.048982418197929214,
+        "max_abs_change_p": 0.48574613792005106,
+        "route_changed": 995,
+        "deviations_moved_from_review_to_auto": 0,
+        "share_reviewed_after": 0.6889340691257624,
+        "deviations_caught_after": 158
+      },
+      "buried": {
+        "mean_abs_change_p": 0.01545245324949269,
+        "max_abs_change_p": 0.48574613792005106,
+        "route_changed": 254,
+        "deviations_moved_from_review_to_auto": 1,
+        "share_reviewed_after": 0.4487365669474296,
+        "deviations_caught_after": 149
+      }
+    },
     "top_features": [
       {
         "feature": "cat__proposal_type_OTHER_BUSINESS",
-        "weight": 3.147183282499275,
+        "weight": 3.147190276605515,
         "direction": "towards MOT"
       },
       {
         "feature": "cat__proposal_type_infrequent_sklearn",
-        "weight": 2.757736788577771,
+        "weight": 2.7577518687413782,
         "direction": "towards MOT"
       },
       {
         "feature": "txt__board member",
-        "weight": 2.590630607683382,
+        "weight": 2.5906420779681367,
         "direction": "towards MOT"
       },
       {
         "feature": "txt__member",
-        "weight": 2.3081176028353942,
+        "weight": 2.308128233761188,
         "direction": "towards MOT"
       },
       {
         "feature": "txt__amend",
-        "weight": 2.234573474506405,
+        "weight": 2.2345821683241995,
         "direction": "towards MOT"
       },
       {
         "feature": "txt__and member",
-        "weight": 2.1786766848546377,
+        "weight": 2.1786792486060373,
         "direction": "towards MOT"
       },
       {
         "feature": "txt__system",
-        "weight": 2.014314952422113,
+        "weight": 2.0143242434462323,
         "direction": "towards MOT"
       },
       {
         "feature": "txt__elect directors",
-        "weight": 1.8903554131208122,
+        "weight": 1.8903531918319403,
         "direction": "towards MOT"
       },
       {
         "feature": "txt__and",
-        "weight": 1.7611130584830799,
+        "weight": 1.7611301055803812,
         "direction": "towards MOT"
       },
       {
         "feature": "txt__arbitration",
-        "weight": 1.6720306239315676,
+        "weight": 1.6720264712321922,
         "direction": "towards MOT"
       },
       {
         "feature": "txt__business",
-        "weight": 1.6508213738347954,
+        "weight": 1.6508311343432605,
         "direction": "towards MOT"
       },
       {
         "feature": "cat__country_Germany",
-        "weight": 1.6381389674570124,
+        "weight": 1.6381544419917664,
         "direction": "towards MOT"
       },
       {
         "feature": "txt__fiscal year",
-        "weight": -4.538328532170372,
+        "weight": -4.538341849056769,
         "direction": "towards FOR"
       },
       {
         "feature": "txt__year",
-        "weight": -4.060110976948367,
+        "weight": -4.060128522827771,
         "direction": "towards FOR"
       },
       {
         "feature": "cat__proposal_type_DIVIDEND",
-        "weight": -1.9864026305128173,
+        "weight": -1.9864215090193207,
         "direction": "towards FOR"
       },
       {
         "feature": "cat__country_United Kingdom",
-        "weight": -1.977860735350899,
+        "weight": -1.9778546521580058,
         "direction": "towards FOR"
       },
       {
         "feature": "cat__country_Malaysia",
-        "weight": -1.976913421943233,
+        "weight": -1.9769251523227676,
         "direction": "towards FOR"
       },
       {
         "feature": "txt__board for",
-        "weight": -1.9332849787977577,
+        "weight": -1.9332921044479703,
         "direction": "towards FOR"
       },
       {
         "feature": "cat__proposal_type_FIN_STATEMENTS",
-        "weight": -1.761936769438872,
+        "weight": -1.7619305177716778,
         "direction": "towards FOR"
       },
       {
         "feature": "txt__approve",
-        "weight": -1.7269595864339076,
+        "weight": -1.7269619088916333,
         "direction": "towards FOR"
       },
       {
         "feature": "txt__meeting",
-        "weight": -1.723100563825226,
+        "weight": -1.7230969269230207,
         "direction": "towards FOR"
       },
       {
         "feature": "txt__person re",
-        "weight": -1.7175469297550934,
+        "weight": -1.7175399293294613,
         "direction": "towards FOR"
       },
       {
         "feature": "cat__country_Hong Kong",
-        "weight": -1.548904707970501,
+        "weight": -1.5489173696879641,
         "direction": "towards FOR"
       },
       {
         "feature": "cat__proposal_type_ROUTINE",
-        "weight": -1.505319630258521,
+        "weight": -1.5053351372690214,
         "direction": "towards FOR"
       }
     ]
@@ -645,6 +837,38 @@
         "rel_tsr_cum": 0.909,
         "loss_maker": 0.936,
         "dilution": 0.917
+      },
+      "cik_match": {
+        "2023-24": {
+          "unmatched": {
+            "n": 235,
+            "against_rate": 0.09361702127659574
+          },
+          "matched": {
+            "n": 1374,
+            "against_rate": 0.08660844250363901
+          }
+        },
+        "2024-25": {
+          "unmatched": {
+            "n": 137,
+            "against_rate": 0.11678832116788321
+          },
+          "matched": {
+            "n": 1354,
+            "against_rate": 0.0878877400295421
+          }
+        },
+        "2025-26": {
+          "unmatched": {
+            "n": 60,
+            "against_rate": 0.1
+          },
+          "matched": {
+            "n": 1157,
+            "against_rate": 0.09853068280034573
+          }
+        }
       }
     },
     "selected": {
@@ -652,7 +876,7 @@
       "t_flag": 0.38461538461538464,
       "t_review": 0.022222222222222223,
       "oof_pr_auc": {
-        "logreg": 0.5960111591228016,
+        "logreg": 0.5960040278764064,
         "gbm": 0.6071184085861875
       },
       "chosen": "logreg",
@@ -723,7 +947,7 @@
         "fn": 38
       }
     },
-    "test_model_brier": 0.05218834401264064,
+    "test_model_brier": 0.052188344012640574,
     "test_model_ci95": {
       "precision": [
         0.46938775510204084,

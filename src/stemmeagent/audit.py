@@ -1,10 +1,13 @@
 """Audit of the organizers' data files against each other and against NBIM's SEC filing.
 
 Findings this reproduces (see README):
-  * real_votes.csv: 'with the board' 94.4% (2025: 94.6%), matching NBIM's published 94%.
+  * real_votes.csv: NBIM votes against the board on 5.3% of labelled proposals (AVSTÅ
+    excluded, as in the model): 94.7% with the board. Counting AVSTÅ as 'not with the
+    board' gives 94.4%, close to NBIM's published 94%.
   * npx_votes.csv: mgmt_rec mirrors NBIM's vote. 2,538 MANAGEMENT proposals are marked
     'board recommends MOT', so the provided against_board misses real deviations; its
-    96.0% 'with the board' falls to 92.0% once the board recommendation is corrected.
+    96.0% 'with the board' becomes 93.8% once the board recommendation is corrected
+    (AVSTÅ excluded), in line with NBIM's own records.
   * NBIM's SEC N-PX filing (US say-on-pay) agrees with real_votes.csv on 97.7% of matched
     votes, but npx_votes.csv catches only 11 of its 51 AGAINST votes.
 """
@@ -39,11 +42,19 @@ def run() -> dict:
             "mgmt_proposals_with_board_rec_MOT": int((mgmt["mgmt_rec"] == "MOT").sum()),
             "of_which_nbim_voted_MOT": int(((mgmt["mgmt_rec"] == "MOT") & (mgmt["nbim_vote"] == "MOT")).sum()),
         }
-    out["npx_votes"]["with_board_corrected"] = float(1 - npx["y_fixed"].dropna().mean())
+    out["npx_votes"]["with_board_corrected"] = float(1 - npx["y_fixed"].dropna().mean())  # AVSTÅ excluded
+    out["npx_votes"]["abstain_votes"] = int((npx["nbim_vote"] == "AVSTÅ").sum())
     out["npx_votes"]["injection_flag_rows"] = int((npx["injection_flag"] == 1).sum())
-    lab = real[real["against_board"].notna()]
+    # The model's definition: AVSTÅ is neither with nor against the board (unlabelled).
+    lab = real[real["against_board"].notna() & real["nbim_vote"].ne("AVSTÅ")]
+    out["real_votes"]["abstain_votes"] = int((real["nbim_vote"] == "AVSTÅ").sum())
+    out["real_votes"]["labelled_excl_abstain"] = int(len(lab))
+    out["real_votes"]["against_board_rate"] = float(lab["against_board"].mean())
+    out["real_votes"]["with_board"] = float(1 - lab["against_board"].mean())
     out["real_votes"]["with_board_by_year"] = {int(y): float(1 - g["against_board"].mean())
                                                for y, g in lab.groupby(lab["meeting_date"].dt.year)}
+    # 'with_board_provided_label' above counts AVSTÅ as not following the board (NBIM's own
+    # 'in line with the board' statistic is computed that way).
 
     # Cross-check with NBIM's SEC N-PX filing (US say-on-pay only)
     sec_file = DATA_PROCESSED / "sec_nbim_npx_sop.csv"
