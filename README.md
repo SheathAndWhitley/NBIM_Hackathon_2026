@@ -19,7 +19,7 @@ Den er beslutningsstøtte, ikke en autopilot: et menneske stemmer.
 Krever macOS eller Linux og [uv](https://docs.astral.sh/uv/). Første kjøring laster ned låste pakker (ca. 80 MB)
 til et eget miljø `.venv_kjor`.
 
-    git clone -b test_version_mkh https://github.com/SheathAndWhitley/NBIM_Hackathon_2026.git && cd NBIM_Hackathon_2026
+    git clone https://github.com/SheathAndWhitley/NBIM_Hackathon_2026.git && cd NBIM_Hackathon_2026
     sh KJOR.sh
 
 Arrangørens `real_votes.csv` ligger i `ny_data/`, så `sh KJOR.sh` virker rett etter kloning (se [DATA.md](DATA.md)).
@@ -118,7 +118,7 @@ git-historikken (`git checkout 7d968c8`). Tekstene i `arbeid/hack/c1/leveranse/`
 - Ingen andre data er brukt i hovedresultatet.
 
 **Kode:** skrevet av laget. Historikktrekkene i `arbeid/hack/levering/stemmeagent/` kommer fra lagets første versjon
-(v1, branchen `main` i dette repoet). Åpne biblioteker: pandas, scikit-learn, LightGBM, SciPy, matplotlib og Streamlit (versjonene står i `uv.lock` og `arbeid/hack/levering/demo/uv.lock`).
+(v1, i git-historikken: `git checkout 622e3c5`). Åpne biblioteker: pandas, scikit-learn, LightGBM, SciPy, matplotlib og Streamlit (versjonene står i `uv.lock` og `arbeid/hack/levering/demo/uv.lock`).
 
 **AI-verktøy:** Claude Opus 5.5 (Anthropic) via Claude Code. Et lag AI-agenter skrev koden, hentet og undersøkte dataene,
 laget måleren, testet modellene og skrev tekstene. En egen kontrollagent målte tallene på nytt fra en kald kopi.
