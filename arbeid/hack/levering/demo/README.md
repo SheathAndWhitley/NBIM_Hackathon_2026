@@ -11,6 +11,8 @@ cd arbeid/hack/levering/demo && uv run streamlit run app.py
 ```
 
 Første gang installerer uv Streamlit i et eget miljø i denne mappa. Appen åpner på http://localhost:8501.
+Har du allerede et Python-miljø med Streamlit, går det også an å kjøre `streamlit run app.py` eller `python app.py`
+(også Run-knappen i VS Code). Startes appen med `python`, starter den seg selv på nytt med `streamlit run`.
 
 ## Hva appen gjør
 - **Inn:** sakslisten som CSV i real_votes-format, uten fasitfelt. Velg et av eksemplene, eller lim inn egne saker.

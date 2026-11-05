@@ -21,7 +21,20 @@ from pathlib import Path
 
 import streamlit as st
 
-import ekte_agent
+try:
+    from streamlit.runtime.scriptrunner import get_script_run_ctx
+except ImportError:  # eldre/nyere plassering
+    from streamlit.runtime.scriptrunner_utils.script_run_context import get_script_run_ctx
+
+if __name__ == "__main__" and get_script_run_ctx(suppress_warning=True) is None:
+    # Startet med «python app.py» (f.eks. Run-knappen i VS Code): da finnes ingen Streamlit-økt, og knapper og
+    # nedtrekkslister virker ikke. Start appen riktig i stedet, som  streamlit run app.py.
+    import sys
+    from streamlit.web import cli as stcli
+    sys.argv = ["streamlit", "run", str(Path(__file__).resolve())]
+    sys.exit(stcli.main())
+
+import ekte_agent  # noqa: E402
 
 HER = Path(__file__).parent
 LOGGMAPPE = HER / "logg"
