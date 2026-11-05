@@ -38,7 +38,13 @@ if __name__ == "__main__" and get_script_run_ctx(suppress_warning=True) is None:
     sys.argv = ["streamlit", "run", str(Path(__file__).resolve())]
     sys.exit(stcli.main())
 
+import importlib  # noqa: E402
+
 import ekte_agent  # noqa: E402
+
+# Streamlit laster app.py på nytt ved hver kjøring, men beholder importerte moduler. Last ekte_agent på nytt, så en
+# app som har stått på mens koden ble endret, aldri bruker en gammel versjon (det ga feil agent for 2024/2025 én gang).
+ekte_agent = importlib.reload(ekte_agent)
 
 HER = Path(__file__).parent
 LOGGMAPPE = HER / "logg"
@@ -175,10 +181,16 @@ def kjor_ekte(tekst, kilde, kjoring, aar=int(TESTAAR)):
         if not saker:
             raise ValueError(f"ingen saker fra teståret {aar}: {ute} er fra før (i treningsdataene) og {etter} fra etter; "
                              f"velg et annet testår eller bruk saker fra {aar}")
-        res = ekte_agent.kjor_sporbar(saker, aar)
+        res = ekte_agent.kjor_sporbar(saker, aar=aar)
         post["svar"] = res.pop("rader")
         post["feil"] = res.pop("feil")
         post["agentkall"] = res
+        # Vakt: for 2024/2025 må den rullende modellen (agent_aar.py --aar) brukes. Den leverte 2026-agenten er trent på
+        # de årene, så den ville gitt et oppblåst tall. Vis heller en feil enn et galt tall.
+        kall = " ".join(res.get("kall") or [])
+        if (aar != 2026 and f"agent_aar.py --aar {aar}" not in kall) or (aar == 2026 and "kjor_agent" not in kall):
+            post["svar"] = []
+            raise RuntimeError(f"feil agent for testår {aar} (kallet var: {kall[:160]}). Start appen på nytt.")
     except (ValueError, RuntimeError, OSError, subprocess.TimeoutExpired) as e:
         post["feil"] = ekte_agent.uten_rot(e)
     fil = LOGGMAPPE / f"lim_{start:%Y%m%dT%H%M%S}_{kjoring}.json"
