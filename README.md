@@ -85,7 +85,10 @@ Lim inn sakslisten til et møte, eller velg et ekte møte fra 2026, og trykk Anb
 - punktet i NBIMs retningslinjer og NBIMs tidligere begrunnelse;
 - NBIMs faktiske stemme, som fasit.
 
-Ett av eksemplene er motstandstesten: en instruks lagt inn i saksteksten. Hver kjøring logges. Se [demo-README](arbeid/hack/levering/demo/README.md).
+Ett av eksemplene er motstandstesten: en instruks lagt inn i saksteksten.
+Du kan også laste opp en hel CSV-fil, for eksempel hele test 2026. Da viser appen F1, presisjon og recall øverst,
+pluss hver sak merket ✅ treff, ❌ bom, ⚠️ falsk MOT eller ✓ riktig, med filter. Hele testfila gir samme tall som `sh KJOR.sh`.
+Hver kjøring logges. Se [demo-README](arbeid/hack/levering/demo/README.md). <!-- tallvakt: ignorer: demo-app, ikke hovedtall -->
 
 ## Begrensninger (de tre viktigste)
 
