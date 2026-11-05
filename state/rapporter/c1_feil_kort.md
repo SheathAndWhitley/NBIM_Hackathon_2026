@@ -1,7 +1,0 @@
-# Case 1: hvor bommer agenten, i tre setninger for juryen (#2725)
-
-1. Modellen er like god (eller like dårlig) hvert år: F1 på MOT er 0,506 i 2024, 0,531 i 2025 og 0,512 i 2026 (levert), og forskjellen er innenfor støyen, siden ett år bare har 58–99 MOT-stemmer og 95 % KI for 2026 er [0,40; 0,62] (kilde: `state/rapporter/c1_feiltabell_per_aar.md`, #2718).
-2. Den største feilkilden er styrevalg: i 2026 står styrevalg for 23 av 35 falske MOT-flagg og 11 av 26 oversette MOT-stemmer (F1 0,47), mens «annet» (revisor, vedtekter o.l.) er tryggest med F1 0,58 og bare 6 falske flagg (kilde: `arbeid/oppgave_2725/ut.txt`, kjørt med `python3 -I arbeid/oppgave_2725/per_gruppe_repo4.py` på `oppgave_2490/repo4_test.csv`).
-3. For et menneske betyr det: agenten sender selv 161 av 1539 saker (10,5 %) til manuell vurdering, og der havner 32 av 35 falske MOT-flagg, men bare 8 av 26 oversette MOT-stemmer, så den som bruker den bør stole lite på et MOT-flagg agenten ikke selv er sikker på, og bør vite at de fleste missene (18 av 26) kommer som trygge «følg styret» uten varsel (7 på styrevalg, 9 på «annet»; kilde: samme kjøring, `til_menneske` fra kald kjøring `arbeid/oppgave_2592/agent.csv`, #2592).
-
-Kontroll: totalene i kjøringen (TP/FP/FN 32/35/26, F1 0,512, 161 til menneske) er de samme som i feiltabellen #2718. Lønn (4 MOT) og aksjonærforslag (2 MOT) har for få MOT-stemmer til å si noe sikkert per sakstype.

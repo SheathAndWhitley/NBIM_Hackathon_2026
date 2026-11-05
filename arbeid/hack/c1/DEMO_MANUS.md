@@ -2,10 +2,10 @@
 
 Agent: repo4 (miks h2 + fire historikktrekk, `modell_repo4.py`, frys 17:18; standardkjøring, bånd [0,15; 0,85)). Erstatter den eldre frosne miks h2 (F1 0,476, se nederst).
 Kilde for sakene: `ut/agent.csv` fra dommerens kalde kjøring av jury-zipen (sak 2596, `/tmp/c1_dom_2596/zt`, agent.csv sha `24ee6b182f55…`, pred_maaler.csv sha `d02cf88475bf…` = frossen).
-**Før demoen (ikke i de 3 minuttene):** i roten av den utpakkede jury-zipen, kjør `sh KJOR.sh` (lager .venv og `ut/agent.csv`, ett til to minutter fra tom cache). **Live under demoen:** `sh arbeid/hack/c1/leveranse/demo.sh` (gjenbruker kjøringen, under 1 s), og for de tre sakene på skjermen `python3 -I arbeid/hack/c1/vis_manussaker.py ut/agent.csv` (0,03 s). Fra repoet (ikke zipen) gjør `sh arbeid/hack/levering/fremmed.sh /tmp/c1_kald` det samme som KJOR.sh, og demo.sh/vis_manussaker.py tar da `/tmp/c1_kald` og `/tmp/c1_kald/ut/agent.csv`.
+**Før demoen (ikke i de 3 minuttene):** i roten av repoet, kjør `sh KJOR.sh` (lager `.venv_kjor` og `ut/agent.csv`, ett til to minutter fra tom cache). **Live under demoen:** `sh arbeid/hack/c1/leveranse/demo.sh` (gjenbruker kjøringen, under 1 s), og for de tre sakene på skjermen `python3 -I arbeid/hack/c1/vis_manussaker.py ut/agent.csv` (0,03 s).
 Linjenummer = linje i fila, overskrift er linje 1. Valgt med et eget skript i repoet (sak 2260, ikke i zipen): første sak i fila av hver type, ikke håndplukket.
-Tall: `arbeid/oppgave_2659/maaling.txt` (måler v3 `--data real --score mot` på den kalde `pred_maaler.csv`) + rutingstelling `arbeid/oppgave_2267/telling.py` på den kalde `agent.csv` (`arbeid/oppgave_2659/telling.txt`).
-Bare tekst i «anførselstegn» leses høyt (ca. 340 ord i «»; ca. 2:20 i 145 ord/min, ca. 2:40 med pauser). Den kalde kjøringen er ferdig før start, så ingenting venter under opplesingen. Forrige 5-min-versjon: `DEMO_MANUS_5min_tilfeldige.md` (eldre modell, skal ikke leses høyt).
+Tall: `arbeid/oppgave_2659/maaling.txt` (måler v3 `--data real --score mot` på den kalde `pred_maaler.csv`) + rutingstelling på den kalde `agent.csv` (`arbeid/oppgave_2659/telling.txt`; arbeidsfilene er i git-historikken).
+Bare tekst i «anførselstegn» leses høyt (ca. 340 ord i «»; ca. 2:20 i 145 ord/min, ca. 2:40 med pauser). Den kalde kjøringen er ferdig før start, så ingenting venter under opplesingen.
 **Hvis MUNTLIG og denne demoen deler én 5-min-luke:** hopp over MUNTLIG pkt. 1, pkt. 3 og avslutningen (demoåpningen sier det samme). Da er det ca. 300 + 360 ord, ca. 4:40 ren taletid, under 5 min med pauser. Hver for seg er begge under 3:30.
 
 ---
@@ -65,7 +65,7 @@ Skjerm: tidsstempelet i linje 2 av `leveranse/demo_utskrift.txt` (frysen i linje
 
 ### Sjekk etter bytte til repo4 (sak 2659, 05.11 kl. 17.50)
 Kald kjøring av jury-zipen (dommer sak 2596): F1 MOT 0,5120 (0.512000), TP 32 FP 35 FN 26, 161 av 1539 til menneske, FN maskin 18 / menneske 8, FP maskin 3 / menneske 32. `vis_manussaker.py` på den: treff = linje 15 (Kura Sushi, før menneskesak), bom = linje 89 (LOTTE, uendret, p_mot 0.0887), menneske = linje 39 (Lundbeck). Sakene i manuset er byttet etter samme regel (første av hver type), ikke valgt for å se penere ut. Eldre Mobimo-sak (linje 276) er fortsatt et maskintreff i repo4, men ikke det første. `vis_manussaker.py` er oppdatert til de nye id-ene og sier MANUS OK på den kalde kjøringen.
-Ved ny sjekk: kald kopi, så `vis_manussaker.py` og `arbeid/oppgave_2267/telling.py`. Endres sakene: bytt saker og tall, ikke behold de gamle.
+Ved ny sjekk: `sh KJOR.sh`, så `sh arbeid/hack/c1/leveranse/demo.sh` (varsler hvis sakene ikke lenger stemmer med manuset). Endres sakene: bytt saker og tall, ikke behold de gamle.
 
 ### Eldre frossen modell (før bytte, bare historikk)
 Eldre frossen miks h2 (sak 2044, frys 16:00): F1 MOT 0,476 [0,36; 0,59], TP 30 FP 38 FN 28, 183 av 1539 til menneske. Erstattet av repo4 17:18 (sak 2592). <!-- tallvakt: ignorer: eldre frossen modell -->

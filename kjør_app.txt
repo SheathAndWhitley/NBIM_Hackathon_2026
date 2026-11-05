@@ -1,1 +1,0 @@
-.venv/bin/python arbeid/hack/levering/demo/app.py

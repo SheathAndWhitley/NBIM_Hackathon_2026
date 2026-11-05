@@ -1,12 +1,12 @@
 # Case 1: kandidatlogg etter byttet – alt vi prøvde, og hvorfor repo4 står
 
-Kilderapportene i kolonnen «kilde» ligger i repoet under `state/rapporter/`, ikke i jury-zipen. «Frossen» betyr her repo4, modellen som leveres. <!-- tallvakt: ignorer: kandidatlogg, ikke hovedtall -->
+Kilderapportene i kolonnen «kilde» lå under `state/rapporter/` og er ryddet ut av repoet; de finnes i git-historikken (se `kilder/LESMEG.md`). «Frossen» betyr her repo4, modellen som leveres. <!-- tallvakt: ignorer: kandidatlogg, ikke hovedtall -->
 
 ## Bytteregelen, fastsatt FØR måling (ordre #265, mission.md)
 En kandidat erstatter den frosne modellen bare hvis **snittet av F1 på MOT over tre rullende testår (2024, 2025, 2026) er minst +0,02 over frossen**, og **intet testår er mer enn 0,02 dårligere** enn frossen. Dommeren avgjør. Ellers står frossen.
 - Frossen = repo4 (#2567): 0,5057 / 0,5309 / 0,5120, snitt **0,5162** (frys 17:18:18, frysvakt).
-- Måler: den offisielle `arbeid/oppgave_2567/maaler_aar.py --score mot`. Terskel/variant velges på val-året T-1, og test T måles én gang.
-- Regelen er også skrevet ned per kandidat før måling i `arbeid/oppgave_{2699,2703,2707,2708}/REGEL.md`. Når hver fil ble skrevet, mot første resultatfil i samme mappe: `arbeid/hack/c1/REGEL_TIDSSTEMPLER.md` (også natt-kandidatene fra #281).
+- Måler: den offisielle `arbeid/hack/c1/leveranse/verktoy/maaler_aar.py --score mot` (kopi av `arbeid/oppgave_2567/maaler_aar.py`). Terskel/variant velges på val-året T-1, og test T måles én gang.
+- Regelen ble også skrevet ned per kandidat før måling (`arbeid/oppgave_{2699,2703,2707,2708}/REGEL.md`, med tidsstempler mot første resultatfil i `arbeid/hack/c1/REGEL_TIDSSTEMPLER.md`); filene er i git-historikken.
 
 ## Tabell
 Δ = kandidat minus frossen repo4. Snitt og årstall er hentet fra kilderapporten. Δ-kolonnene er regnet ut her fra de samme tallene (enkel differanse).

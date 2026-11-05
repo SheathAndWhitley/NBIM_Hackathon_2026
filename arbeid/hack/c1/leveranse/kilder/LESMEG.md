@@ -1,5 +1,9 @@
 # Kildene pakka peker til (kopier, 05.11 kl. 14.15)
 
+> **Rydding 05.11 kveld:** lagets arbeidsmapper (`arbeid/oppgave_*`, `state/rapporter/`, eldre utkast og reservepakker) er
+> fjernet fra repoet. Står det `utviklingsrapport:<navn>.md`, `state/rapporter/...` eller `arbeid/oppgave_<nr>/...` i en tekst,
+> finnes fila i git-historikken: `git show 7d968c8:state/rapporter/<navn>.md` eller `git checkout 7d968c8 -- <sti>`.
+
 Filnavn uten sti i rapportene under (f.eks. `abl.py`, `val_pred.py`, `reprod.sh`, `gvg2024.txt`) viser til lagets interne arbeidsmapper og er ikke med i pakka. Alle tall i rapportene står likevel ferdig målt i teksten.
 
 Kopier av måle- og kontrollrapportene som JURY.md, BEGRENSNINGER.md og ERLIG_EVALUERING.md viser til, så pakka står alene.

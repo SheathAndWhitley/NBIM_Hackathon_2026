@@ -1,3 +1,0 @@
-# Case 1: kontroll av injeksjonstesten etter robusthetsfiksen (dommer2, #2226)
-
-GODKJENT 05.11 ca. kl. 13.36: smed3s driver (#2212) kjørt på nytt med egen utmappe /tmp/inj2226 (`arbeid/oppgave_2226/`). Alle 10 kjøringer ga kode 0, og alle 8 varianter er tall for tall like smed3s `resultat.json` (B kindly endret uten ruting 20/21). Rene prediksjoner (A og B, id + mot_styret) er identiske med frossen `oppgave_2103/full_test.csv` (sha256 av projeksjonen 1fc264e1a80cdc60 på begge, 0 av 1578 avvik). F1 MOT er 0,47619 uten angrep og 0,476 på alle A-varianter. Forbehold: kjørt fra landsbymappa, ikke fra en kald kopi. `c1_real.py` har nå sha256 d222e7… (endret 13.31), ikke 15d2379ea5c3 som smed3 oppga, men utfallet er det samme.

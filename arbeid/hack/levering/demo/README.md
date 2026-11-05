@@ -54,5 +54,3 @@ uten å kunne se NBIMs stemme på originalmøtet samme dag.
 
 Uten Streamlit: `python ekte_agent.py saker.csv` skriver agentens svar som JSON-linjer.
 
-`modell.py`, `retningslinjer.py` og `data/vg_us_2025.txt` er en eldre skisse (en forenklet stubb med Vanguards
-amerikanske retningslinjer). Appen bruker dem ikke.

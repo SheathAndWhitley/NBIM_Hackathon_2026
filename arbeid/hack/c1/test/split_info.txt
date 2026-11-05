@@ -1,8 +1,0 @@
-kilde test/votes.csv: 875 rader, 456 unike forslag, 0 med uenige fond
-grense moetedato >= 2025-09-25 (andel 0.2), selskap-modus strikt
-train 366 forslag {'MOT': 72, '': 48, 'FOR': 244, 'AVSTÅ': 2}, datoer 2025-01-10..2025-09-23
-holdout 78 forslag {'FOR': 60, 'MOT': 16, 'AVSTÅ': 2}, datoer 2025-09-25..2025-12-07
-fjernet fra train fordi selskapet er i holdout: 0
-styret-kolonne: styret
-andre stemmeverdier holdt utenfor: {'1 YEAR': 60}
-overlapp selskap train/holdout: 0
