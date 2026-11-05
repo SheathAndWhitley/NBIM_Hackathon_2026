@@ -30,7 +30,9 @@ Har du allerede et Python-miljø med Streamlit, går det også an å kjøre `str
 - **Treffsikkerhet med en gang:** øverst står F1, presisjon og recall på MOT mot styret, samme mål som den offisielle
   måleren. Under står antall treff, bom, falske MOT og saker sendt til menneske. Hver sak er merket ✅ treff,
   ❌ bom, ⚠️ falsk MOT eller ✓ riktig, med farge, ikon og tekst. Du kan filtrere på hver av dem.
-  I store filer sorteres treff, bom og falske MOT først.
+  Sakene er sortert etter møtedato. Treffprosenten vises for agenten alene, for «følg styret» og for agent
+  og menneske sammen (hvis mennesket avgjør de rutede sakene riktig). På hele test 2026 er tallene
+  96,0 %, 96,2 % og 98,6 %. Agenten alene treffer altså like ofte som «følg styret», men finner MOT-stemmene.
 - **Agenten:** `ekte_agent.py` kjører den leverte agenten (`arbeid/hack/levering/kjor_agent.py --csv`), som er samme modell som `sh KJOR.sh`.
   Agenten kjører som egen prosess i `.venv_kjor`. Én kjøring tar 10–30 s, fordi modellen trenes på nytt hver gang.
 - **Ut, per sak:**

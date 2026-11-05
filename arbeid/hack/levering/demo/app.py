@@ -44,8 +44,7 @@ HER = Path(__file__).parent
 LOGGMAPPE = HER / "logg"
 TESTAAR = "2026"  # teståret: modellen er trent på årene før, så bare saker herfra (eller nye saker) måles ærlig
 MAKS_DETALJER = 40
-STOR_LISTE = 30  # flere saker enn dette: sorter de interessante først og lukk detaljene
-PRIORITET = {"TP": 0, "FN": 1, "FP": 2, "TN": 3, "-": 4}
+STOR_LISTE = 30  # flere saker enn dette: lukk detaljene (et møte vises med de interessante sakene åpne)
 # Statusfarger fra dataviz-skillens faste statuspalett (good #0ca30c, critical #d03b3b, serious #ec835a, warning #fab219),
 # som svake toner så teksten beholder vanlig farge i lyst og mørkt tema. Alltid ikon + tekst, aldri farge alene.
 UTFALL = {"TP": ("✅ Treff", "rgba(12,163,12,0.22)"), "FN": ("❌ Bom", "rgba(208,59,59,0.24)"),
@@ -130,8 +129,11 @@ def poeng(rader, fas):
     # Hvis mennesket avgjør de rutede sakene riktig: rutet MOT blir funnet, rutet falsk MOT blir rettet.
     sy = [("TP" if x in ("TP", "FN") else "TN") if r["til_menneske"] == "1" and x != "-" else x for r, x in zip(rader, u)]
     stp, sfp, sfn = sy.count("TP"), sy.count("FP"), sy.count("FN")
+    med = max(tp + fp + fn + n["TN"], 1)
+    # Treffprosent (andel saker riktig om MOT mot styret). «Følg styret» sier aldri MOT: riktig på alle saker uten MOT.
     return dict(u=u, n=n, p=tp / (tp + fp) if tp + fp else 0.0, r=tp / (tp + fn) if tp + fn else 0.0,
-                f1=2 * tp / (2 * tp + fp + fn) if tp else 0.0, f1_sys=2 * stp / (2 * stp + sfp + sfn) if stp else 0.0)
+                f1=2 * tp / (2 * tp + fp + fn) if tp else 0.0, f1_sys=2 * stp / (2 * stp + sfp + sfn) if stp else 0.0,
+                acc=(tp + n["TN"]) / med, acc_styret=(fp + n["TN"]) / med, acc_sys=(stp + sy.count("TN")) / med)
 
 
 def forbered(saker):
@@ -214,14 +216,32 @@ def vis_poeng(res, pg):
             k[2].metric("⚠️ Falsk MOT", heltall(n["FP"]), help="Agenten sa MOT, men NBIM fulgte styret")
             k[3].metric("🧑 Til menneske", heltall(rut), help="Usikre saker, ukjente selskaper eller instruks i teksten")
             rutede = "den rutede saken" if rut == 1 else f"de {heltall(rut)} rutede sakene"
-            st.caption(f"«Følg styret» ville fått F1 0 og funnet 0 av {antall(n['TP'] + n['FN'], 'MOT-stemme', 'MOT-stemmer')}. "
-                       f"Avgjør mennesket {rutede} riktig, blir F1 for agent og menneske sammen {tall(pg['f1_sys'], 2)}. "
-                       "Fasit er NBIMs faktiske, publiserte stemmer; agenten ser dem aldri.")
+            pst = lambda x: f"{x * 100:.1f} %".replace(".", ",")
+            k = st.columns(4)
+            k[0].metric("Treffprosent: agenten alene", pst(pg["acc"]),
+                        help="Andelen saker der agenten har rett om NBIM stemmer MOT mot styret eller ikke")
+            k[1].metric("Treffprosent: «følg styret»", pst(pg["acc_styret"]),
+                        help="Grunnlinjen sier aldri MOT. Den treffer like ofte, men finner ingen av MOT-stemmene")
+            k[2].metric("Treffprosent: agent + menneske", pst(pg["acc_sys"]),
+                        help=f"Hvis mennesket avgjør {rutede} riktig. Mennesket leser bare de sakene agenten sender videre")
+            d = pg["acc"] - pg["acc_styret"]
+            nivaa = "holder omtrent samme treffprosent" if abs(d) < 0.005 else ("treffer oftere" if d > 0 else "treffer sjeldnere")
+            st.caption(f"Treffprosent er ikke hovedmålet: «følg styret» treffer {pst(pg['acc_styret'])} uten å finne én eneste "
+                       f"MOT-stemme. Agenten {nivaa} og finner {heltall(n['TP'])} av "
+                       f"{antall(n['TP'] + n['FN'], 'MOT-stemme', 'MOT-stemmer')}. Avgjør mennesket {rutede} riktig, blir F1 "
+                       f"for agent og menneske sammen {tall(pg['f1_sys'], 2)}. Fasit er NBIMs faktiske, publiserte stemmer; "
+                       "agenten ser dem aldri.")
         else:
             st.info("Ingen av sakene finnes i NBIMs stemmer, så det finnes ingen fasit å måle mot.")
         ekstra = f"{antall(res['ute'], 'sak', 'saker')} fra før {TESTAAR} er tatt ut: de er i treningsdataene, så et treff der sier ingenting. " \
             if res["ute"] else ""
         st.caption(f"{ekstra}Kjøringen tok {res['sek']} s og er logget i logg/{res['loggfil']}.")
+
+
+def datonokkel(r):
+    mid, _, nr = r["id"].partition("|")
+    tall_ = lambda v: (0, int(v), "") if v.isdigit() else (1, 0, v)
+    return r["meeting_date"], tall_(mid), tall_(nr)
 
 
 def flagg(r):
@@ -239,11 +259,10 @@ def vis_saker(res, pg):
     if not utvalg:
         st.info("Ingen saker i dette utvalget.")
         return
-    stor = len(rader) > STOR_LISTE  # hele resultatet, ikke filteret: et møte vises i saksrekkefølge med åpne detaljer
-    if stor:  # store filer: treff, bom og falske MOT først, så rutede, så resten (stabil sortering beholder rekkefølgen)
-        utvalg.sort(key=lambda rx: (PRIORITET[rx[1]], rx[0]["til_menneske"] != "1"))
-    df = pd.DataFrame([{"Utfall": UTFALL[x][0], "Flagg": flagg(r), "Sak": r["id"], "Selskap": r["company"],
-                        "Forslag": r["proposal_text"][:90], "Styret": r["styret"], "Agent": r["anbefaling"],
+    stor = len(rader) > STOR_LISTE  # hele resultatet, ikke filteret: et møte vises med åpne detaljer
+    utvalg.sort(key=lambda rx: datonokkel(rx[0]))  # møtedato, så møte og saksnummer
+    df = pd.DataFrame([{"Utfall": UTFALL[x][0], "Flagg": flagg(r), "Sak": r["id"], "Dato": r["meeting_date"],
+                        "Selskap": r["company"], "Forslag": r["proposal_text"][:90], "Styret": r["styret"], "Agent": r["anbefaling"],
                         "P(MOT)": float(r["p_mot"]) if r["p_mot"] else None,
                         "NBIM stemte": (fas.get(r["id"]) or {}).get("nbim_vote", ""),
                         "Retningslinje": r["retningslinje_id"]} for r, x in utvalg])
@@ -253,12 +272,12 @@ def vis_saker(res, pg):
             .format({"P(MOT)": "{:.2f}"}, na_rep=""))
     kol = st.column_config.TextColumn
     st.dataframe(stil, width="stretch", hide_index=True, height=min(38 + 35 * len(df), 460),
-                 column_config={"Utfall": kol(width=125), "Flagg": kol(width=210), "Sak": kol(width=95),
+                 column_config={"Utfall": kol(width=125), "Flagg": kol(width=210), "Sak": kol(width=95), "Dato": kol(width=95),
                                 "Selskap": kol(width=190), "Forslag": kol(width=360), "Styret": kol(width=60),
                                 "Agent": kol(width=60), "NBIM stemte": kol(width=95)})
     st.caption("Utfall regnes mot NBIMs faktiske stemme: ✅ treff, ❌ bom (oversett MOT), ⚠️ falsk MOT, ✓ riktig. "
                "Fargene følger alltid et ikon og en tekst."
-               + (" Sortert med treff, bom og falske MOT først." if stor else ""))
+               + " Sortert etter møtedato.")
     for r, x in utvalg[:MAKS_DETALJER]:
         p = tall(float(r["p_mot"]), 2) if r["p_mot"] else "–"
         tittel = f"{UTFALL[x][0]} · {r['id']} · {r['company'][:40]} · agenten: {r['anbefaling']} (P(MOT) {p})"
