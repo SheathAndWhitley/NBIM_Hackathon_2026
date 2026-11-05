@@ -1,0 +1,6 @@
+
+Ting vi burde nevne:
+
+- Lekkasje
+    - Modellene vår er lekkasje beskyttet bruker ikke informasjon fra et møte den er i i det øyeblikket til å beregne svar til samme møte.
+    - Samt så husker den ikke fra tidligere runs og går gjennom periodisk slik at fremtiden ikke forklarer fortiden
