@@ -1,9 +1,11 @@
 """Full-ballot dataset from NBIM's own voting records (ny_data/real_votes.csv).
 
-Ground truth: `against_board` = 1 when NBIM's vote differs from the board's
-recommendation (MOT or AVSTÅ on a FOR recommendation, FOR or AVSTÅ on a MOT one).
-Rows without an NBIM vote or without a board recommendation (3.1%) have no label
-and are excluded from training and evaluation.
+Ground truth: `against_board` = 1 when NBIM voted against the board's
+recommendation (MOT on a FOR recommendation, FOR on a MOT one). This matches the
+case definition ("presisjon og recall på MOT-stemmer"; the starter kit counts
+AGAINST/WITHHOLD only). AVSTÅ is neither with nor against the board, so AVSTÅ rows
+are unlabelled, like rows without an NBIM vote or without a board recommendation,
+and are excluded from training, evaluation and the history features.
 
 Walk-forward split by meeting date: train 2019-2023, validate 2024 (model choice,
 calibration and thresholds), test 2025-2026 (evaluated once).
@@ -83,7 +85,7 @@ def load_real() -> pd.DataFrame:
     d["split"] = None
     for name, lo, hi in SPLITS:
         d.loc[d["meeting_date"].between(lo, hi), "split"] = name
-    d["labelled"] = d["against_board"].notna()
+    d["labelled"] = d["against_board"].notna() & d["nbim_vote"].ne("AVSTÅ")
     d["y"] = d["against_board"].fillna(0).astype(int)
     d["proposal_text"] = d["proposal_text"].fillna("")
     d["item_key"] = d["proposal_text"].map(item_key)
@@ -168,6 +170,6 @@ def load_npx_fixed() -> pd.DataFrame:
     """
     d = pd.read_csv(NPX_FILE, low_memory=False, parse_dates=["meeting_date"])
     d["board_rec_fixed"] = d["mgmt_rec"].where(d["proponent"] == "Shareholder", "FOR").fillna("MOT")
-    voted = d["nbim_vote"].notna()
+    voted = d["nbim_vote"].notna() & d["nbim_vote"].ne("AVSTÅ")  # AVSTÅ: no label (see module doc)
     d["y_fixed"] = np.where(voted, (d["nbim_vote"] != d["board_rec_fixed"]).astype(float), np.nan)
     return d

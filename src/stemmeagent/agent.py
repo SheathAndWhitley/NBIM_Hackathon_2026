@@ -309,9 +309,13 @@ def route(board_rec: str, llm: dict | None, check: dict | None, model_score: flo
     if model_score is not None and t_review is not None and model_score >= t_review:
         reasons.append("triage_model_risk")
     vote = llm["vote"] if llm else board_rec
-    deviates = vote != board_rec
+    # A prediction of "against the board" is the opposite vote only. AVSTÅ is not a MOT
+    # prediction, but it still goes to a human.
+    deviates = (board_rec, vote) in (("FOR", "MOT"), ("MOT", "FOR"))
     if deviates:
         reasons.append("recommends_deviation_from_board")
+    elif vote == "AVSTÅ":
+        reasons.append("recommends_abstain")
     valid = bool(check and check["id_in_force"] and check["quote_verbatim"])
     if llm and not valid:
         reasons.append("citation_not_verified")

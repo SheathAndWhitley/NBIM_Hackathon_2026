@@ -4,7 +4,7 @@ Unit of analysis: issuer x meeting. In 10 cases NBIM's N-PX lists two SOP rows f
 same issuer and meeting (share classes, or separate pay votes per executive); they are
 collapsed and the meeting counts as AGAINST if any of its SOP rows was voted AGAINST.
 
-Target: `against` = 1 if NBIM voted AGAINST/WITHHOLD/ABSTAIN. The board always
+Target: `against` = 1 if NBIM voted AGAINST/WITHHOLD (ABSTAIN does not occur on NBIM's SOP rows). The board always
 recommends FOR on its own SOP proposal, so this is exactly "NBIM deviates from the board".
 """
 from __future__ import annotations

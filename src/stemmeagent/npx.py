@@ -26,7 +26,7 @@ from . import sec
 from .config import DATA_PROCESSED, NBIM_CIK, SEASONS
 
 FREQUENCY_VOTES = {"ONE YEAR", "TWO YEARS", "THREE YEARS"}
-AGAINST_VOTES = {"AGAINST", "WITHHOLD", "ABSTAIN"}  # any non-support of the board's proposal
+AGAINST_VOTES = {"AGAINST", "WITHHOLD"}  # the case's MOT definition; ABSTAIN is not a vote against
 
 # Proposal-type detection from the ballot text (available before the vote).
 _FREQ_RE = re.compile(
