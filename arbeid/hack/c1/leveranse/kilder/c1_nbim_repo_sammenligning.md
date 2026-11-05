@@ -2,7 +2,7 @@
 
 *Rettet 05.11 (ordre #262): zipen er en løsning laget av andre i teamet, parallelt med agenten, ikke fra NBIM. «repoet» under betyr den løsningen. Tallene er uendret; «nbim» i filnavnet er historisk.*
 
-Kode: `<arbeidsmappe>/oppgave_2464/kjor_nbim.py` (kjører repoets egen `ballot.py`/`ballot_model.py` med `python -I`, uendret, på vår offisielle real_votes; sha256 71ba51… er lik fila i repoet).
+Kode: `<arbeidsmappe>/oppgave_2464/kjor_nbim.py` (kjører repoets egen filene `ballot` og `ballot_model` i mappa `src/stemmeagent` i arrangørens repo NBIM_Hackathon_2026, ikke kopiert hit med `python -I`, uendret, på vår offisielle real_votes; sha256 71ba51… er lik fila i repoet).
 Gjenskaping: deres egne tall kom ut likt: hybrid avvik-F1 0,518 og persistence 0,491 på 2025-26 (169 avvik).
 Måler: `maaler_offisiell_v3.py <svar> test --data real --score mot` (58 MOT i fasit). KI: `<arbeidsmappe>/oppgave_2103/diff_ki.py`, parret klyngebootstrap per selskap, 2000 trekk, B minus frossen #2044.
 

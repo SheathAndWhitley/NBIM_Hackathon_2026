@@ -1,5 +1,7 @@
 # Case 1: ærlig evaluering, hva den frosne modellen bygger på
 
+> **Oppdatert grunnlinje (5.11 kveld):** Den sterkeste enkle regelen er «gjenta NBIMs forrige beslutning på samme sak eller person» (`arbeid/hack/c1/grunnlinje_gjenta_forrige.py`). Den gir F1 på MOT 0,42 / 0,51 / 0,51 for 2024–2026, snitt 0,48, mot agentens 0,51 / 0,53 / 0,51, snitt 0,52: agenten er bedre i snitt, men lik regelen i 2026. Der dette dokumentet sammenligner med regel b2 (0,365), er det en svakere regel. Lekkasjetesten: `arbeid/hack/c1/lekkasjetest.py`. <!-- tallvakt: ignorer: grunnlinje, ikke hovedtall -->
+
 Modell: repo4 = den frosne «miks h2» (snitt av logreg og LightGBM, løpende historikk) + fire historikktrekk, byttet inn 17:02 etter regelen i § 7. Ablasjon og brute force-sjekk under er gjort på den frosne miks h2. Val-modellen er trent på 2019–2024, test-modellen på 2019–2025 (11 785 saker: alle 12 179 rader før 2026 minus 394 uten fasit, `kilder/tell_trening.py`). Grensen er valgt på val 2025, og test 2026 er kjørt én gang per variant.
 Kilder står i hakeparentes: [A] = `kilder/c1_ablasjon_v2.md` (v2 = andre kjøring av ablasjonen, ikke V2-varianten i README), [AD] = `kilder/dommer_ablasjon_v2.md` (kontrollagentens dom, godkjent), [S] = `kilder/c1_streng_mot.md`, [D2090] = `kilder/dommer_2090_streng_mot.md` (kontrollagentens dom, godkjent), [H] = `kilder/c1_tall_likt.md`, [X] = `kilder/c1_siste_mot_forsok.md`.
 

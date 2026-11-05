@@ -1,3 +1,5 @@
+> **Oppdatert grunnlinje (5.11 kveld):** Den sterkeste enkle regelen er «gjenta NBIMs forrige beslutning på samme sak eller person» (`arbeid/hack/c1/grunnlinje_gjenta_forrige.py`). Den gir F1 på MOT 0,42 / 0,51 / 0,51 for 2024–2026, snitt 0,48, mot agentens 0,51 / 0,53 / 0,51, snitt 0,52: agenten er bedre i snitt, men lik regelen i 2026. Der dette dokumentet sammenligner med regel b2 (0,365), er det en svakere regel. Lekkasjetesten: `arbeid/hack/c1/lekkasjetest.py`. <!-- tallvakt: ignorer: grunnlinje, ikke hovedtall -->
+
 > **Eldre versjon.** Gjeldende jurysvar er `arbeid/hack/c1/leveranse/JURY_SPORSMAL.md`. Tall her kan være fra den eldre frosne modellen (#2044).
 
 > **UTDATERT (05.11 kl. 14.20).** Denne versjonen (kl. 12.55, før modellfrys) har gamle #-pekere og tall. Bruk `arbeid/hack/c1/leveranse/JURY_SPORSMAL.md`.

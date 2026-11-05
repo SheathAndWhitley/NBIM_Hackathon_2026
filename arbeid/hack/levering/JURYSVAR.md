@@ -1,6 +1,8 @@
 # Jurysvar: de ti vanskeligste spørsmålene, med ærlige svar (Case 1)
 
-Alle tall har en kilde: forsøk-id (`uv run python tavle.py forsok-list --alle`) eller rapport i `state/rapporter/`; kopiene som ligger i zipen er listet i `arbeid/hack/c1/leveranse/kilder/LESMEG.md`. Tallene er hentet fra METODE.md, BESLUTNINGSSTOTTE.md og rapportene nevnt under. Ingen tall er målt for denne fila; tall som ikke står i METODE (svar 5: #2134, svar 6: #2130) har egen kilde i teksten.
+> **Oppdatert grunnlinje (5.11 kveld):** Den sterkeste enkle regelen er «gjenta NBIMs forrige beslutning på samme sak eller person» (`arbeid/hack/c1/grunnlinje_gjenta_forrige.py`). Den gir F1 på MOT 0,42 / 0,51 / 0,51 for 2024–2026, snitt 0,48, mot agentens 0,51 / 0,53 / 0,51, snitt 0,52: agenten er bedre i snitt, men lik regelen i 2026. Der dette dokumentet sammenligner med regel b2 (0,365), er det en svakere regel. Lekkasjetesten: `arbeid/hack/c1/lekkasjetest.py`. <!-- tallvakt: ignorer: grunnlinje, ikke hovedtall -->
+
+Alle tall har en kilde: forsøk-id (fra lagets interne oppgavetavle, som ikke er med i repoen) eller rapport i `state/rapporter/`; kopiene som ligger i zipen er listet i `arbeid/hack/c1/leveranse/kilder/LESMEG.md`. Tallene er hentet fra METODE.md, BESLUTNINGSSTOTTE.md og rapportene nevnt under. Ingen tall er målt for denne fila; tall som ikke står i METODE (svar 5: #2134, svar 6: #2130) har egen kilde i teksten.
 
 > **Hovedtall (#231):** F1 **0,512 på MOT mot styret**, 95 % KI [0,40; 0,62], test 2026 på NBIMs egne stemmer
 > (real_votes, frosset modell #2044 miks h2, 1539 saker, 58 MOT; P 0,478, R 0,552, TP 32 FP 35 FN 26), måler v3 `--score mot` (#2087, #2095).

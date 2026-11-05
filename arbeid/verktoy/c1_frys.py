@@ -81,7 +81,7 @@ def main(argv=None):
             print("FRYS FEILET: mangler " + ", ".join(mangler))
             return 2
         d = {"tid": datetime.datetime.now().isoformat(timespec="seconds"),
-             "modell": "#2044 miks h2", "rot": a.rot,
+             "modell": "repo4 (#2572): frossen #2044 miks h2 + fire historikktrekk (modell_repo4.py)", "rot": a.rot,
              "filer": {f: sha(os.path.join(a.rot, f)) for f in FILER}}
         os.makedirs(os.path.dirname(a.frys), exist_ok=True)
         with open(a.frys, "w") as f:

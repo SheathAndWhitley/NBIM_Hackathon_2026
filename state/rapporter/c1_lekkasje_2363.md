@@ -1,0 +1,9 @@
+# GODKJENT: lekkasjesjekk av nyeste-historikk-forsøket #2363 (arkitekt #2367, 05.11)
+1) **Ingen lekkasje fra samme møte eller fremtiden.** Trekk A og B (`arbeid/oppgave_2363/train_nh.py:70-100`) bruker `merge_asof(..., allow_exact_matches=False)`, altså bare møter strengt før sakens dato. Hvert møte har én dato, og ingen datoer mangler. Forvrengingstest (`arbeid/oppgave_2367/perturb.py`): tilfeldige etiketter på alle datoer ≥ c, for c i 2025 og 2026. Trekkene for rader med dato ≤ c endres ikke (avvik 0) for A, B og AB med `--hist 2`, som er innstillingen i den frosne modellen.
+   Kjent og gammelt, ikke nytt her: med `--hist 1` ser treningsrader fra 2025 sine egne etiketter i basistrekkene, uendret fra #2044. Det treffer ikke test og brukes ikke i det som leveres.
+2) **Valg gjort på val, ikke test.** I `grid.txt` vinner AB på val 2025 (F1 0,543 mot 0,522 for 0, 0,533 for A og 0,517 for B) og også på kontrollåret val 2024 (0,596). Skriptet velger C og grense på val 2025. Test 2026 ble kjørt etter at grid-en var ferdig (`test2026.txt`).
+3) **Mine egne tall, måler v3 `--score mot`** (test 2026, 58 MOT i fasit). smed4s `svar_test_AB.csv`: **F1 0,500, P 0,470, R 0,534, TP 31, FP 35, FN 27**. Frossen (`svar_test_0.csv`): 0,476, P 0,441, R 0,517, TP 30, FP 38.
+   KP: forventet frossen 0,476190, fikk 0,476190. Min uavhengige kjøring av AB gir p-verdier identiske med smed4s.
+   Gevinsten er liten: 3 færre falske MOT og 1 treff mer, +0,024 i F1. Det er godt innenfor støyen (bootstrap ±0,1). PR-AUC går ned (0,509 mot 0,525), så fremgangen kommer av grensen og ikke av bedre rangering.
+   Advarsel: A alene gir 0,512 på test. Bytter noen til A nå, er valget gjort på test. Det er ikke lov, AB er val-valget.
+Anbefaling til dommer #2366: ren og ærlig. Den kan tas inn som AB hvis den frosne kjøringen kan byttes trygt før kl. 16, men den er ikke en tydelig forbedring. Skriv den heller som et støynivåfunn enn som nytt hovedtall.

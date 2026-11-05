@@ -1,0 +1,24 @@
+kjor_agent.py 2026-11-05 11:40:30, 11 s
+inn: 1246 saker; MOT 221; til menneske 119 (9.6%), av dem 0 som ikke kunne vurderes
+låst på val 2025: rå grense 0.18330 (kalibrert 0.114), val-F1 0.4286 i utvalget; 10 %-bånd 0.3322 logit
+kode (sha256[:12]): hack/levering/kjor_agent.py 97df141ad660, kandidater/smed2_c1_mot/train_v3.py 3dc5742d0ef8, kandidater/smed2_c1_mot/sec_feats.py 5493be1e8bec, kandidater/smed2_c1_mot/sec/vanguard_unik_1109.csv 268d289c380e, hack/varianter/smed3_utf_sitat/agent.py 5dd8af85ae2f, hack/varianter/smed3_utf_sitat/rl/punkter.json d2eb49cee548
+--- måler (alle saker, ruting ignorert) ---
+holdout 1246 forslag, 129 avvik fra styret (10.4%), 129 MOT, ekstra id-er ignorert: 0
+AVVIK (hovedtall) presisjon 0.3756  recall 0.6434  F1 0.4743  (tp 83 fp 138 fn 46)
+AVVIK PR-AUC 0.4550  (basisrate 0.1035; p_avvik fra fila)
+MOT (sekundært) presisjon 0.3756  recall 0.6434  F1 0.4743  (tp 83 fp 138 fn 46)
+accuracy (ikke bruk alene)  0.8523
+rutet til menneske (konfidens < 0.6): 0 = 0.0%, derav avvik 0
+ikke-rutet: AVVIK presisjon 0.3756  recall 0.6434  (n 1246)
+PRAUC 0.454970
+SCORE 0.474286
+--- måler (med ruting (konfidens < 0,6 = menneske)) ---
+holdout 1246 forslag, 129 avvik fra styret (10.4%), 129 MOT, ekstra id-er ignorert: 0
+AVVIK (hovedtall) presisjon 0.3756  recall 0.6434  F1 0.4743  (tp 83 fp 138 fn 46)
+AVVIK PR-AUC 0.4550  (basisrate 0.1035; p_avvik fra fila)
+MOT (sekundært) presisjon 0.3756  recall 0.6434  F1 0.4743  (tp 83 fp 138 fn 46)
+accuracy (ikke bruk alene)  0.8523
+rutet til menneske (konfidens < 0.6): 119 = 9.6%, derav avvik 18
+ikke-rutet: AVVIK presisjon 0.4269  recall 0.6577  (n 1127)
+PRAUC 0.454970
+SCORE 0.474286

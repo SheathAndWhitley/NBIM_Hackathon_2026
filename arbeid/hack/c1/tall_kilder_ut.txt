@@ -1,0 +1,62 @@
+# tall_kilder_ut.txt, generert 2026-11-05 14:17 av lag_tall_kilder.py (#2276)
+
+## 1) menneske_tabell.py på arbeid/oppgave_2132/agent.csv (kald standardkjøring)
+Kilde: arbeid/oppgave_2132/agent.csv; inn 1578 saker, 188 (11.9 %) til menneske; målt på 1539 saker med fasit (test 2026).
+
+| oppsett | saker til menneske | MOT mot styret blant dem | maskin alene | maskin + menneske (øvre grense, antar riktig menneskelig avgjørelse) | gulv: menneske følger styret |
+|---|---|---|---|---|---|
+| ingen til menneske | 0 av 1539 (0,0 %) | 0 av 58 | P 0,44 / R 0,52 / F1 0,476 (TP 30 FP 38 FN 28) | P 0,44 / R 0,52 / F1 0,476 (TP 30 FP 38 FN 28) | P 0,44 / R 0,52 / F1 0,476 |
+| bare båndet: kalibrert P(MOT) i [0,15; 0,85) | 122 av 1539 (7,9 %) | 27 av 58 | P 0,44 / R 0,52 / F1 0,476 (TP 30 FP 38 FN 28) | P 1,00 / R 0,64 / F1 0,779 (TP 37 FP 0 FN 21) | P 1,00 / R 0,17 / F1 0,294 |
+| **standard** (bånd + ukjent selskap/type, injeksjon, datafeil, MOT uten sitat) | 183 av 1539 (11,9 %) | 32 av 58 | P 0,44 / R 0,52 / F1 0,476 (TP 30 FP 38 FN 28) | P 1,00 / R 0,71 / F1 0,828 (TP 41 FP 0 FN 17) | P 1,00 / R 0,16 / F1 0,269 |
+F1 0,779 = 2*37/(2*37+0+21) = 0.7789; F1 0,269 = 2*9/(2*9+0+49) = 0.2687
+
+## 2) diff_ki.py (#2103): parret klyngebootstrap per selskap, 2000 trekk, seed 0, rad mot null_test.csv (følg styret, F1 0)
+hovedmodell #2044 miks h2 (kontroll_h2_test.csv): test: B-A +0.4762, 95 % KI [+0.359; +0.590], andel trekk B<A 0.00, ulike prediksjoner 68
+regel b2 (regel_b2_test.csv): test: B-A +0.3650, 95 % KI [+0.252; +0.492], andel trekk B<A 0.00, ulike prediksjoner 79
+regel b (regel_b_test.csv): test: B-A +0.2871, 95 % KI [+0.203; +0.378], andel trekk B<A 0.00, ulike prediksjoner 151
+regel a (regel_a_test.csv): test: B-A +0.0974, 95 % KI [+0.072; +0.124], andel trekk B<A 0.00, ulike prediksjoner 928
+golv hist1 (hist1_test.csv): test: B-A +0.4151, 95 % KI [+0.301; +0.533], andel trekk B<A 0.00, ulike prediksjoner 48
+
+## 3) tellinger per splitt fra datafila (rader med against_board satt = saker med fasit)
+datafil state/opplastet/20261105_114241_real_votes.csv: 13757 rader
+train 2019-2024: saker 9876 MOT mot styret 504 avvik 575
+val 2025: saker 1909 MOT mot styret 99 avvik 103
+test 2026: saker 1539 MOT mot styret 58 avvik 66
+
+## 4) avledet aritmetikk i TREFFSIKKERHET.md
+båndet konfidens >= 0,6 (TP 9 FP 0 FN 17 TN 1330 = 1356 saker): accuracy 0.9875 = 98.75 %, følg styret 0.9808 = 98.1 %
+Clopper-Pearson 95 % recall i båndet 9/26: 0.1721-0.5567 = 17.2-55.7 %
+Clopper-Pearson 95 % recall alle 30/58: 0.3822-0.6505 = 38.2-65.0 %
+Clopper-Pearson 95 % presisjon alle 30/68: 0.3208-0.5668 = 32.1-56.7 %
+terskel 0,80 test TP/FP 41/176: presisjon 41/217 = 0.1889, recall 41/58 = 0.7069, F1 = 0.2982
+
+## 5) terskelrader i TREFFSIKKERHET.md: P/R/F1 MOT mot styret regnet fra p_avvik i oppgave_2103/full_{val,test}.csv (#2044 miks h2)
+val 2025 terskel 0.7: P 0.173 R 0.687 F1 0.276 TP/FP 68/326
+val 2025 terskel 0.8: P 0.262 R 0.646 F1 0.373 TP/FP 64/180
+val 2025 terskel 0.85: P 0.369 R 0.586 F1 0.453 TP/FP 58/99
+val 2025 terskel 0.9: P 0.541 R 0.465 F1 0.500 TP/FP 46/39
+val 2025 terskel 0.9188: P 0.608 R 0.455 F1 0.520 TP/FP 45/29
+val 2025 terskel 0.95: P 0.660 R 0.354 F1 0.461 TP/FP 35/18
+val 2025 terskel 0.97: P 0.735 R 0.253 F1 0.376 TP/FP 25/9
+test 2026 terskel 0.7: P 0.109 R 0.759 F1 0.190 TP/FP 44/360
+test 2026 terskel 0.8: P 0.189 R 0.707 F1 0.298 TP/FP 41/176
+test 2026 terskel 0.85: P 0.260 R 0.655 F1 0.373 TP/FP 38/108
+test 2026 terskel 0.9: P 0.400 R 0.586 F1 0.476 TP/FP 34/51
+test 2026 terskel 0.9188: P 0.441 R 0.517 F1 0.476 TP/FP 30/38
+test 2026 terskel 0.95: P 0.569 R 0.500 F1 0.532 TP/FP 29/22
+test 2026 terskel 0.97: P 0.742 R 0.397 F1 0.517 TP/FP 23/8
+
+## 6) treffsikkerhet_ki.py (#2185, frø 2185, 2000 trekk) på arbeid/oppgave_2132/agent.csv
+Bootstrap 2000 trekk, frø 2185, 1539 saker med fasit (test 2026, real)
+[alle saker] n 1539: TP 30 FP 38 FN 28
+  presisjon 44,1 %  bootstrap 95 % 32,8–56,2 %  Clopper-Pearson 32,1–56,7 %  (gyldige trekk 2000)
+  recall    51,7 %  bootstrap 95 % 39,1–65,2 %  Clopper-Pearson 38,2–65,0 %  (gyldige trekk 2000)
+[konfidens >= 0.6] n 1539: TP 30 FP 38 FN 28
+  presisjon 44,1 %  bootstrap 95 % 32,8–56,2 %  Clopper-Pearson 32,1–56,7 %  (gyldige trekk 2000)
+  recall    51,7 %  bootstrap 95 % 39,1–65,2 %  Clopper-Pearson 38,2–65,0 %  (gyldige trekk 2000)
+
+## 7) øvre grenser i NESTE_VERSJON.md: F1 regnet fra oppgitte TP/FP/FN
+GVG-gruppe test: TP 39 FP 38 FN 19 -> F1 0.5778
+GVG-gruppe val: TP 55 FP 29 FN 44 -> F1 0.6011
+revisor test: TP 33 FP 32 FN 25 -> F1 0.5366
+revisor val: TP 59 FP 28 FN 40 -> F1 0.6344

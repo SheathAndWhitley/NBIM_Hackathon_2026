@@ -1,0 +1,21 @@
+[12:47:06 +0s] 0 tmp=/tmp/c1_kald.jm8kSV git=6026cc4 (endrede filer i leveransen vises under)
+[12:47:06 +0s] 1 kopierer leveransen (uten .venv, __pycache__, ut/)
+[12:47:09 +3s] 1 ferdig: 857M, 449 filer
+[12:47:09 +3s] 2 uv sync --frozen fra uv.lock (ny .venv i kopien)
+  lightgbm 4.7.0 sklearn 1.9.1 pandas 3.1.1
+[12:47:51 +45s] 3 kjører agenten på holdout 2026 (real_votes, data_off/real_test_input.csv) -> /tmp/c1_kald.jm8kSV/ut
+  inn: 1578 saker; MOT styret 74 (med NBIM-sitat 74); til menneske 228 (14.4%), av dem 0 som ikke kunne vurderes og 1 med injeksjon
+  låst på val 2025: C 3, rå grense 0.91885, val-F1 0.5217; 10 %-bånd 0.9459 logit
+[12:47:58 +52s] 4 måler v3 (arbeid/hack/c1/maaler_offisiell_v3.py, landsbyens kopi) test 2026 --data real --score mot (#2099)
+  -- _pred_uten_ruting.csv
+      streng MOT: TP 38 FP 41 FN 28  P 0.4810  R 0.5758  F1 0.5241
+      MOT mot styret: TP 30 FP 38 FN 28  P 0.4412  R 0.5172  F1 0.4762  (58 i fasit)
+    SCORE 0.476190
+  -- pred_maaler.csv
+      streng MOT: TP 38 FP 41 FN 28  P 0.4810  R 0.5758  F1 0.5241
+      MOT mot styret: TP 30 FP 38 FN 28  P 0.4412  R 0.5172  F1 0.4762  (58 i fasit)
+    SCORE 0.476190
+  måler sha256[:10] 8b09c36e01
+[12:47:58 +52s] 5 referanse: beste målte forsøk på tavla for agenten
+  REF 0.476190 (REF fra miljøet eller #2090)
+[1;32mGRØNN F1_MOT 0.476190 REF 0.476190 AVVIK +0.000000 (grense 0.005) tid 52s[0m

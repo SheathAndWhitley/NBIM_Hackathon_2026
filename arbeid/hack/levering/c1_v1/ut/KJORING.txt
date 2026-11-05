@@ -1,0 +1,25 @@
+kjor_agent.py (real_votes, smed2 #2044-modell) 2026-11-05 12:47:58, 7 s
+inn: 1578 saker; MOT styret 74 (med NBIM-sitat 74); til menneske 228 (14.4%), av dem 0 som ikke kunne vurderes og 1 med injeksjon
+låst på val 2025: C 3, rå grense 0.91885, val-F1 0.5217; 10 %-bånd 0.9459 logit
+nye saker lagt til uten etikett: 0; saker fra før 2026 (i treningen, ikke ærlig målt): 0
+--- smed2 train.py (#2044) ---
+FEATURES (kolonner lest av modellen): ['company_id', 'country', 'item_no', 'market', 'meeting_date', 'mgmt_rec', 'mgmt_rec_raw', 'proponent', 'proposal_text', 'proposal_type', 'year']
+FORBUDT og ikke brukt: ['funds_disagree', 'nbim_vote', 'nbim_vote_raw', 'position_paper', 'rationale_section', 'rationale_text'] | snitt med brukt: set()
+VAL 2025: C=3 grense=0.9188 {'F1': 0.5217, 'P': 0.5926, 'R': 0.466, 'n_pred_MOT': 81, 'n_MOT': 103, 'n': 1909, 'PRAUC': 0.4732}
+TEST 2026 (rå grense fra val 0.9188): {'F1': 0.4818, 'P': 0.4648, 'R': 0.5, 'n_pred_MOT': 71, 'n_MOT': 66, 'n': 1539, 'PRAUC': 0.5246}
+TEST 2026 (samme andel flagget som val 0.0424, merk: bruker test-fordeling uten etiketter): {'F1': 0.5, 'P': 0.5, 'R': 0.5, 'n_pred_MOT': 66, 'n_MOT': 66, 'n': 1539, 'PRAUC': 0.5246}
+SCORE 0.4818
+--- måler maaler_offisiell_v2.py test (maskin alene, ruting ignorert) ---
+[svar] data real, vindu test: 1539 vurderte rader, 66 avvik fra styret, 0 svarrader utenfor vinduet ignorert
+  avvik: TP 33 FP 38 FN 33  P 0.4648  R 0.5000  F1 0.4818  PR-AUC 0.5245
+  streng MOT: TP 0 FP 0 FN 0  P 0.0000  R 0.0000  F1 0.0000
+  ruting (konfidens < 0.6): 0 til menneske (0.0%)
+SCORE 0.481752
+RETNING maks
+--- måler maaler_offisiell_v2.py test (med ruting (konfidens < 0,6 = menneske)) ---
+[svar] data real, vindu test: 1539 vurderte rader, 66 avvik fra styret, 0 svarrader utenfor vinduet ignorert
+  avvik: TP 33 FP 38 FN 33  P 0.4648  R 0.5000  F1 0.4818  PR-AUC 0.5245
+  streng MOT: TP 0 FP 0 FN 0  P 0.0000  R 0.0000  F1 0.0000
+  ruting (konfidens < 0.6): 223 til menneske (14.5%)
+SCORE 0.481752
+RETNING maks

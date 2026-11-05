@@ -1,0 +1,38 @@
+Agenten på test 2026 (NBIMs egne stemmer, 1539 saker med fasit, 58 der NBIM stemte mot styret):
+  MOT funnet 30, falsk MOT 38, MOT mistet 28:  presisjon 0.441  recall 0.517  F1 MOT 0.4762
+  til menneske 183 av 1539 (11.9 %).  Følg styret: F1 MOT 0.
+  P(MOT) er kalibrert (isotonisk på val 2025, sak 2132); saken går til menneske når P(MOT) er i [15 %, 85 %), eller ved injeksjon, ukjent selskap/type eller datafeil.
+
+== Sak 1 MOT funnet, med sitat  (trukket med seed 0 blant 9 slike)
+   2084790|5  PT Rukun Raharja Tbk  2026-06-23  (Indonesia, DIRECTOR_ELECTION, fremmet av Management)
+   forslag: Approve Changes in the Boards of the Company
+   styret anbefaler: FOR
+   AGENT: MOT  (mot styret 1)  P(MOT) 100% kalibrert (rå score 0.9932)  SEND TIL MENNESKE: nei
+   RETNINGSLINJE NBIM 3.1.1: «The company should have a robust nomination and election process to ensure an effective board that is accountable to shareholders.»
+   grunnlag: BM25 38.5; type DIRECTOR_ELECTION: 16/277 tidligere MOT-begrunnelser i 3.1; nabo-begrunnelsen i 3.1; regler i seksjonen et menneske bør sjekke: 3.1.4, 3.1.6, 3.1.9
+   tidligere NBIM-begrunnelse (GVG 3.1): «The company should have a robust nomination and election process to ensure an effective board that is accountable to shareholders. Shareholders should be able to participate in frequent elections of all board members, preferably on an annual basis. The company should establish reasonable procedures »
+   kilde: NBIMs begrunnelse 2024, PT Rukun Raharja Tbk: «Approve Changes in the Boards of the Company»
+   FASIT: NBIM stemte Against (mot styret 1)  NBIMs egen begrunnelse: The company should have a robust nomination and election process to ensure an effective board that is accountable to shareholders. Shareholders should be able to participate in frequent elections of a
+
+== Sak 2 usikker, sendt til menneske  (trukket med seed 0 blant 122 slike)
+   2097662|16  Colruyt Group NV  2026-09-30  (Belgium, DIRECTOR_ELECTION, fremmet av Management)
+   forslag: Reelect Kriya One BV, Permanently Represented by Jef Colruyt, as Director
+   styret anbefaler: FOR
+   AGENT: MOT  (mot styret 1)  P(MOT) 52% kalibrert (rå score 0.95413)  SEND TIL MENNESKE: JA  grunn: usikker: kalibrert P(MOT) 0.52 i båndet [0.15, 0.85)
+   RETNINGSLINJE NBIM 1.1.1: «The board should guide company strategy and monitor management performance without conflicts of interest.»
+   grunnlag: BM25 43.7; type DIRECTOR_ELECTION: 74/277 tidligere MOT-begrunnelser i 1.1; nabo-begrunnelsen i 1.1; posisjonsnotat (fra nabo-begrunnelsen): Board independence (NBIM-PP2)
+   tidligere NBIM-begrunnelse (GVG 1.1): «The board should guide company strategy and monitor management performance without conflicts of interest. A majority of shareholder-elected board members in a non-controlled company should be independent of management, dominant shareholders, and related third parties. In a majority-controlled compan»
+   kilde: NBIMs begrunnelse 2024, Colruyt Group NV: «Approve Co-optation of Kriya One BV, Permanently Represented by Jef Colruyt, as »
+   FASIT: NBIM stemte For (mot styret 0)
+
+== Sak 3 MOT bom (NBIM fulgte styret)  (trukket med seed 0 blant 38 slike)
+   2097662|18  Colruyt Group NV  2026-09-30  (Belgium, DIRECTOR_ELECTION, fremmet av Management)
+   forslag: Reelect Korys Management NV, Permanently Represented by Lisa Colruyt, as Director
+   styret anbefaler: FOR
+   AGENT: MOT  (mot styret 1)  P(MOT) 52% kalibrert (rå score 0.96373)  SEND TIL MENNESKE: JA  grunn: usikker: kalibrert P(MOT) 0.52 i båndet [0.15, 0.85)
+   RETNINGSLINJE NBIM 1.1.1: «The board should guide company strategy and monitor management performance without conflicts of interest.»
+   grunnlag: BM25 43.7; type DIRECTOR_ELECTION: 74/277 tidligere MOT-begrunnelser i 1.1; nabo-begrunnelsen i 1.1; posisjonsnotat (fra nabo-begrunnelsen): Board independence (NBIM-PP2)
+   tidligere NBIM-begrunnelse (GVG 1.1): «The board should guide company strategy and monitor management performance without conflicts of interest. A majority of shareholder-elected board members in a non-controlled company should be independent of management, dominant shareholders, and related third parties. In a majority-controlled compan»
+   kilde: NBIMs begrunnelse 2024, Colruyt Group NV: «Reelect Korys NV, Permanently Represented by Griet Aerts, as Director»
+   FASIT: NBIM stemte For (mot styret 0)
+

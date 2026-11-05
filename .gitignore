@@ -1,8 +1,10 @@
 .venv/
-home/
-ut/
+.venv_kjor/
+/home/
+/ut/
 __pycache__/
 *.pyc
 .DS_Store
 state/opplastet/
 arbeid/hack/c1/data_off/
+arbeid/hack/levering/demo/logg/

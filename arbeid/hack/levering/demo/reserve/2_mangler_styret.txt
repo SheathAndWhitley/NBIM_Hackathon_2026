@@ -1,0 +1,8 @@
+== 2041102|2 Arbonia AG 2026-04-24: styret anbefaler For
+   forslag: Approve Non-Financial Report
+   agent: FOR (styret lest som FOR, mot styret 0)  rå 0.2623  sjanse for MOT 0.0075
+   til menneske: 0  grunn: -
+== 2041102|2 Arbonia AG 2026-04-24: styrets anbefaling mangler
+   forslag: Approve Non-Financial Report
+   agent: FOR (styret lest som FOR, mot styret 0)  rå 0.2623  sjanse for MOT 0.0075
+   til menneske: 1  grunn: styrets anbefaling mangler: antatt FOR, sjekk innkallingen; felt avviker fra lagret sak (mgmt_rec); modellen brukte lagret rad

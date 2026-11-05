@@ -1,0 +1,55 @@
+######## De tre sakene i DEMO_MANUS.md (første i agent.csv av hver type)
+== Treff (agent MOT, NBIM MOT, maskinen alene): Mobimo Holding AG  2026-03-31  «Transact Other Business (Voting)»  (agent.csv linje 276, 2041367|21)
+   styret: FOR   AGENT: MOT   p_mot 1.0   til_menneske 0  
+   punkt GVG 5.2: "We will not support an agenda item if the information disclosed is insufficient to make an informed decision."   [NBIMs begrunnelse 2021, Mobimo Holding AG: «Transact Other Business (Voting)»]
+   retningslinje NBIM 5.2.1: "The board should use the annual report to present a fair, sensible and clear assessment of the company. The report should be reflective of the prior year, and include material risk factors."
+   fasit: NBIM stemte Against (mot styret 1)  NBIMs begrunnelse: We will not support an agenda item if the information disclosed is insufficient to make an informed decision.
+
+== Bom (maskinen alene, feil mot fasit): LOTTE Chemical Corp.  2026-03-20  «Amend Articles of Incorporation (Office Term)»  (agent.csv linje 89, 2048411|10)
+   styret: FOR   AGENT: FOR   p_mot 0.0896   til_menneske 0  
+   retningslinje NBIM 0.0.3: "Our starting point when deciding how to vote is to support the board. We participate in electing the board and entrust it with running the company."
+   fasit: NBIM stemte Against (mot styret 1)  NBIMs begrunnelse: The right to vote on fundamental changes affecting the company is a basic right of shareholders. This includes the right to approve changes to the company’s gov
+
+== Til menneske (første sak agenten sendte videre): Kura Sushi, Inc.  2026-01-28  «Elect Director Tanaka, Kunihiko»  (agent.csv linje 15, 2033470|1)
+   styret: FOR   AGENT: MOT   p_mot 0.5833   til_menneske 1  usikker: kalibrert P(MOT) 0.58 i båndet [0.15, 0.85)
+   punkt GVG 1.1: "The board should guide company strategy and monitor management performance without conflicts of interest. A majority of shareholder-elected board members in a non-controlled company should be independent of management, dominant shareholders, and related third parties. In a majority-controlled company, at least a third of board members should be independent."   [NBIMs begrunnelse 2021, Kura Sushi, Inc.: «Elect Director Tanaka, Kunihiko»]
+   retningslinje NBIM 1.1.1: "The board should guide company strategy and monitor management performance without conflicts of interest."
+   fasit: NBIM stemte Against (mot styret 1)  NBIMs begrunnelse: The board should guide company strategy and monitor management performance without conflicts of interest. A majority of shareholder-elected board members in a n
+
+MANUS OK: samme tre saker som DEMO_MANUS.md (linje 276 / 89 / 15)
+######## Tillegg: 5 saker trukket med fast seed + 1 sitatsak (DEMO_MANUS_5min_tilfeldige.md)
+VALGT seed 17 : 2056685|7 2084542|6 2089598|12 2041102|2 2039527|11
+SITATSAK seed 0 blant 68 agent-MOT: 2089132|3  fasit against_board 1.0
+== 2056685|7 Hainan Jinpan Smart Technology Co., Ltd. 2026-04-10 (China, ARTICLES)
+   forslag: Approve the Change of Registered Capital, Amend the Articles of Association and Its Annexes
+   agent: FOR (mot styret 0)  rå 0.91223  sjanse for MOT 0.1912  til menneske 1 usikker: kalibrert P(MOT) 0.19 i båndet [0.15, 0.85)
+   sitat:    []
+   fasit: NBIM stemte For (mot styret 0.0)  NBIMs begrunnelse: 
+== 2041102|2 Arbonia AG 2026-04-24 (Switzerland, OTHER_MGMT)
+   forslag: Approve Non-Financial Report
+   agent: FOR (mot styret 0)  rå 0.2623  sjanse for MOT 0.0075  til menneske 0 
+   sitat:    []
+   fasit: NBIM stemte For (mot styret 0.0)  NBIMs begrunnelse: 
+== 2039527|11 Vietnam Export Import Commercial Joint Stock Bank 2026-04-28 (Vietnam, DIRECTOR_ELECTION)
+   forslag: Approve Liability Insurance for Members of the Board of Directors, Members of the Supervisory Board and Executives of Ex
+   agent: FOR (mot styret 0)  rå 0.63559  sjanse for MOT 0.0455  til menneske 1 ukjent selskap: ingen NBIM-stemmer for selskapet før møtedatoen
+   sitat:    []
+   fasit: NBIM stemte For (mot styret 0.0)  NBIMs begrunnelse: 
+== 2084542|6 Nomad Foods Limited 2026-06-22 (British Virgin Islands, DIRECTOR_ELECTION)
+   forslag: Elect Director James E. Lillie
+   agent: FOR (mot styret 0)  rå 0.45061  sjanse for MOT 0.0138  til menneske 0 
+   sitat:    []
+   fasit: NBIM stemte Against (mot styret 1.0)  NBIMs begrunnelse: Shareholders should have the right to seek changes to the board when it does not act in their best interest. We will con
+== 2089598|12 Klarna Group Plc 2026-06-22 (United Kingdom, SHARE_ISSUANCE)
+   forslag: Authorize Issue of Equity without Pre-emptive Rights
+   agent: FOR (mot styret 0)  rå 0.257  sjanse for MOT 0.0075  til menneske 1 ukjent selskap: ingen NBIM-stemmer for selskapet før møtedatoen
+   sitat:    []
+   fasit: NBIM stemte Against (mot styret 1.0)  NBIMs begrunnelse: Existing shareholders should have the right to approve share issuances in order to prevent the dilution of ownership wit
+== 2089132|3 TV TOKYO Holdings Corp. 2026-06-18 (Japan, DIRECTOR_ELECTION)
+   forslag: Elect Director Ishikawa, Ichiro
+   agent: MOT (mot styret 1)  rå 0.96994  sjanse for MOT 0.5217  til menneske 1 usikker: kalibrert P(MOT) 0.52 i båndet [0.15, 0.85)
+   sitat: GVG 1.1 The board should guide company strategy and monitor management performance without conflicts of interest. A majority of shareholder-elected board members in a n  [NBIMs begrunnelse 2023, TV TOKYO Holdings Corp.: «Elect Director Ishikawa, Ichir]
+   fasit: NBIM stemte Against (mot styret 1.0)  NBIMs begrunnelse: The board should guide company strategy and monitor management performance without conflicts of interest. A majority of 
+agentens egen sjekk, avvik inkl. avstå (sidetall, ikke hovedtallet): SCORE 0.4818
+  MOT mot styret: TP 30 FP 38 FN 28  P 0.4412  R 0.5172  F1 0.4762  (58 i fasit)
+HOVEDTALL maaler_offisiell_v3.py full/_pred_uten_ruting.csv test --data real --score mot: F1 MOT 0.476190

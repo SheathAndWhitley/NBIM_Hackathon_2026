@@ -1,0 +1,10 @@
+laget 2026-11-05 16:02:48, frys 2026-11-05T16:00:01 (#2044 miks h2)
+dedc94062cf414e9038ec6094edce272dcb8c6d15a36629f8bc49226eeac87e2  arbeid/hack/levering/kjor_agent.py  LIK FRYS
+439b49f7483674e55456e89bafa7eb2fdf2f9dbea9d31dfc500e6656e434f378  arbeid/hack/levering/c1_real.py  LIK FRYS
+22ac6717e1287c5ae1cc8b53471823dbcfa9e04fdda97b474ba1e9af0cbc788f  arbeid/hack/levering/kjor_agent_real_maskin_alene.csv  LIK FRYS
+69702192d3a4309ef5b41c6779a24d5c943489244557e030f027dadad3de8dfc  arbeid/oppgave_2103/full_test.csv  LIK FRYS
+40afcc3e2fec85b2bf1f51568a97efd764b967d06d9e71ba117b288f5970c6ed  arbeid/oppgave_2044/pred_miks_h2.csv  LIK FRYS
+1543706f9d9436bfcc6e3b2280929af95870c46a8f185e2f0931afaa7cf5d273  reserve/csv/test2026_agent.csv  (kald kopi, ikke i frysen)
+SHA-SJEKK GRØNN: alle 5 lik frysen
+FRYSVAKT GRØNN: 17 filer like som ved frys 2026-11-05T16:00:01
+HOVEDTALL F1 MOT mot styret (v3 --score mot): 0.476190

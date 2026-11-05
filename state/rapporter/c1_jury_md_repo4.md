@@ -1,0 +1,3 @@
+# Case 1: JURY.md rettet til repo4 (#2661, smed4)
+
+JURY.md:4/:9 og hovedraden i tabellen sier nå repo4 (miks h2 + 4 historikktrekk): 2026 er brukt til å finne kandidaten, og byttet ble avgjort på 2024 og 2025 etter en regel satt før måling (sp. 20). I tillegg er «under målet 0,5» på :5 endret til «like over, men KI dekker godt under», og golvraden er merket «frossen miks h2» (0,415 er målt på frossen, kilder/c1_enkle_regler_og_hist1.md:14). Tallvakt GRØNN (175 påstander, 0 avvik), ordsjekk BYTT 50 linjer før og etter (ingen nye treff, JURY.md har 0 egne treff). Ikke rettet (utenfor oppdraget): JURY.md:34 «alle 9 MOT-flagg riktige» gjelder frossen, repo4 har 3 falske uten menneske.

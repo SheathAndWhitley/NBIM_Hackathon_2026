@@ -1,0 +1,94 @@
+# Case 1: de atten vanskeligste jurysporsmålene, med svar og kilde
+
+Skrevet 05.11 før modellfrys. Ingen nye tall: hvert tall står i `c1/tall_tabell.md` eller i pakka, med fil:linje.
+Stier er fra `arbeid/hack/c1/`. Hovedtallet er F1 på MOT mot styret, test 2026, den frosne modellen (miks av logreg og LightGBM med løpende historikk).
+
+## 1. «Målet var 0,5. Hvorfor leverer dere bare 0,476?»
+Fordi det er det ærlige testtallet: grensa er valgt på val 2025, og test 2026 er kjørt én gang. Val ligger over målet (0,520) og test under. Vi har ikke valgt noe på test for å komme over 0,5. Med 58 MOT i test er ±0,05 innenfor støyen, så 0,5 ligger godt inne i intervallet.
+Kilde: `tall_tabell.md:10`, `tall_tabell.md:24`, `leveranse/ERLIG_EVALUERING.md:34`. Val-tallet 0,520 (F1 på MOT) er målt på nytt fra kald start med måler v3: `kilder/c1_val_kaldstart.md`.
+
+## 2. «Følg styret gir 96 % accuracy. Hvorfor er ikke det godt nok?»
+Fordi den finner 0 av 58 MOT-stemmer og får F1 0. Accuracy belønner å gjøre ingenting: agenten får 95,7 % og finner 30. Den betaler 38 falske flagg for det, og alle 38 går til et menneske.
+Kilde: `leveranse/JURY.md:7`, `leveranse/README.md:24`, `tall_tabell.md:9`, `leveranse/kilder/demo_saker.md:101`.
+
+## 3. «Hvor bredt er intervallet med bare 58 MOT, og slår dere egentlig en enkel regel?»
+95 % KI er [0,36; 0,59] (klyngebootstrap per selskap), og [0,37; 0,59] med bootstrap over rader. Den beste enkle regelen (samme selskap og samme tekst fikk MOT før) gir 0,365. Differansen er +0,11 [0,01; 0,22], altså så vidt over null. Vi leser tallet som et sted mellom 0,36 og 0,59, ikke som 0,476. Presedensregelen i teamets parallelle hybridløsning (laget av andre i teamet, parallelt med agenten, ikke fra NBIM), «avvik hvis siste stemme på samme direktør var et avvik; er direktøren ukjent fra før, brukes siste stemme på samme sakstekst» (avvik teller også AVSTÅ), gir 0,515 på vår måler og test 2026, +0,04 over vår frosne modell, KI [−0,05; +0,13], altså innenfor støyen; hybriden (presedens først, så modell) gir 0,545 på vår splitt, +0,069 [+0,007; +0,133], et reelt forsprang på oss. Vår rangering er fortsatt best (PR-AUC 0,525 mot 0,318 for presedensregelen og 0,413 for hybriden), men hybridløsningens modell alene med dens terskel gir 0,538 på vår splitt, så vi kan bare si at vår rangering er best; modellen er ikke endret etter frysen (`kilder/c1_nbim_repo_sammenligning.md` (filnavnet er historisk, løsningen er ikke fra NBIM), dom `kilder/c1_nbim_repo_sammenligning_dom.md`). <!-- tallvakt: ignorer: hybridløsningens regel og hybrid, ikke hovedtall -->
+Kilde: `leveranse/JURY.md:44-45`, `leveranse/JURY.md:51`, `tall_tabell.md:4`, `tall_tabell.md:10`.
+
+## 4. «Uten tekst gir 0,482 og uten forslagstype 0,500 på test (F1 på MOT). Hvorfor leverer dere ikke de?»
+Fordi forskjellene er under støygrensa (én flyttet sak gir ±0,01, forskjeller under ~0,02 kan ikke tolkes, og KI er ±0,12), og fordi vi valgte på val, ikke test. Å velge den beste raden på test ville vært å tilpasse seg testsettet. Det ablasjonen faktisk viser, er at historikken bærer modellen: uten all historikk faller F1 på MOT til 0,276 (ablasjonen i `tall_tabell.md`; den eldre ablasjonen på avvik i `ERLIG_EVALUERING.md` gir 0,282, og 0,504 uten sakstype). <!-- tallvakt: ignorer: ablasjon, ikke hovedtall -->
+Kilde: `tall_tabell.md:13`, `tall_tabell.md:16-17`, `tall_tabell.md:24`, `leveranse/ERLIG_EVALUERING.md:32`, `leveranse/BEGRENSNINGER.md:7`.
+
+## 5. «Er det lekkasje i tidssplitten? Dere bruker stemmer fra samme sesong.»
+Ingen lekkasje fra samme møte eller senere: historikken bruker bare møter strengt før saken, og 400 tilfeldige rader sjekket med brute force ga 0 avvik. Kolonner som avslører svaret stoppes med assert. Men vi antar at NBIMs stemmer er kjent løpende; uten den antakelsen faller F1 fra 0,476 til 0,415 [0,30; 0,53], og det er golvet vi oppgir.
+Kilde: `leveranse/ERLIG_EVALUERING.md:28-29`, `leveranse/ERLIG_EVALUERING.md:54`, `leveranse/JURY.md:49`.
+
+## 6. «Har dere brukt test til å velge noe?»
+Modell og grense: nei. Usikkerhetsbåndet [0,15; 0,85) som styrer hvilke saker som går til menneske, ble derimot valgt fra en tabell på test 2026 og bare sjekket på val; det sier vi rett ut. Det siste MOT-forsøket ble forkastet på val (beste 0,522, kravet var +0,03), og testkjøringen etterpå var bare kontroll.
+Kilde: `leveranse/ERLIG_EVALUERING.md:44`, `leveranse/ERLIG_EVALUERING.md:37-38`.
+
+## 7. «Hva skjer med bommen LOTTE Chemical?»
+Agenten sa FOR med P(MOT) 0,09, under båndet, så ingen menneske så saken. NBIM stemte MOT på vedtektsendringen. Det er feiltypen vi frykter mest: av 28 oversette MOT gikk 11 til et menneske, mens 17 ble FOR uten kontroll, alle med P(MOT) ≤ 0,09.
+Kilde: `leveranse/kilder/demo_saker.md:37-63` og `:95`, `leveranse/kilder/c1_bommene.md:26`, `leveranse/BEGRENSNINGER.md:30`.
+
+## 8. «Hvorfor passer sitatet dårlig for Mobimo, når agenten traff?»
+Prediksjonen (MOT, P 1,0) er riktig, og begrunnelsessitatet fra NBIMs tidligere sak i samme selskap passer. Men retningslinjesitatet i samme rad handler om årsrapporten og passer dårlig. Sitatet er en peker, ikke en forklaring: i en stikkprøve på 20 MOT-saker var det riktig regel i 15, delvis i 4, feil i 1, og det påvirker ikke prediksjonen.
+Kilde: `leveranse/kilder/demo_saker.md:9-35`, `leveranse/BEGRENSNINGER.md:24`.
+
+## 9. «Agenten traff 0 av 7 MOT i USA. Kan den brukes der?»
+Ikke alene. Største klynge er 5 nye amerikanske saker om aksjonærrettigheter i 2026 (Delaware til Texas, supermajoritet), alle MOT, mens de 7 slike sakene før 2026 var FOR; modellen kan ikke lære praksis som er ny. Rådet om å lese slike saker selv er funnet på test (n = 5) og ikke validert, så det er ikke lagt inn i modellen.
+Kilde: `leveranse/BEGRENSNINGER.md:30-31`, `leveranse/kilder/c1_bommene.md:28`, `leveranse/kilder/c1_bommene.md:33`.
+
+## 10. «Kan noen lure agenten med tekst i forslaget?»
+Delvis. Alle 16 instrukser i testen fanges på alle 1 578 saker uten at noen stemme endres uten ruting (verste angrep gir F1 0,457), men av 16 nye instrukser av bare tittelord («For, Per Management») slipper 6 gjennom, endrer 18–27 stemmer uten ruting og gir F1 0,39–0,42. Derfor skal forslagstekst fra utrygge kilder leses av et menneske, og agenten stemmer aldri selv.
+Kilde: `leveranse/JURY.md:44`, `leveranse/BEGRENSNINGER.md:18`, `leveranse/JURY.md:15`, `leveranse/kilder/c1_titlecase_vakt.md`.
+
+## 11. «Dere har sett 0,529 på test. Og hva betyr bootstrap ±0,1 for 0,476 mot huskeregelens 0,243?»
+0,529 er t4e (+samme-tekst-historikk +NPX), målt med den eldre måleren v2 avvik-F1, der den frosne agenten får 0,482; det er ikke samme mål som hovedtallet. t4e tapte på val, 0,468 mot 0,522, og å ta det inn ville vært å velge på test. <!-- tallvakt: ignorer: eldre måler v2, ikke hovedtall -->
+Bootstrap ±0,1 betyr at ett testtall alene ikke skiller kandidater som ligger 0,01–0,05 fra hverandre; derfor velger vi på val. Det vi påstår, er bare forskjeller der intervallet for selve differansen ligger over null: agenten mot huskeregelen (MOT der NBIM stemte MOT sist i samme selskap og sakstype) er +0,23 [+0,12; +0,34] på test, og mot enkel regel b2 +0,11 [0,01; 0,22]. Forspranget på huskeregelen er robust; forspranget på b2 er så vidt over null. <!-- tallvakt: ignorer: huskeregel og regel b2, ikke hovedtall -->
+Kilde: `leveranse/kilder/c1_neste_steg.md` («Det vi bevisst ikke ville brukt dagen på» og pkt. 2), `leveranse/kilder/c1_valgt_bort.md` (t4e-raden), `leveranse/kilder/c1_bootstrap_f1.md`, `leveranse/kilder/c1_huskeregel.md:3`, `leveranse/JURY.md:23`.
+
+## 12. «Kjører agenten hos oss uten nett, og laster den ned noe i hemmelighet?»
+Ja, den kjører uten nett, og den laster ikke ned noe. Hele løpet (kald kopi, `uv sync --frozen`, agent, målere, tallsjekk) gikk med IP-nett sperret med `sandbox-exec`, etter at `curl https://pypi.org` i samme sandbox ga «Couldn't connect». Hovedtallet ble uendret 0,476190, og kontrollagenten fikk bit-identiske svarfiler i en egen mappe. Agentfilene importerer ikke torch, transformers, requests eller urllib, og avhengighetene er bare lightgbm, matplotlib, pandas, scikit-learn og scipy. <!-- tallvakt: ignorer: kaldstart, samme tall -->
+Forbeholdet: på minien hentet `uv sync` pakkene fra uv-cachen. På en maskin uten cache trenger `uv sync` nett én gang (pakker fra PyPI, låst i `uv.lock`), og etter det trenger agenten aldri nett. Det er prøvd: med tom uv-cache og tom Python-katalog lastet `uv sync` ned Python og pakkene, og kontrollagenten fikk samme hovedtall, F1 MOT 0,476, og svarfil byte for byte lik pakkas. Hele løpet tok ett til to minutter på vår maskin, lengre på treg linje.
+Kilde: `kilder/c1_offline_kaldstart.md` (målt av én agent, kontrollert av kontrollagenten), logger `<arbeidsmappe>/oppgave_2412/offline_kjoring.log` og `<arbeidsmappe>/oppgave_2414/offline_kjoring.log`; tom cache: `utviklingsrapport:c1_dom_tom_cache.md`.
+
+## 13. «Den parallelle hybridløsningen slår dere. Hvorfor bytter dere ikke?»
+Hybridløsningen er laget av andre i teamet, parallelt med agenten, ikke fra NBIM. Fordi modellfrysen kl. 16 står: å bytte etter å ha sett hybridløsningens tall på test 2026 ville vært å velge på test. Hybridløsningens forfattere hadde selv 2026 i sin egen test (2025–26), så deres tall på 2026 er like optimistiske som våre etter frysen (`NESTE_VERSJON.md`). På vår måler og test 2026 gir vår frosne modell 0,476, hybridløsningens presedensregel 0,515, hybriden på dens egen splitt 0,523 (trent til og med 2023) og på vår splitt 0,545; bare hybriden på vår splitt er klart bedre, +0,069 med KI [+0,007; +0,133], mens presedensregelen alene ligger innenfor støyen. Vår rangering er fortsatt best (PR-AUC 0,525 mot 0,318 for presedensregelen og 0,413 for hybriden), men hybridløsningens modell alene med dens terskel gir 0,538 på vår splitt (dom `kilder/c1_nbim_repo_sammenligning_dom.md:22`), så vi kan ikke si at gapet ikke ligger i modellen; vi kan bare si at vår rangering er best. Neste versjon er derfor presedens først og deretter vår rangering, med terskel valgt på val, ikke test. Hybridløsningens personnøkkel (samme direktør avvek sist) som ekstra trekk i vår modell gir +0,049 på 2026, men −0,037 på 2024 og +0,001 på 2025, med KI som dekker null begge år, så den er ikke tatt inn (`kilder/c1_personnokkel_rullende.md`, dom `kilder/c1_personnokkel_dom.md`). <!-- tallvakt: ignorer: hybridløsningens regel og hybrid, ikke hovedtall -->
+Kilde: `kilder/c1_nbim_repo_sammenligning_dom.md` (tabellen og KI-linja), `kilder/c1_nbim_repo_sammenligning.md`, `NESTE_VERSJON.md`.
+
+## 14. «Test er ett år, og ikke engang et helt år. Hvorfor skal 0,476 gjelde for andre år?»
+Vi har kjørt samme oppskrift rullende, med C og grense valgt på året før og test én gang på året etter. Det gir 0,4545 for 2024, 0,5143 for 2025 og 0,4762 for 2026, i snitt 0,482. Tallet for 2026 er likt hovedtallet. Spredningen mellom årene er altså ±0,03, og hovedtallet er ikke et heldig år. Men 2026 er ikke et helt år. Dataene slutter 30.09.2026 med 0 saker i oktober–desember, mot 111 i samme måneder i 2025. Test 2026 har derfor færre MOT enn årene før, 58 mot 70–99. Høstmøtene er ikke målt. <!-- tallvakt: ignorer: rullende år og sesong, ikke hovedtall -->
+Kilde: `kilder/c1_personnokkel_rullende.md:14-20` (raden «uten» per år), `kilder/c1_personnokkel_rullende.png`, `kilder/tell_aar.txt:3-10`, `utviklingsrapport:c1_jury_hardeste_5.md` (sesongtabellen er målt med `<arbeidsmappe>/oppgave_2511/sesong.py`, utskrift `sesong.txt`).
+
+## 15. «Grensa 0,9188 er valgt på val med en annen modell og på avvik, ikke på MOT. Hvorfor skal den passe?»
+Den passer ikke nødvendigvis, og det er en antakelse. Grensa er valgt på avvik fra styret inkludert AVSTÅ (66 avvik på test, av dem 58 MOT), med modellen trent til og med 2024. Så er den brukt rå på modellen trent på nytt til og med 2025. Følsomhetstabellen viser hva det koster: på test går F1 på MOT fra 0,373 til 0,532 over grensene 0,85–0,97, og 0,95 ville vunnet på test. Vi valgte den ikke, fordi det ville vært å velge på test. De rullende årene i svar 14 er det beste beviset vi har for at det å flytte grensa ett år fram holder. <!-- tallvakt: ignorer: terskeltabell og avvik, ikke hovedtall -->
+Kilde: `kilder/TREFFSIKKERHET.md:65-87`, `leveranse/ERLIG_EVALUERING.md:3`, `leveranse/ERLIG_EVALUERING.md:7`.
+
+## 16. «Hvor mange ganger har dere sett på test, og hva ble valgt der?»
+Modell, C og grense er valgt på val. Én ting er valgt på test: båndet [0,15; 0,85) for hva som går til menneske. Båndet ble valgt fra en tabell på test og bare sjekket på val, slik JURY.md og ERLIG_EVALUERING.md sier. Linja om at «alle 9 MOT-flagg agenten tar selv er riktige» hviler på det båndet og er derfor optimistisk. «Kjørt én gang» betyr én gang per variant. Etter valget har vi sett på test for disse variantene: ablasjonene (uten tekst, uten forslagstype, uten historikk), t4e, USA-regelen, seed, regelen og hybriden fra teamets parallelle hybridløsning, personnøkkelen, grensetabellen og båndet. Bare båndet ble tatt inn. Ingen av de andre endret den frosne modellen.
+Kilde: `leveranse/JURY.md:40` mot `leveranse/ERLIG_EVALUERING.md:49` og `kilder/c1_menneske_terskel.md`; `leveranse/JURY.md:34`; `leveranse/ERLIG_EVALUERING.md:3`; svar 4, 9, 11 og 13 her.
+
+## 17. «F1 0 for følg styret følger av definisjonen. Hva er forspranget egentlig?»
+Følg styret er gulvet, ikke noe argument. Det reelle golvet er den beste enkle regelen b2 med 0,365, og vi slår den med +0,11 [0,01; 0,22], altså så vidt over null. Mot huskeregelen er forspranget +0,23 [+0,12; +0,34], og det er robust. Teamets parallelle hybridløsning (ikke fra NBIM) slår oss: hybriden gir +0,069 [+0,007; +0,133] på vår splitt, og dens modell alene med dens grense gir 0,538. Vår rangering er best (PR-AUC 0,525), men det er ikke det samme som best F1 på MOT. <!-- tallvakt: ignorer: regel b2, huskeregel og hybridløsningen, ikke hovedtall -->
+Kilde: `leveranse/JURY.md:14-23`, `leveranse/JURY.md:23`, `kilder/c1_enkle_regler_og_hist1.md:18`, `kilder/c1_nbim_repo_sammenligning_dom.md:15`, `kilder/c1_nbim_repo_sammenligning_dom.md:22`.
+
+## 18. «Løpende historikk fra samme sesong: lekker det, og gjelder golvet 0,415 i det hele tatt for NBIM?»
+Det lekker ikke. Historikken bruker bare møter strengt før saken, og 400 rader er sjekket med brute force med 0 avvik (svar 5). Men gevinsten av løpende historikk er usikker. Uten den er F1 på MOT 0,415, altså −0,061, og KI for forskjellen krysser null: 92 % av trekkene ligger under null. Vi kan ikke bevise at løpende historikk hjelper på test. For NBIM er antakelsen ikke svak. NBIM kjenner sine egne avgitte stemmer, så løpende historikk er tilgjengelig for den som faktisk skal bruke agenten. Golvet 0,415 gjelder en ekstern bruker som bare ser publiserte stemmer. <!-- tallvakt: ignorer: uten løpende historikk, ikke hovedtall -->
+Kilde: `kilder/c1_enkle_regler_og_hist1.md:20`, `leveranse/ERLIG_EVALUERING.md:28-29`, `leveranse/ERLIG_EVALUERING.md:67`.
+
+## 19. «Hvorfor leverer dere ikke den beste varianten?»
+Fordi hovedtallet 0,476 er det eneste som er valgt uten å se test. Modell, C og grense ble valgt på val før frysen kl. 16. V2 (hybridløsningens sikre ja/nei, vår modell i midten) gir 0,516 på test og 0,548 på val. Hybriden alene gir 0,545. Begge er målt på test etter frysen. Hybriden er teamets parallelle løsning, laget av andre i teamet, parallelt med agenten, ikke fra NBIM. Test har bare 58 MOT, og KI for F1 er ca. ±0,1. V2 mot frossen er +0,040 [−0,007; +0,095], innenfor støyen. Hybriden alene mot frossen er +0,069 [+0,007; +0,133], men trekkene er laget med 2026 synlig. V2s val-tall er optimistisk, fordi hybridens terskel og modellvalg er gjort på samme 2025 som V2 velger på. Velger vi det beste av flere testblikk, blir tallet for høyt. Det har skjedd før: t4e ga 0,529 på test, men tapte på val (0,468). <!-- tallvakt: ignorer: V2, hybriden og t4e, ikke hovedtall -->
+Dommen (16:37) fulgte krav skrevet kl. 16:16, før kandidatene ble dømt: alle fire må holde. V2 feiler krav 2 (KI-nedre −0,007 krysser null) og krav 3 (ikke i pakken, ingen kaldstart). Hybriden feiler krav 1 (terskel og trekk valgt med 2025 i utvalget og 2026 synlig for forfatterne) og krav 3. Minst 8 testtall er sett etter frysen, så et testtall alene kan ikke utløse bytte. **Den frosne agenten står.** <!-- tallvakt: ignorer: V2 og hybriden, ikke hovedtall -->
+I drift i dag setter vi den frosne agenten. Bare den har kaldstart, lekkasjesjekk og ruting til menneske testet. For V2 er rutingen ikke vurdert. V2 er kandidaten for neste versjon. Det som hjelper i V2, er hybridens «sikker nei», som fjerner falske MOT (FP 38 → 34). V2 byttes inn først når den vinner på rullerende val 2022–2025, altså trent på årene før og målt på hvert år, med nye lekkasjesjekker. Det rakk vi ikke før frysen. <!-- tallvakt: ignorer: V2, ikke hovedtall -->
+Kilde: `NESTE_VERSJON.md:35-36`, `NESTE_VERSJON.md:89-96`, `NESTE_VERSJON.md:100-102`, `utviklingsrapport:c1_hvorfor_ikke_bedre.md`, `utviklingsrapport:c1_hybrid_pluss_rangering.md`, `utviklingsrapport:c1_byttedom_263.md`.
+
+## 20. «Repo4 (frossen + fire historikktrekk) besto regelen deres. Kjente dere tallene allerede, og hvorfor er den ikke levert?»
+Delvis kjente vi dem. Repo4s 2026-tall (0,512) var kjent kl. 16:13. Regelen ble skrevet kl. 16:49. 2026 er året repo4 ble funnet på, så det er ikke et friskt testår for den. Årene som avgjør, 2024 og 2025, ble målt etter regelen (16:49–16:51): +0,051 og +0,017 over frossen, i snitt +0,034. Snittet over alle tre år er +0,0345 [−0,005; +0,078], og 4 % av bootstrap-trekkene gir repo4 under frossen. Repo4 besto altså regelen. Den er likevel ikke levert, fordi pakken med repo4 ikke var reprodusert fra kald start (samme tall, uten feil) før vi måtte låse tekstene kl. 19. Vi leverer ikke en halvveis pakke. Den frosne agenten (0,476) står. <!-- tallvakt: ignorer: repo4 ikke levert, ikke hovedtall -->
+Lekkasje: de fire nye trekkene er sjekket i kontrollagentens protokollsjekk #2575 (seks punkter, alle besto). Historikken oppdateres først etter hele møtet, trekkene bygges bare fra `against_board` i tidligere møter, og ingen forbudte kolonner er med. Brute force-sjekken på 400 rader (svar 5) er ikke kjørt på nytt for repo4.
+Kilde: `ERLIG_EVALUERING.md` § 7, `utviklingsrapport:c1_byttregel_forhand.md`, `utviklingsrapport:c1_byttedom_265.md`.
+
+## Hull vi kjenner
+- To KI-er står i pakka: [0,37; 0,59] i tall-tabellen (bootstrap over rader) og [0,36; 0,59] i JURY.md og README (klyngebootstrap per selskap). Begge filene sier nå hvilken metode de bruker, og svar 3 nevner begge.
+- «NBIM publiserer stemmene løpende» har ingen kilde i pakka; svar 5 kaller det en antakelse (`leveranse/ERLIG_EVALUERING.md:46`).
+- Mobimo og LOTTE har nå kilde i pakka: `leveranse/kilder/demo_saker.md` (kopi av demosakene, rettet 05.11 kl. 14.20).

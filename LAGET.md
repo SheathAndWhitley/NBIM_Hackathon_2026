@@ -37,3 +37,29 @@ Ferdig på under ett minutt med varm uv-cache, et par minutter første gang. Se 
 
 ## Ikke les først
 `arbeid/hack/c1/leveranse/spor_npx/` er et gammelt spor (egen SEC-skraping) og brukes ikke i hovedtallet.
+
+## Resten av repoen: leveranse eller historikk (#2766)
+Repoen har nå alt Case 1-arbeid, ikke bare pakken (#2762). Rådata og fasit-CSV er utelatt, se `DATA.md`
+og `state/rapporter/c1_github_alt.md`. Grovt skille:
+
+**Leveranse (det hovedtallet og juryen bygger på)**
+- `arbeid/hack/levering/` toppnivå: agent, lim, modell, `JURYSVAR.md` og pakketekstene (se over).
+- `arbeid/hack/levering/stemmeagent/`: historikktrekkene modellen bruker.
+- `arbeid/hack/levering/demo/`: demoappen (`app.py`) og demodata.
+- `arbeid/hack/c1/leveranse/`: README, JURY*, BEGRENSNINGER, ERLIG_EVALUERING; `kilder/` er kopier av
+  måle- og kontrollrapportene tekstene viser til, `verktoy/` er de rullende testår-kjøringene bak byttet.
+- `arbeid/hack/c1/` toppnivå: målerne (`maaler_offisiell_v3.py` gjelder), grunnlinjer, lekkasje- og sitatvakt.
+- `arbeid/hack/c1/retningslinjer/`: NBIMs retningslinjer som agenten siterer fra.
+- `arbeid/oppgave_2044/`, `arbeid/oppgave_2047/`: frossen modell og vern (kalles fra pakken).
+- `arbeid/verktoy/c1_tallvakt.py`, `c1_frys.py`: tallvakt og frysvakt.
+
+**Eksperimenter og historikk (brukes ikke i hovedtallet)**
+- `arbeid/hack/c1/bytte/`: skriptet som byttet frossen modell til repo4 etter dommen (`BYTTEPLAN.md`).
+- `arbeid/hack/c1/reserve/`, `reserve_staar/`: reservepakker vi ikke trengte («STÅR» = frossen modell).
+- `arbeid/hack/c1/arkiv/`, `arbeid/hack/levering/arkiv/`: gamle jurysvar og kjøringer; tallene der er eldre.
+- `arbeid/hack/levering/c1_v1/`: første hele leveranse fra kald start, med eldre modell.
+- `arbeid/hack/levering/motstand_ut/`, `arbeid/hack/c1/ut_v3/`, `usikkerhet_inn/`, `kjennetegn/`, `test/`:
+  mellomresultater fra modell- og usikkerhetsforsøk.
+- `arbeid/hack/c1/leveranse/spor_npx/`: gammelt SEC-spor (se under).
+- `arbeid/oppgave_2046/`, `oppgave_2103/`, `oppgave_2274/`: enkeltforsøk og feilanalyse.
+- `state/rapporter/`: lagets arbeidsrapporter i tidsrekkefølge. Gjeldende tall står i pakketekstene, ikke her.

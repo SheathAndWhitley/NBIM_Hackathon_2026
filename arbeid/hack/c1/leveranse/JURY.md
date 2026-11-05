@@ -1,5 +1,7 @@
 # Case 1: svar til juryen
 
+> **Oppdatert grunnlinje (5.11 kveld):** Den sterkeste enkle regelen er «gjenta NBIMs forrige beslutning på samme sak eller person» (`arbeid/hack/c1/grunnlinje_gjenta_forrige.py`). Den gir F1 på MOT 0,42 / 0,51 / 0,51 for 2024–2026, snitt 0,48, mot agentens 0,51 / 0,53 / 0,51, snitt 0,52: agenten er bedre i snitt, men lik regelen i 2026. Der dette dokumentet sammenligner med regel b2 (0,365), er det en svakere regel. Lekkasjetesten: `arbeid/hack/c1/lekkasjetest.py`. <!-- tallvakt: ignorer: grunnlinje, ikke hovedtall -->
+
 > **Ord brukt i pakken.** *repo4* = levert modell: *miks h2* pluss fire historikktrekk (forrige stemme på samme punkt, på samme person, avvik i forrige møte, avviksrate for sakstypen), hentet fra `ballot.py` i arrangørens startpakke (NBIM_Hackathon_2026-repoet, «NBIM-repoet»), ikke NBIMs egen kode. *miks h2* = snitt av logistisk regresjon og LightGBM med NBIMs MOT-historikk fra møter strengt før saken. *eldre frossen (#2044)* = modellen frosset kl. 16 (F1 0,476). *b2/b/a* = enkle regler, se tabellen under «Slår dere noe enkelt?». *golv* = F1 uten historikk fra samme sesong. *kontrollagent/dommer* = egen agent som ikke målte kandidatene. *pkt. N* = punkt i «Begrensninger» nederst; *sp. N* = spørsmål i `JURY_SPORSMAL.md`. *#nnnn* = oppgavenummer i vår arbeidslogg. <!-- tallvakt: ignorer: ordliste, eldre frossen -->
 
 ## Les dette først (1 minutt)

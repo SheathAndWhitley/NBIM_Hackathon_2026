@@ -13,7 +13,7 @@ Unntak: påstander med eldre/avvik/val/2025/N-PX/h1/utentype/uten sakstype/ikke 
 
   - (#2136) «<n> MOT»/«<n> MOT-stemmer» = 58, «<n> avvik fra styret/med AVSTÅ» = 66, og «X av Y (p %)» på
     linjer om menneske: Y = saker inn eller med fasit, X og p fra agentens KJORING.txt (--kjoring)
-Bruk:  python3 -I arbeid/verktoy/c1_tallvakt.py [--rot LANDSBY] [--svar SVAR.csv] [--kjoring KJORING.txt] [--vis] [fil.md ...]
+Bruk:  python3 -I arbeid/verktoy/c1_tallvakt.py [--rot LANDSBY] [--svar SVAR.csv] [--kjoring KJORING.txt] [--toleranse 0.01] [--vis] [fil.md ...]
        --vis lister også påstandene som stemmer.
 Utgang 0 = OK, 1 = avvik funnet, 2 = måleren feilet.
 """
@@ -156,13 +156,14 @@ def sjekk_fil(sti, M):
 
 
 def main(a):
-    rot, svar, filer, vis, kj = ROT, None, [], False, None
+    rot, svar, filer, vis, kj, tol = ROT, None, [], False, None, 0.0
     while a:
         x = a.pop(0)
         if x == "--rot": rot = a.pop(0)
         elif x == "--svar": svar = a.pop(0)
         elif x == "--kjoring": kj = a.pop(0)
         elif x == "--vis": vis = True
+        elif x == "--toleranse": tol = float(a.pop(0))
         elif x in ("-h", "--help"): print(__doc__); return 0
         else: filer.append(x)
     svar = svar or os.path.join(rot, SVAR)
@@ -181,6 +182,15 @@ def main(a):
             print(f"ok    {os.path.relpath(f, rot)}:{nr}: {navn} {tekst}")
         for nr, navn, tekst, sann, linje in avv:
             print(f"AVVIK {os.path.relpath(f, rot)}:{nr}: {navn} {tekst}, måleren sier {sann}\n      {linje.strip()[:200]}")
+    # #2897: plattformavvik. Samme kode og låste pakker gir F1 0,512 på Mac og 0,520 på Linux (numerikk i
+    # bibliotekene). Med --toleranse T: avviker hovedtallet F1 bare innenfor T i ALLE påstander, er dette en annen
+    # plattform; da er avvikene (også TP/FP/FN, P, R, til menneske, som følger av samme forskjell) et varsel, ikke rødt.
+    # Stemmer F1 eksakt, eller er ett F1-avvik større enn T, gjelder full strenghet som før.
+    f1_avv = [x for f in filer for x in sjekk_fil(f, M)[1] if x[1] == "F1"] if tol and n_avv else []
+    if f1_avv and all(abs(float(x[2].replace(",", ".")) - x[3]) <= tol + 1e-9 for x in f1_avv):
+        print(f"PLATTFORMAVVIK: denne maskinen gir F1 {M['F1']:.4f}, pakka sier {f1_avv[0][2]} (Mac); innenfor toleransen {tol}."
+              f" De {n_avv} avvikene over er varsel, ikke feil. README oppgir begge tallene.")
+        n_avv = 0
     print(f"{len(filer)} filer, {n_paa} påstander om hovedtallet stemmer, {n_avv} avviker")
     print("OK" if n_avv == 0 else "FEIL: rett tallene over eller merk linja «eldre»/«tallvakt: ignorer»")
     return 0 if n_avv == 0 else 1

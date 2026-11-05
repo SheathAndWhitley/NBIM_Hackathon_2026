@@ -1,0 +1,10 @@
+# Case 1, neste versjon: presedensregelen fra det andre lagets repo (#2468)
+
+1. **Regelen:** saken flagges MOT uansett modell hvis NBIM avvek *sist* på samme sak (tekst uten tall) eller samme direktørnavn hos samme selskap (`ballot.py` l. 109–158, `prev_same`). Alene gir den F1 MOT 0,515 på vår test 2026, mot vår frosne 0,476 (`c1_nbim_repo_sammenligning.md`).
+2. **Overlapp med vårt historikktrekk (#2399/#2363):** stor på saksnøkkelen. Vi har samme-tekst-historikk som feature i #2044, og variant A i #2363 («siste stemme per nøkkel, MOT før») er nesten samme signal. Forskjellen er formen: hos oss er det en vekt modellen kan overstyre, hos dem en overstyring etter modellen. Direktørnavn som egen nøkkel har vi ikke sjekket at vi har; det er det eneste nye signalet.
+3. **Kost:** regelen er ca. 20 linjer etter scoren (ELLER med modellens MOT-flagg), pluss en navnenøkkel for direktørvalg. Den virkelige kosten er protokollen: terskelen må velges på nytt på val 2025 med regelen på, kontrollåret 2024 sjekkes, og så én testkjøring. Anslag 1–2 timer for smed + dom. Ikke nå: modellen er frosset.
+4. **Lekkasje i selve koden: lav.** De oppdaterer historikken etter hele møtet og bare med tidligere møter, samme regel som vår (dom #2367).
+5. **Lekkasjerisiko 1:** regelen bruker NBIMs stemmer fra tidligere møter i teståret. Det er bare lov fordi stemmene publiseres før neste møte fra 2021 (`c1_nbim_publisering.md`). For 2013–2020 ville det vært lekkasje.
+6. **Lekkasjerisiko 2 (valg, ikke data):** testen deres (2025–26) inneholder 2026, så regelen og navnefjerningen kan være valgt med 2026 synlig. Tallet 0,515 er derfor ikke et rent ut-av-utvalg-tall for *oss*. Neste versjon må velge regelen på val 2025/2024 før den rører test.
+7. **Forventet gevinst, ærlig:** +0,039 [−0,051; +0,126] alene mot #2044, innenfor støyen (58 MOT). Den tydeligste gevinsten (+0,069, KI over 0) kommer av presedens *og* strammere terskel sammen.
+8. **Anbefaling:** inn i NESTE_VERSJON som test nr. 1: «presedens-ELLER oppå vår rangering (vi har høyest PR-AUC, 0,525), terskel valgt på val». Ingen endring i pakka nå.

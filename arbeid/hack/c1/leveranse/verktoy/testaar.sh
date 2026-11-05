@@ -14,7 +14,23 @@ K=$(mktemp -d "${TMPDIR:-/tmp}/c1_testaar.XXXXXX")
 cd "$K"
 echo "rot: $ROT"
 echo "utdata: $K"
-if [ "${1:-}" = "--rask" ]; then
+# #2896: MODELL (fila arbeid/hack/levering/MODELL, eller C1_MODELL=...) = frossen (standard) eller v2av (#2887:
+# v2_rull.py, SVD-tekst i LGBM med k låst på val i #2882: 2024 k=32, 2025 k=64, 2026 k=48, så av-regel; av ble valgt på val T-1 alle år).
+MODELL="${C1_MODELL:-$(tr -d ' \n' < "$ROT/arbeid/hack/levering/MODELL" 2>/dev/null || echo frossen)}"
+echo "modell: $MODELL"
+if [ "$MODELL" = v2av ]; then
+  [ "${1:-}" = "--rask" ] && { echo "FEIL: --rask finnes bare for frossen"; exit 1; }
+  for T in 2024 2025 2026; do
+    case $T in 2024) KK=32;; 2025) KK=64;; 2026) KK=48;; esac
+    uv run --project "$ROT" python "$V/v2_rull.py" "$D" --ut v2_$T.csv --hist 2 --variant miks --testaar $T --k $KK \
+      --repo prev_same_item,prev_same_person,prev_meeting_any_dev,hist_type_dev_rate > v2_$T.log 2>&1 &
+  done
+  for j in $(jobs -p); do wait "$j" || { echo "FEIL: trening feilet, se $K/v2_*.log"; tail -5 v2_*.log; exit 1; }; done
+  for T in 2024 2025 2026; do
+    python3 -I "$ROT/arbeid/hack/levering/av_regel.py" "$D" v2_${T}_test.csv $T repo4_${T}_test.csv
+  done
+elif [ "$MODELL" != frossen ]; then echo "FEIL MODELL: '$MODELL' (lov: frossen, v2av)"; exit 1
+elif [ "${1:-}" = "--rask" ]; then
   cp "$V"/lagret/repo4_202[456]_test.csv .
 else
   for T in 2024 2025 2026; do
@@ -32,4 +48,5 @@ for T in 2024 2025 2026; do
   S="$S $F"
 done
 echo $S | awk '{printf "F1 MOT mot styret: 2024 %.4f  2025 %.4f  2026 %.4f  snitt %.4f\n", $1, $2, $3, ($1+$2+$3)/3}'
-echo "fasit (dom #2713): 2024 0.5057  2025 0.5309  2026 0.5120  snitt 0.5162"
+if [ "$MODELL" = v2av ]; then echo "fasit (dom #2890, v2+av): 2024 0.5731  2025 0.5667  2026 0.5391  snitt 0.5596"
+else echo "fasit (dom #2713): 2024 0.5057  2025 0.5309  2026 0.5120  snitt 0.5162"; fi

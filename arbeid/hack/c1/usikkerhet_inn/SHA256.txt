@@ -1,0 +1,6 @@
+30c7da3c73e5  usikkerhet_inn/gulv_test.csv
+3af6fcae58c8  usikkerhet_inn/gulv_val.csv
+f1d75becf491  usikkerhet_inn/smed2_nyeste_1125_test.csv
+3be2334db240  usikkerhet_inn/smed2_nyeste_1125_val.csv
+708f0b9a676a  usikkerhet_inn/smed2_v3_test.csv
+b8926b4adb07  usikkerhet_inn/smed2_v3_val.csv
