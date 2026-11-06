@@ -1,3 +1,0 @@
-alle rader 13757 | test 2026 1578 | før 2026 12179
-injeksjonsrader før 2026 0 | uten fasit (against_board tom) 394
-trening (begge krav) 11785
