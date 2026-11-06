@@ -6,7 +6,7 @@ NBIM stemmer på tusenvis av generalforsamlinger hvert år og følger nesten all
 forvalter ligger i de få sakene der fondet bør stemme mot. Agenten foreslår FOR eller MOT for hver sak, viser hvorfor,
 og sender usikre saker til et menneske. Den stemmer aldri selv.
 
-**Leveransen:** [kravrespons (én side)](KRAVRESPONS.md) · [kjør det selv](#kjør-det-selv) · [demo-appen](#demo-appen)
+**Leveransen:** [kravrespons (én slide)](KRAVRESPONS.md) · [kjør det selv](#kjør-det-selv) · [demo-appen](#demo-appen)
 
 ## Resultat
 
@@ -132,7 +132,7 @@ Hvert klikk logges i `demo/logg/`.
 ## Filer
 
     KJOR.sh                              ett kall: miljø, inndata, agent og måling
-    KRAVRESPONS.md                       én side, etter arrangørens mal
+    KRAVRESPONS.md                       kravresponsen på én slide, etter arrangørens mal
     data/real_votes.csv                  arrangørens data: NBIMs stemmer 2019–2026
     agent/
       kjor_agent.py                      agenten fra kommandolinja
