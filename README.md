@@ -29,17 +29,20 @@ Ferdig på under et minutt. Utskriften på Linux:
 
       Python-miljø med låste pakker ... ok
       Inndata test 2026 (uten fasit) ... ok
-      Agenten trener og svarer ... ok (14 s)
+      Agenten trener og svarer ... ok (16 s)
 
-    Test 2026: 1539 saker med fasit, 58 av dem stemte NBIM MOT styret.
+    Test 2026: 1539 saker med fasit. NBIM stemte MOT styret i 58 av dem (3,8 %).
 
-                                    F1 MOT  presisjon  recall   funnet
-      Følg styret                    0,000          –   0,000   0 av 58
-      Gjenta forrige beslutning      0,515      0,605   0,448   26 av 58, 17 falske
-      Agenten                        0,520      0,478   0,569   33 av 58, 36 falske
+                                    F1 MOT   presisjon    recall      funnet   falske MOT
+      Følg styret                    0,000           –     0,0 %     0 av 58            0
+      Gjenta forrige beslutning      0,515      60,5 %    44,8 %    26 av 58           17
+      Agenten                        0,520      47,8 %    56,9 %    33 av 58           36
+
+      presisjon: andel av MOT-flaggene som var riktige
+      recall:    andel av NBIMs MOT-stemmer som ble funnet
 
       Agenten sender 164 av 1578 saker (10,4 %) til et menneske.
-      Forventet F1 for agenten: 0,512 på macOS og 0,520 på Linux (samme kode og data, ulik numerikk).
+      Forventet F1 for agenten: 0,512 på macOS, 0,520 på Linux (samme kode og data).
 
       Svar per sak: ut/agent.csv     Hele loggen: ut/logg.txt
 
@@ -55,6 +58,7 @@ Flere kall, alle fra roten etter `sh KJOR.sh`:
 | Grunnlinjen «gjenta forrige beslutning» for 2024–2026 | `.venv_kjor/bin/python maaling/grunnlinje_gjenta_forrige.py` |
 | Agenten på tre testår (2024, 2025, 2026) | `sh maaling/testaar.sh` (ca. 20 s) |
 | Lekkasje- og tidsserietesten | `.venv_kjor/bin/python -B maaling/lekkasjetest.py` (ca. 2 min) |
+| 95 % konfidensintervall for agentens F1 (klyngebootstrap per selskap) | `python3 -I maaling/bootstrap_ki.py` |
 | Agenten på egne saker (real_votes-format) | `.venv_kjor/bin/python agent/kjor_agent.py --csv saker.csv --ut mappe` |
 
 ## Hovedtallet: F1 på stemmer mot styret
@@ -77,7 +81,8 @@ mot styret. Vi måler det forvalteren trenger: hvor mange av MOT-sakene agenten 
 
 Ærlig om tallet:
 
-- **Usikkert:** med 58 MOT-saker er 95 % KI [0,400; 0,621] (klyngebootstrap per selskap). Les det som et intervall.
+- **Usikkert:** med 58 MOT-saker er 95 % KI [0,400; 0,621] på macOS og [0,408; 0,629] på Linux (klyngebootstrap per
+  selskap, `maaling/bootstrap_ki.py`). Les det som et intervall.
 - **Testårene er brukt til å velge modell.** Vi valgte mellom to varianter med en regel skrevet ned før målingen:
   snitt over testårene 2024–2026 minst +0,02 over den frosne modellen, og intet år mer enn 0,02 under. Varianten besto
   (2024 0,5057, 2025 0,5309, 2026 0,5120 mot frossen 0,4545 / 0,5143 / 0,4762, snitt +0,0345, ikke statistisk sikkert).
@@ -144,7 +149,7 @@ og svarene).
 | `agent/retningslinje_oppslag.py`, `agent/retningslinjer.jsonl` | NBIMs retningslinjer (140 punkter) og oppslaget som siterer dem |
 | `agent/vern.py`, `agent/injeksjon_hoflig.py` | Vern mot instrukser i forslagsteksten |
 | `maaling/maaler.py` | Måleren (fasit = NBIMs egne stemmer) |
-| `maaling/` | Også inndata, resultattabellen, grunnlinjen, testårene og lekkasjetesten |
+| `maaling/` | Også inndata, resultattabellen, grunnlinjen, testårene, lekkasjetesten og konfidensintervallet |
 | `demo/` | Demo-appen (Streamlit) |
 | `ut/` | Lages av `KJOR.sh`: `agent.csv` (svar per sak) og `logg.txt` |
 

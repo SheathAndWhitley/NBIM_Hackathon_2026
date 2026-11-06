@@ -34,17 +34,21 @@ def main():
         rader = [("Følg styret", maal(styret)), ("Gjenta forrige beslutning", maal(regel)),
                  ("Agenten", maal(os.path.join(ROT, "ut/pred_maaler.csv")))]
     a = rader[-1][1]
-    print(f"Test 2026: {a['n']} saker med fasit, {a['mot']} av dem stemte NBIM MOT styret.")
+    print(f"Test 2026: {a['n']} saker med fasit. NBIM stemte MOT styret i {a['mot']} av dem "
+          f"({tall(100 * a['mot'] / a['n'], 1)} %).")
     print()
-    print(f"  {'':28}{'F1 MOT':>8}{'presisjon':>11}{'recall':>8}   funnet")
+    print(f"  {'':28}{'F1 MOT':>8}{'presisjon':>12}{'recall':>10}{'funnet':>12}{'falske MOT':>13}")
     for navn, r in rader:
-        p = tall(r["P"]) if r["TP"] + r["FP"] else "–"
-        print(f"  {navn:28}{tall(r['F1']):>8}{p:>11}{tall(r['R']):>8}   {r['TP']} av {r['mot']}"
-              + (f", {r['FP']} falske" if r["FP"] else ""))
+        p = tall(100 * r["P"], 1) + " %" if r["TP"] + r["FP"] else "–"
+        print(f"  {navn:28}{tall(r['F1']):>8}{p:>12}{tall(100 * r['R'], 1) + ' %':>10}"
+              f"{str(r['TP']) + ' av ' + str(r['mot']):>12}{r['FP']:>13}")
+    print()
+    print("  presisjon: andel av MOT-flaggene som var riktige")
+    print("  recall:    andel av NBIMs MOT-stemmer som ble funnet")
     menneske = sum(r["til_menneske"] == "1" for r in agent)
     print()
     print(f"  Agenten sender {menneske} av {len(agent)} saker ({tall(100 * menneske / len(agent), 1)} %) til et menneske.")
-    print("  Forventet F1 for agenten: 0,512 på macOS og 0,520 på Linux (samme kode og data, ulik numerikk).")
+    print("  Forventet F1 for agenten: 0,512 på macOS, 0,520 på Linux (samme kode og data).")
 
 
 if __name__ == "__main__":
