@@ -122,7 +122,7 @@ def finn_fasit(s):
 
 
 def utfall(rad, f):
-    """Samme mål som den offisielle måleren (maaler_offisiell_v3 --score mot): MOT mot styret."""
+    """Samme mål som måleren (maaling/maaler.py --score mot): MOT mot styret."""
     if not f or not f.get("against_board"):
         return "-"
     ys = f["nbim_vote"] == "MOT" and f["against_board"] == "1.0"  # NBIM stemte MOT mot styret

@@ -9,7 +9,7 @@
 - Fasit: NBIMs egne stemmer (13 757 saker) · målvariabel: MOT styret · terskel valgt på 2025, test 2026
 - F1, presisjon og recall på MOT, ikke accuracy (følg styret: 96 % riktig, F1 0) · 95 % KI 0,41–0,63
 - Grunnlinje «gjenta forrige beslutning» 0,515: likt i 2026, agenten bedre over 3 år (0,52 mot 0,48)
-- `sh KJOR.sh` reproduserer (Linux 0,520, macOS 0,512) · forbehold: testår brukt til modellvalg
+- `sh KJOR.sh` reproduserer (Linux 0,520, macOS 0,512) · forbehold: testår brukt til modellvalg og rutingsbånd
 
 ## 3. Beslutningsstøtte
 - Per sak: P(MOT), GVG-punkt ordrett og NBIMs begrunnelse fra en tidligere sak

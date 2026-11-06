@@ -267,7 +267,7 @@ def main(a, andel):
                           retningslinje_id=rl_id, retningslinje_sitat=rl_st, retningslinje_grunnlag=rl_gr))
     with open(os.path.join(a.ut, "agent.csv"), "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=FELT, extrasaction="ignore"); w.writeheader(); w.writerows(rader)
-    # måler-format (maaler_offisiell_v2.py, id = meeting_id|item_no, anbefaling 1 = avvik fra styret)
+    # måler-format (maaling/maaler.py, id = meeting_id|item_no, anbefaling 1 = avvik fra styret)
     for fil, med in (("pred_maaler.csv", True), ("_pred_uten_ruting.csv", False)):
         with open(os.path.join(a.ut, fil), "w", newline="") as f:
             w = csv.writer(f); w.writerow(["id", "anbefaling", "konfidens", "p_avvik"])
