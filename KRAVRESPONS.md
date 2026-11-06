@@ -3,18 +3,18 @@
 ## 1. Hva vi bygde
 - Agent: saksliste inn → FOR/MOT styret per sak, med P(MOT) · analytikeren stemmer, ikke agenten
 - Logistisk regresjon + LightGBM, med NBIMs tidligere stemmer som historikk
-- Test 2026: **32 av 58** MOT funnet · **F1 0,51** · presisjon 48 % · recall 55 %
+- Test 2026: **33 av 58** MOT funnet · **F1 0,520** · presisjon 48 % · recall 57 %
 
 ## 2. Hvordan vi verifiserte det
 - Fasit: NBIMs egne stemmer (13 757 saker) · målvariabel: MOT styret · terskel valgt på 2025, test 2026
-- F1, presisjon og recall på MOT, ikke accuracy (følg styret: 96 % riktig, F1 0) · 95 % KI 0,40–0,62
+- F1, presisjon og recall på MOT, ikke accuracy (følg styret: 96 % riktig, F1 0) · 95 % KI 0,41–0,63
 - Grunnlinje «gjenta forrige beslutning» 0,515: likt i 2026, agenten bedre over 3 år (0,52 mot 0,48)
-- `sh KJOR.sh` reproduserer (0,512 macOS / 0,520 Linux) · forbehold: testår brukt til modellvalg
+- `sh KJOR.sh` reproduserer (Linux 0,520, macOS 0,512) · forbehold: testår brukt til modellvalg
 
 ## 3. Beslutningsstøtte
 - Per sak: P(MOT), GVG-punkt ordrett og NBIMs begrunnelse fra en tidligere sak
 - Til menneske: P(MOT) 0,15–0,85, ukjent selskap, instruks i teksten → 10 % av sakene
-- Der havner nesten alle falske MOT-flagg (32 av 35)
+- Der havner nesten alle falske MOT-flagg (33 av 36)
 
 ## 4. Robusthet og styring
 - Motstandstest: instruks i teksten flagges → menneske, svaret endres ikke

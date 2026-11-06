@@ -16,13 +16,15 @@ Test 2026: NBIMs egne stemmer, 1 539 saker med fasit, 58 av dem MOT styret (3,8 
 | --- | --- | --- | --- | --- |
 | Følg styret | 0 | – | 0 % | 0 av 58 |
 | Gjenta NBIMs forrige beslutning (sterkeste enkle regel) | 0,515 | 60,5 % | 44,8 % | 26 av 58 |
-| **Agenten** | **0,512** | **47,8 %** | **55,2 %** | **32 av 58** |
+| **Agenten** | **0,520** | **47,8 %** | **56,9 %** | **33 av 58** |
 
 - Agenten og den enkle regelen er like gode i 2026. Over tre testår er agenten bedre: snitt 0,52 mot 0,48 (2024–2026).
 - Agenten gir i tillegg sannsynlighet, sitat og ruting for alle saker, også der NBIM ikke har stemt på saken før.
 - 164 av 1 578 saker (10,4 %) går til et menneske. 39 saker der styret ikke ga noen anbefaling, er utenfor F1.
-- Usikkerhet: 95 % konfidensintervall for F1 er 0,40–0,62 (klyngebootstrap per selskap).
-- Tallene er fra macOS. Linux gir 0,520 (33 av 58) med samme kode og data, fordi numerikken i bibliotekene er ulik.
+- Usikkerhet: 95 % konfidensintervall for F1 er 0,41–0,63 (klyngebootstrap per selskap).
+- Tallene er fra Linux, der vi kjører demoen. På macOS gir samme kode og data F1 0,512 (32 av 58, KI 0,40–0,62).
+  Bare 2 av 1 578 saker får ulikt svar: de ligger rett på terskelen, og bibliotekene regner litt ulikt på de to
+  plattformene. Hver plattform gir samme tall hver gang.
 
 ## Kjør det selv
 
@@ -166,4 +168,5 @@ Streamlit. Versjonene står i `uv.lock` og `demo/uv.lock`.
 
 **AI-verktøy:** Claude Opus 5.5 (Anthropic) via Claude Code. AI-agenter skrev koden, hentet og undersøkte dataene,
 laget måleren, testet modellene og skrev tekstene. En egen kontrollagent målte tallene på nytt fra en kald kopi.
-Ingen språkmodell kjøres i agenten: modellen er deterministisk (fast seed), så `sh KJOR.sh` gir samme tall hver gang.
+Ingen språkmodell kjøres i agenten: modellen er deterministisk (fast seed), så `sh KJOR.sh` gir samme tall hver gang
+på samme plattform.
