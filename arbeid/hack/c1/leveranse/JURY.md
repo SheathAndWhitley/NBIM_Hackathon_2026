@@ -6,7 +6,7 @@
 
 ## Les dette først (1 minutt)
 - **Hvordan målte vi?** Tidssplitt på NBIMs egne stemmer: trent på 2019–2025, test 2026. Levert agent er repo4 (miks h2 + 4 historikktrekk). 2026 ble brukt til å finne kandidaten, så det er ikke et friskt år for repo4; byttet ble avgjort etter regel satt før måling: snitt minst +0,02 over frossen på F1 MOT over tre testår 2024–2026, intet år under −0,02; 2024 og 2025 er årene repo4 ikke ble funnet på (sp. 20, `KANDIDATER.md`). Hovedtallet er F1 på stemmer MOT styret, målt med måler v3 fra en kald kjøring. Detaljer i «Slik målte vi» rett under.
-- **Hvor ærlig er tallet?** F1 0,512 på MOT mot styret, 95 % KI [0,40; 0,62]. Agenten finner 32 av 58 MOT, og 35 av 67 MOT-flagg er falske. Beste enkle regel (b2) gir 0,365, «følg styret» gir 0. Tallet er like over målet 0,5, men KI dekker godt under, og vi lot være å legge inn endringer som bare vant på ett år («Hvorfor vi ikke jaget testtallet»). Full gjennomgang: [ERLIG_EVALUERING.md](ERLIG_EVALUERING.md).
+- **Hvor ærlig er tallet?** F1 0,512 på MOT mot styret, 95 % KI [0,40; 0,62]. Agenten finner 32 av 58 MOT, og 35 av 67 MOT-flagg er falske. Den sterkeste enkle regelen, «gjenta NBIMs forrige beslutning på samme sak eller person», gir 0,515, like godt som agenten i 2026; over 2024–2026 er snittet 0,48 mot agentens 0,52. Regel b2 gir 0,365, «følg styret» gir 0. Tallet er like over målet 0,5, men KI dekker godt under, og vi lot være å legge inn endringer som bare vant på ett år («Hvorfor vi ikke jaget testtallet»). Full gjennomgang: [ERLIG_EVALUERING.md](ERLIG_EVALUERING.md).
 - **Hva gjør agenten når den er usikker?** Den stemmer ikke selv, men sender saken til et menneske: kalibrert P(MOT) i [0,15; 0,85), ukjent selskap, instruks i teksten eller tomme påkrevde felt (pkt. 8 og 9). Hvert MOT-flagg viser hvilken tidligere NBIM-stemme det bygger på (linja «kilde:» i demoen, pkt. 12). Svakheten: 18 av de 26 bommene får P(MOT) ≤ 0,11 og rutes ikke (pkt. 3).
 
 ## Slik målte vi
@@ -20,19 +20,20 @@ Forventet siste linje i utskriften (kald kopi 05.11, #2733; de tre linjene over 
 
     F1 MOT mot styret: 2024 0.5057  2025 0.5309  2026 0.5120  snitt 0.5162
 
-## Slår dere noe enkelt? Ja.
-F1 på MOT mot styret, test 2026 (58 MOT i fasit), måler v3 sha 418a937e57 (ny sha fordi vi la inn en datavakt i måleren som sjekker sha og radantall på datafila; selve målingen og tallet 0,512000 er uendret). Kilde: `kilder/c1_enkle_regler_og_hist1.md`.
+## Slår dere noe enkelt? Over tre år ja, i 2026 er det likt
+F1 på MOT mot styret, test 2026 (58 MOT i fasit), måler v3 sha 418a937e57 (ny sha fordi vi la inn en datavakt i måleren som sjekker sha og radantall på datafila; selve målingen og tallet 0,512000 er uendret). Kilde: `kilder/c1_enkle_regler_og_hist1.md`; regelen «gjenta forrige beslutning»: `arbeid/hack/c1/grunnlinje_gjenta_forrige.py`.
 
 | Rad | F1 MOT | 95 % KI |
 |---|---|---|
 | **Hovedmodell, repo4 (miks h2 + 4 historikktrekk, løpende historikk)** | **0,512** | [0,400; 0,621] |
+| Regel «gjenta NBIMs forrige beslutning på samme sak eller person» (sterkeste enkle regel) <!-- tallvakt: ignorer: grunnlinje, ikke hovedtall --> | 0,515 | ikke beregnet |
 | Regel b2: samme selskap + samme forslagstekst fikk MOT før | 0,365 | [0,252; 0,492] |
 | Regel b: samme forslagstekst fikk MOT før (alle selskaper) | 0,287 | [0,203; 0,378] |
 | Regel a: NBIM stemte MOT mot styret i selskapet før | 0,097 | [0,072; 0,124] |
 | Følg styret | 0 | [0; 0] |
 | Golv: frossen miks h2, bare historikk fra tidligere år | 0,415 | [0,301; 0,533] |
 
-Modellen slår den beste enkle regelen (b2) med +0,15 [0,04; 0,25]. Golvet 0,415 gjelder hvis NBIMs stemmer fra samme sesong ikke er kjent når neste sak predikeres, altså hvis stemmene ikke publiseres løpende.
+Modellen slår regel b2 med +0,15 [0,04; 0,25], men ikke den sterkeste enkle regelen: «gjenta forrige beslutning» gir 0,515 i 2026, like godt som modellen. Over tre testår er modellen bedre i snitt, 0,52 mot 0,48 (0,51 / 0,53 / 0,51 mot 0,42 / 0,51 / 0,51 for 2024–2026), og den gir sannsynlighet, sitat og ruting også for saker NBIM ikke har stemt på før. Golvet 0,415 gjelder hvis NBIMs stemmer fra samme sesong ikke er kjent når neste sak predikeres, altså hvis stemmene ikke publiseres løpende. <!-- tallvakt: ignorer: grunnlinjer og golv, ikke hovedtall -->
 **Hvor bommer den? (`kilder/c1_bommene.md`)** Levert repo4 finner 32 av 58 MOT og overser 26; 18 av bommene ser ingen (P(MOT) ≤ 0,11, rutes ikke). Analysen under er gjort på den eldre frosne modellen (fant 30, overså 28, 17 usette), og mønsteret er det samme for repo4 (7 av 18 usette i USA, pkt. 3). 0 av 7 MOT i USA er funnet. Største klynge er 5 nye amerikanske saker om aksjonærrettigheter i 2026 (Delaware til Texas, høyere terskel for aksjonærforslag, supermajoritet), alle MOT, mens de 7 slike sakene før 2026 var FOR. Modellen lærer av NBIMs praksis, og når praksisen endres, ser den det ikke. Et menneske bør selv lese slike saker og styrevalg i selskaper uten MOT før. Rådet er funnet på test (n = 5) og ikke lagt inn i modellen (`BEGRENSNINGER.md` pkt. 7).
 
 ## Juryspørsmål 1: Hvorfor målvariabelen *MOT styret*, og hva vurderte vi?
